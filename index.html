@@ -155,9 +155,140 @@ footer{text-align:center;padding:28px 0 48px;color:#887b91;font-size:12px;font-w
  width:100%;min-height:52px;border:0;border-radius:17px;background:#24162f;color:#fff;font-weight:900;cursor:pointer
 }
 
+
+/* PASSWORD GATE */
+body.site-locked{
+  overflow:hidden;
+}
+#siteContent{
+  display:none;
+}
+.password-gate{
+  position:fixed;
+  inset:0;
+  z-index:20000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:
+    radial-gradient(circle at 15% 10%,rgba(255,255,255,.95),transparent 22rem),
+    radial-gradient(circle at 90% 18%,rgba(255,255,255,.62),transparent 24rem),
+    linear-gradient(135deg,#ffd5ed 0%,#ffe8ae 30%,#c9f5ff 63%,#ddcaff 100%);
+}
+.password-gate.hidden{
+  display:none;
+}
+.password-card{
+  width:min(440px,100%);
+  text-align:center;
+  background:rgba(255,255,255,.78);
+  border:1px solid rgba(255,255,255,.96);
+  border-radius:30px;
+  padding:28px 24px 24px;
+  box-shadow:0 28px 90px rgba(69,35,94,.18);
+  backdrop-filter:blur(22px);
+}
+.password-lock{
+  width:76px;
+  height:76px;
+  margin:0 auto 16px;
+  display:grid;
+  place-items:center;
+  border-radius:24px;
+  font-size:36px;
+  background:linear-gradient(135deg,#ff4fa3,#845ef7);
+  box-shadow:0 14px 32px rgba(132,94,247,.25);
+}
+.password-card h1{
+  font-size:clamp(34px,9vw,48px);
+  line-height:1;
+  margin:0 0 12px;
+  letter-spacing:-.055em;
+}
+.password-card p{
+  margin:0 auto 20px;
+  max-width:330px;
+  color:#74647f;
+  line-height:1.5;
+  font-weight:600;
+}
+.password-form{
+  display:grid;
+  gap:10px;
+}
+.password-input{
+  width:100%;
+  min-height:58px;
+  border:1px solid rgba(98,57,126,.13);
+  border-radius:18px;
+  background:rgba(255,255,255,.82);
+  color:#271a36;
+  text-align:center;
+  font-size:24px;
+  letter-spacing:.22em;
+  font-weight:900;
+  outline:none;
+}
+.password-input:focus{
+  border-color:rgba(132,94,247,.35);
+  box-shadow:0 0 0 4px rgba(132,94,247,.08);
+}
+.password-submit{
+  width:100%;
+  min-height:56px;
+  border:0;
+  border-radius:18px;
+  color:#fff;
+  font-size:15px;
+  font-weight:950;
+  cursor:pointer;
+  background:linear-gradient(135deg,#ff4fa3,#845ef7 60%,#27badd);
+  box-shadow:0 14px 30px rgba(132,94,247,.24);
+}
+.password-error{
+  min-height:20px;
+  color:#b4235a;
+  font-size:13px;
+  font-weight:800;
+}
+.password-note{
+  margin-top:10px!important;
+  font-size:11px!important;
+  color:#97899f!important;
+}
+
 </style>
 </head>
-<body>
+<body class="site-locked">
+
+<div class="password-gate" id="passwordGate">
+  <div class="password-card">
+    <div class="password-lock">🔒</div>
+    <h1>Site temporarily closed.</h1>
+    <p>This site is currently private. Enter the password to continue.</p>
+
+    <form class="password-form" id="passwordForm">
+      <input
+        class="password-input"
+        id="passwordInput"
+        type="password"
+        inputmode="numeric"
+        autocomplete="off"
+        maxlength="4"
+        placeholder="••••"
+        aria-label="Password"
+        required
+      >
+      <button class="password-submit" type="submit">ENTER SITE ✦</button>
+      <div class="password-error" id="passwordError"></div>
+    </form>
+
+    <p class="password-note">Authorised access only.</p>
+  </div>
+</div>
+
+<div id="siteContent">
 <div class="wrap">
 <nav><div class="brand"><div class="logo">✦</div>BORN.</div><div class="badge">A personal time capsule</div></nav>
 
@@ -292,6 +423,7 @@ $("#finder").addEventListener("submit",async e=>{e.preventDefault();$("#error").
 $("#share").addEventListener("click",async()=>{const text=`I went back to ${$("#titleDate").textContent} with BORN.`;try{if(navigator.share)await navigator.share({title:"The Day I Was Born",text,url:location.href});else{await navigator.clipboard.writeText(`${text} ${location.href}`);$("#share").textContent="Copied ✓";setTimeout(()=>$("#share").textContent="Share my day ↗",1400)}}catch(e){}});
 </script>
 
+</div>
 <div class="panda-overlay" id="pandaOverlay" aria-hidden="true">
   <div class="panda-modal">
     <button class="panda-close" id="pandaClose" aria-label="Close">×</button>
@@ -398,6 +530,48 @@ $("#share").addEventListener("click",async()=>{const text=`I went back to ${$("#
   if(!localStorage.getItem("bornPandaMedal")){
     setTimeout(openPanda,30000);
   }
+})();
+</script>
+
+
+<script>
+(function(){
+  const PASSWORD = "1234";
+  const gate = document.getElementById("passwordGate");
+  const site = document.getElementById("siteContent");
+  const form = document.getElementById("passwordForm");
+  const input = document.getElementById("passwordInput");
+  const error = document.getElementById("passwordError");
+
+  function unlockSite(){
+    gate.classList.add("hidden");
+    site.style.display = "block";
+    document.body.classList.remove("site-locked");
+    sessionStorage.setItem("bornSiteUnlocked","yes");
+  }
+
+  if(sessionStorage.getItem("bornSiteUnlocked") === "yes"){
+    unlockSite();
+  }else{
+    setTimeout(()=>input.focus(),250);
+  }
+
+  form.addEventListener("submit",function(e){
+    e.preventDefault();
+
+    if(input.value === PASSWORD){
+      error.textContent = "";
+      unlockSite();
+    }else{
+      error.textContent = "Incorrect password.";
+      input.value = "";
+      input.focus();
+
+      if("vibrate" in navigator){
+        try{ navigator.vibrate([50,40,50]); }catch(e){}
+      }
+    }
+  });
 })();
 </script>
 
