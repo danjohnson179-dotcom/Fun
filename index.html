@@ -116,13 +116,119 @@ footer{padding:22px 0 46px;text-align:center;color:#71889a;font-size:12px}
 .planeMarker{font-size:30px;transform-origin:50% 50%;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35))}
 @media(max-width:720px){.hero{padding-top:38px}.card,.card.wide{grid-column:1/-1}#liveMap{height:370px}}
 @media(max-width:450px){.wrap{width:min(100% - 16px,1120px)}h1{font-size:clamp(50px,16vw,72px)}.live{display:none}.globe{width:min(310px,86vw)}.plane{font-size:68px}.globe strong{font-size:26px}#liveMap{height:330px}}
+
+/* v1.2.0 — HANGAR UPDATE */
+.menuBtn{
+  width:42px;height:42px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.05);
+  color:#fff;font-size:20px;font-weight:900;cursor:pointer;display:grid;place-items:center
+}
+.navRight{display:flex;align-items:center;gap:9px}
+.menuBackdrop{
+  display:none;position:fixed;inset:0;z-index:9000;background:rgba(3,10,17,.58);backdrop-filter:blur(8px)
+}
+.menuBackdrop.show{display:block}
+.sideMenu{
+  position:absolute;right:0;top:0;width:min(340px,88vw);height:100%;padding:20px;
+  background:#0b1b2a;border-left:1px solid var(--line);box-shadow:-18px 0 60px rgba(0,0,0,.28)
+}
+.menuTop{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.menuTop strong{font-size:20px;letter-spacing:-.03em}
+.menuClose{
+  width:38px;height:38px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.05);
+  color:#fff;font-size:20px;cursor:pointer
+}
+.menuLinks{display:grid;gap:10px;margin-top:22px}
+.menuLink{
+  width:100%;text-align:left;min-height:54px;border:1px solid var(--line);border-radius:16px;
+  background:rgba(255,255,255,.04);color:#fff;padding:0 15px;font-weight:900;cursor:pointer
+}
+.menuLink span{float:right;color:#7890a4;font-weight:800}
+.saveCardBtn{
+  margin-top:14px;width:100%;min-height:54px;border:0;border-radius:17px;color:#06111b;
+  background:linear-gradient(135deg,#ffd56a,#ff9ccf 55%,#83a2ff);font-weight:950;cursor:pointer
+}
+.saveCardBtn.saved{background:rgba(186,252,112,.12);color:var(--lime);border:1px solid rgba(186,252,112,.22)}
+.collectorToast{
+  position:fixed;left:50%;bottom:24px;z-index:9500;transform:translate(-50%,20px);opacity:0;pointer-events:none;
+  padding:12px 15px;border-radius:15px;background:#101f2f;border:1px solid var(--line);box-shadow:var(--shadow);
+  color:#fff;font-size:13px;font-weight:900;transition:.25s ease
+}
+.collectorToast.show{opacity:1;transform:translate(-50%,0)}
+.hangarBackdrop{
+  display:none;position:fixed;inset:0;z-index:9200;background:rgba(3,10,17,.74);backdrop-filter:blur(10px);
+  padding:18px;align-items:center;justify-content:center
+}
+.hangarBackdrop.show{display:flex}
+.hangarModal{
+  width:min(980px,100%);max-height:88vh;overflow:auto;background:#0b1b2a;border:1px solid var(--line);
+  border-radius:28px;padding:22px;box-shadow:var(--shadow)
+}
+.hangarTop{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.hangarTop h2{margin:0;font-size:32px;letter-spacing:-.045em}
+.hangarClose{
+  width:40px;height:40px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.05);
+  color:#fff;font-size:20px;cursor:pointer
+}
+.hangarStats{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px
+}
+.hangarStat{
+  padding:14px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid var(--line)
+}
+.hangarStat b{display:block;font-size:24px;letter-spacing:-.04em}
+.hangarStat span{display:block;margin-top:4px;color:#8197a9;font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:900}
+.progressWrap{margin-top:14px;padding:14px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.progressTop{display:flex;justify-content:space-between;gap:10px;color:#a4b4c1;font-size:12px;font-weight:850}
+.progressBar{height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:9px}
+.progressFill{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),#83a2ff,var(--pink));border-radius:999px}
+.hangarGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.collectCard{
+  position:relative;overflow:hidden;min-height:260px;padding:17px;border-radius:22px;
+  background:linear-gradient(145deg,#10273c,#0d1d2c);border:1px solid var(--line)
+}
+.collectCard:after{content:"✈";position:absolute;right:-12px;top:-25px;font-size:130px;opacity:.04;transform:rotate(-12deg)}
+.rarity{
+  display:inline-flex;padding:6px 9px;border-radius:999px;font-size:10px;font-weight:950;
+  text-transform:uppercase;letter-spacing:.08em;border:1px solid var(--line)
+}
+.rarity.common{color:#d3dde6;background:rgba(255,255,255,.05)}
+.rarity.uncommon{color:#9dffb6;background:rgba(93,255,137,.08)}
+.rarity.rare{color:#8fd8ff;background:rgba(90,182,255,.08)}
+.rarity.ultra{color:#ffd56a;background:rgba(255,213,106,.08)}
+.cardCallsign{margin-top:18px;font-size:30px;font-weight:950;letter-spacing:-.05em}
+.cardType{margin-top:4px;color:#94a8b9;font-weight:800}
+.cardMeta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:18px}
+.cardMeta div{padding:10px;border-radius:13px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.cardMeta b{display:block;font-size:15px}.cardMeta span{display:block;margin-top:3px;color:#7f95a7;font-size:10px}
+.cardFoot{margin-top:14px;color:#72899b;font-size:10px;line-height:1.4}
+.duplicateBadge{
+  position:absolute;right:13px;bottom:13px;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,.06);
+  border:1px solid var(--line);color:#c8d5df;font-size:10px;font-weight:900
+}
+.emptyHangar{
+  margin-top:18px;padding:32px 18px;text-align:center;border:1px dashed rgba(255,255,255,.14);border-radius:20px;color:#8ca1b2
+}
+.emptyHangar strong{display:block;color:#fff;font-size:20px;margin-bottom:6px}
+.hangarActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.hangarAction{
+  flex:1;min-width:180px;min-height:48px;border-radius:15px;border:1px solid var(--line);
+  background:rgba(255,255,255,.04);color:#fff;font-weight:900;cursor:pointer
+}
+.danger{color:#ffabc9}
+@media(max-width:760px){
+  .hangarStats{grid-template-columns:1fr 1fr}.hangarGrid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:500px){
+  .hangarGrid{grid-template-columns:1fr}.navRight .live{display:none}
+}
+
 </style>
 </head>
 <body>
 <div class="wrap">
 <nav>
   <div class="brand"><div class="logo">✈</div> FLIGHT ROULETTE</div>
-  <div class="live"><span class="dot"></span> LIVE ADS-B</div>
+  <div class="navRight"><div class="live"><span class="dot"></span> LIVE ADS-B</div><button class="menuBtn" id="menuBtn" aria-label="Open menu">☰</button></div>
 </nav>
 
 <main class="hero">
@@ -172,6 +278,7 @@ footer{padding:22px 0 46px;text-align:center;color:#71889a;font-size:12px}
     <button class="action primary" id="spinAgain">🎰 SPIN AGAIN</button>
     <button class="action" id="showMapBtn">📡 FOLLOW LIVE</button>
   </div>
+  <button class="saveCardBtn" id="saveCardBtn">🃏 SAVE COLLECTOR CARD TO HANGAR</button>
 
   <div class="mapSection" id="mapSection">
     <div class="mapHead">
@@ -195,52 +302,113 @@ footer{padding:22px 0 46px;text-align:center;color:#71889a;font-size:12px}
 </section>
 
 <footer>
-  Flight Roulette • <button class="versionBtn" id="versionBtn">v1.1.0</button>
+  Flight Roulette • <button class="versionBtn" id="versionBtn">v1.2.0</button>
 </footer>
 </div>
+
+
+
+<div class="menuBackdrop" id="menuBackdrop" aria-hidden="true">
+  <aside class="sideMenu">
+    <div class="menuTop">
+      <strong>Flight Roulette</strong>
+      <button class="menuClose" id="menuClose" aria-label="Close menu">×</button>
+    </div>
+    <div class="menuLinks">
+      <button class="menuLink" id="menuSpin">🎰 Spin the skies <span>→</span></button>
+      <button class="menuLink" id="menuHangar">🛩️ My Hangar <span id="menuHangarCount">0</span></button>
+      <button class="menuLink" id="menuReleases">🏷️ Release notes <span>v1.2.0</span></button>
+    </div>
+  </aside>
+</div>
+
+<div class="hangarBackdrop" id="hangarBackdrop" aria-hidden="true">
+  <div class="hangarModal" role="dialog" aria-modal="true" aria-labelledby="hangarTitle">
+    <div class="hangarTop">
+      <div>
+        <h2 id="hangarTitle">🛩️ My Hangar</h2>
+        <div class="releaseDate">Your aircraft collection is stored on this device.</div>
+      </div>
+      <button class="hangarClose" id="hangarClose" aria-label="Close Hangar">×</button>
+    </div>
+
+    <div class="hangarStats">
+      <div class="hangarStat"><b id="totalCards">0</b><span>Cards</span></div>
+      <div class="hangarStat"><b id="uniqueTypes">0</b><span>Aircraft types</span></div>
+      <div class="hangarStat"><b id="rareCards">0</b><span>Rare+</span></div>
+      <div class="hangarStat"><b id="uniqueAircraft">0</b><span>Unique aircraft</span></div>
+    </div>
+
+    <div class="progressWrap">
+      <div class="progressTop"><span>Aircraft type collection</span><strong id="progressText">0 / 30</strong></div>
+      <div class="progressBar"><div class="progressFill" id="progressFill"></div></div>
+    </div>
+
+    <div id="hangarGrid" class="hangarGrid"></div>
+
+    <div class="hangarActions">
+      <button class="hangarAction danger" id="clearHangar">Clear Hangar</button>
+    </div>
+  </div>
+</div>
+
+<div class="collectorToast" id="collectorToast">Saved to My Hangar ✓</div>
 
 <div class="modalBackdrop" id="releaseBackdrop" aria-hidden="true">
   <div class="releaseModal" role="dialog" aria-modal="true" aria-labelledby="releaseTitle">
     <div class="releaseTop">
       <div>
-        <h2 id="releaseTitle">Flight Roulette v1.1.0</h2>
-        <div class="releaseDate">Released 11 August 2026</div>
+        <h2 id="releaseTitle">Flight Roulette release notes</h2>
+        <div class="releaseDate">Current version: v1.2.0</div>
       </div>
       <button class="releaseClose" id="releaseClose" aria-label="Close">×</button>
     </div>
 
     <div class="releaseBlock">
-      <h3>📡 Follow aircraft live</h3>
-      <p>After finding a real aircraft, you can now open an embedded map and continue tracking the same ICAO address as new ADS-B positions arrive.</p>
-    </div>
-
-    <div class="releaseBlock">
-      <h3>🗺️ Live map</h3>
+      <h3>v1.2.0 — The Hangar Update</h3>
+      <div class="releaseDate">11 August 2026</div>
       <ul>
-        <li>Interactive OpenStreetMap basemap.</li>
-        <li>Aircraft marker rotates with the reported track heading.</li>
-        <li>A trail shows where the aircraft has moved during your session.</li>
-        <li>Auto-follow keeps the aircraft centred as its position changes.</li>
+        <li>Save the aircraft you discover as persistent collector cards.</li>
+        <li>New My Hangar collection library stored in the browser.</li>
+        <li>Aircraft cards include callsign, type, registration, ICAO, altitude, speed, discovery location and time.</li>
+        <li>Rarity system: Common, Uncommon, Rare and Ultra Rare.</li>
+        <li>Duplicate aircraft are counted rather than silently replacing the first discovery.</li>
+        <li>Collection statistics and aircraft-type progress.</li>
+        <li>New burger menu with My Hangar and Release Notes shortcuts.</li>
+        <li>Current version remains clickable in the footer.</li>
       </ul>
     </div>
 
     <div class="releaseBlock">
-      <h3>⚡ Live telemetry</h3>
-      <p>Altitude, speed, heading and coordinates refresh alongside the map whenever the live feed provides updated values.</p>
+      <h3>v1.1.0 — Live Tracker</h3>
+      <div class="releaseDate">11 August 2026</div>
+      <ul>
+        <li>Added embedded OpenStreetMap live aircraft tracking.</li>
+        <li>Follow the selected ICAO transponder address using adsb.lol.</li>
+        <li>Moving aircraft marker, reported heading rotation and session flight trail.</li>
+        <li>Auto-follow and manual centre controls.</li>
+        <li>Altitude, speed, heading and coordinates refresh while tracking.</li>
+        <li>Added clickable version number and in-site release notes.</li>
+      </ul>
     </div>
 
     <div class="releaseBlock">
-      <h3>🏷️ Version & release notes</h3>
-      <p>The current version now appears at the bottom of every page. Tap it at any time to read the release notes.</p>
+      <h3>v1.0.0 — First Flight</h3>
+      <div class="releaseDate">11 August 2026</div>
+      <ul>
+        <li>Introduced Spin the Skies.</li>
+        <li>Random discovery of real aircraft from open ADS-B feeds.</li>
+        <li>Displayed callsign, aircraft type, registration, altitude, speed, heading and live coordinates when available.</li>
+        <li>No API key required.</li>
+      </ul>
     </div>
 
     <div class="releaseBlock">
-      <h3>Data</h3>
-      <p>Flight Roulette uses open ADS-B data. Tracking availability depends on receiver coverage and an aircraft may disappear from the feed temporarily or permanently.</p>
+      <h3>Storage notice</h3>
+      <p>Hangar cards are stored with localStorage on this device and browser. Clearing website data or using a different device will not carry the collection across.</p>
     </div>
   </div>
 </div>
-
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
 <script>
@@ -248,9 +416,12 @@ const $=s=>document.querySelector(s);
 
 const spinBtn=$("#spinBtn"),spinAgain=$("#spinAgain"),scan=$("#scan"),errorBox=$("#error"),result=$("#result");
 const showMapBtn=$("#showMapBtn"),mapSection=$("#mapSection"),autoFollowBtn=$("#autoFollowBtn"),centreBtn=$("#centreBtn");
+const saveCardBtn=$("#saveCardBtn"),menuBtn=$("#menuBtn"),menuBackdrop=$("#menuBackdrop"),menuClose=$("#menuClose"),menuSpin=$("#menuSpin"),menuHangar=$("#menuHangar"),menuReleases=$("#menuReleases");
+const hangarBackdrop=$("#hangarBackdrop"),hangarClose=$("#hangarClose"),hangarGrid=$("#hangarGrid"),collectorToast=$("#collectorToast");
+const totalCards=$("#totalCards"),uniqueTypes=$("#uniqueTypes"),rareCards=$("#rareCards"),uniqueAircraft=$("#uniqueAircraft"),progressText=$("#progressText"),progressFill=$("#progressFill"),menuHangarCount=$("#menuHangarCount"),clearHangar=$("#clearHangar");
 const mapMeta=$("#mapMeta"),trackStatus=$("#trackStatus"),versionBtn=$("#versionBtn"),releaseBackdrop=$("#releaseBackdrop"),releaseClose=$("#releaseClose");
 
-let lastLat=null,lastLon=null,currentHex=null,currentZone=null,currentSource=null;
+let lastLat=null,lastLon=null,currentHex=null,currentZone=null,currentSource=null,currentAircraft=null;
 let map=null,planeMarker=null,trailLine=null,trailPoints=[];
 let trackingTimer=null,trackingBusy=false,autoFollow=true,lastTrack=null;
 
@@ -360,6 +531,9 @@ function renderAircraft(a,zone,source){
  currentHex=(a.hex||"").trim().toLowerCase();
  currentZone=zone;
  currentSource=source;
+ currentAircraft={...a, _zone:zone, _source:source};
+ saveCardBtn.classList.remove("saved");
+ saveCardBtn.textContent="🃏 SAVE COLLECTOR CARD TO HANGAR";
 
  $("#callsign").textContent=flight||a.r||a.hex||"UNKNOWN";
  $("#ident").textContent=flight?`Callsign ${flight} • ${source}`:a.r?`Registration ${a.r} • ${source}`:`ICAO ${a.hex||"unknown"} • ${source}`;
@@ -472,6 +646,7 @@ async function refreshTrackedAircraft(){
 
    const a=list[0];
    currentSource="adsb.lol";
+   currentAircraft={...(currentAircraft||{}),...a,_zone:currentZone,_source:"adsb.lol"};
    updateTelemetry(a);
    updateMapPoint(a,false);
    trackStatus.textContent="● TRACKING";
@@ -510,6 +685,181 @@ function startTracking(){
  setTimeout(()=>mapSection.scrollIntoView({behavior:"smooth",block:"start"}),120);
 }
 
+
+const HANGAR_KEY="flightRouletteHangarV1";
+const TARGET_TYPES=30;
+
+function getHangar(){
+  try{
+    const raw=JSON.parse(localStorage.getItem(HANGAR_KEY)||"[]");
+    return Array.isArray(raw)?raw:[];
+  }catch(e){return []}
+}
+function setHangar(items){
+  localStorage.setItem(HANGAR_KEY,JSON.stringify(items));
+}
+function aircraftRarity(type,desc=""){
+  const t=String(type||"").toUpperCase();
+  const d=String(desc||"").toUpperCase();
+
+  const ultra=["A388","A380","B748","AN22","AN124","A225"];
+  const rare=["B744","B742","B743","A346","A345","A343","B753","B752","MD11","DC10","CONC","B703","IL96"];
+  const uncommon=["B763","B762","B764","B788","B789","B78X","A332","A333","A339","A359","A35K","B77L","B77W","B772","E190","E195","BCS1","BCS3"];
+
+  if(ultra.includes(t) || d.includes("ANTONOV AN-225")) return {name:"Ultra Rare",cls:"ultra"};
+  if(rare.includes(t)) return {name:"Rare",cls:"rare"};
+  if(uncommon.includes(t)) return {name:"Uncommon",cls:"uncommon"};
+  return {name:"Common",cls:"common"};
+}
+function currentCardData(){
+  if(!currentAircraft) return null;
+
+  const flight=(currentAircraft.flight||"").trim();
+  const rarity=aircraftRarity(currentAircraft.t,currentAircraft.desc);
+
+  let altitude="Not available";
+  if(String(currentAircraft.alt_baro).toLowerCase()==="ground") altitude="Ground";
+  else if(currentAircraft.alt_baro!==undefined&&currentAircraft.alt_baro!==null&&!isNaN(Number(currentAircraft.alt_baro)))
+    altitude=`${Math.round(Number(currentAircraft.alt_baro)).toLocaleString("en-GB")} ft`;
+
+  return {
+    id: currentHex || currentAircraft.hex || currentAircraft.r || flight || String(Date.now()),
+    callsign: flight || currentAircraft.r || currentAircraft.hex || "UNKNOWN",
+    type: currentAircraft.t || "Unknown",
+    description: currentAircraft.desc || "",
+    registration: currentAircraft.r || "Unknown",
+    hex: currentAircraft.hex || currentHex || "Unknown",
+    altitude,
+    speed: currentAircraft.gs!==undefined&&currentAircraft.gs!==null&&!isNaN(Number(currentAircraft.gs)) ? `${Math.round(Number(currentAircraft.gs))} kt` : "Not available",
+    heading: currentAircraft.track!==undefined&&currentAircraft.track!==null&&!isNaN(Number(currentAircraft.track)) ? `${Math.round(Number(currentAircraft.track))}°` : "Not available",
+    lat: Number.isFinite(Number(currentAircraft.lat))?Number(currentAircraft.lat):lastLat,
+    lon: Number.isFinite(Number(currentAircraft.lon))?Number(currentAircraft.lon):lastLon,
+    zone: currentZone || currentAircraft._zone || "Unknown area",
+    source: currentSource || currentAircraft._source || "Live ADS-B",
+    rarity: rarity.name,
+    rarityClass: rarity.cls,
+    firstSaved: new Date().toISOString(),
+    discoveries: 1
+  };
+}
+function saveCurrentCard(){
+  const card=currentCardData();
+  if(!card){
+    showError("Spin the skies and discover an aircraft before saving a collector card.");
+    return;
+  }
+
+  const items=getHangar();
+  const match=items.find(x=>String(x.id).toLowerCase()===String(card.id).toLowerCase());
+
+  if(match){
+    match.discoveries=(match.discoveries||1)+1;
+    match.lastSeen=new Date().toISOString();
+    match.altitude=card.altitude;
+    match.speed=card.speed;
+    match.heading=card.heading;
+    match.lat=card.lat;
+    match.lon=card.lon;
+    match.zone=card.zone;
+  }else{
+    items.unshift(card);
+  }
+
+  setHangar(items);
+  renderHangar();
+
+  saveCardBtn.classList.add("saved");
+  saveCardBtn.textContent=match?`✓ DUPLICATE FOUND — NOW ×${match.discoveries}`:"✓ SAVED TO MY HANGAR";
+  showToast(match?`Duplicate! ${card.callsign} is now ×${match.discoveries}`:`${card.callsign} saved to My Hangar ✓`);
+}
+function showToast(text){
+  collectorToast.textContent=text;
+  collectorToast.classList.add("show");
+  setTimeout(()=>collectorToast.classList.remove("show"),2200);
+}
+function safeText(v){
+  return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+}
+function renderHangar(){
+  const items=getHangar();
+  const types=[...new Set(items.map(x=>String(x.type||"Unknown").toUpperCase()).filter(Boolean))];
+  const aircraftIds=[...new Set(items.map(x=>String(x.id||"").toLowerCase()).filter(Boolean))];
+  const rarePlus=items.filter(x=>x.rarity==="Rare"||x.rarity==="Ultra Rare");
+
+  totalCards.textContent=items.reduce((sum,x)=>sum+(x.discoveries||1),0);
+  uniqueTypes.textContent=types.length;
+  rareCards.textContent=rarePlus.length;
+  uniqueAircraft.textContent=aircraftIds.length;
+  menuHangarCount.textContent=items.reduce((sum,x)=>sum+(x.discoveries||1),0);
+
+  const pct=Math.min(100,(types.length/TARGET_TYPES)*100);
+  progressText.textContent=`${types.length} / ${TARGET_TYPES}`;
+  progressFill.style.width=pct+"%";
+
+  if(!items.length){
+    hangarGrid.innerHTML=`<div class="emptyHangar" style="grid-column:1/-1"><strong>Your Hangar is empty.</strong>Spin the skies, find a real aircraft and save your first collector card.</div>`;
+    return;
+  }
+
+  hangarGrid.innerHTML=items.map(card=>{
+    const dt=new Date(card.firstSaved);
+    const date=Number.isNaN(dt.getTime())?"Unknown date":dt.toLocaleString("en-GB",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});
+    return `<article class="collectCard">
+      <div class="rarity ${safeText(card.rarityClass||"common")}">${safeText(card.rarity||"Common")}</div>
+      <div class="cardCallsign">${safeText(card.callsign)}</div>
+      <div class="cardType">${safeText(card.type)}${card.description?` • ${safeText(card.description)}`:""}</div>
+      <div class="cardMeta">
+        <div><b>${safeText(card.altitude)}</b><span>Captured altitude</span></div>
+        <div><b>${safeText(card.speed)}</b><span>Captured speed</span></div>
+        <div><b>${safeText(card.registration)}</b><span>Registration</span></div>
+        <div><b>${safeText(card.hex)}</b><span>ICAO hex</span></div>
+      </div>
+      <div class="cardFoot">Captured near ${safeText(card.zone)} • ${safeText(date)}</div>
+      ${(card.discoveries||1)>1?`<div class="duplicateBadge">×${card.discoveries} FOUND</div>`:""}
+    </article>`;
+  }).join("");
+}
+function openHangar(){
+  renderHangar();
+  hangarBackdrop.classList.add("show");
+  hangarBackdrop.setAttribute("aria-hidden","false");
+}
+function closeHangar(){
+  hangarBackdrop.classList.remove("show");
+  hangarBackdrop.setAttribute("aria-hidden","true");
+}
+function openMenu(){
+  menuBackdrop.classList.add("show");
+  menuBackdrop.setAttribute("aria-hidden","false");
+}
+function closeMenu(){
+  menuBackdrop.classList.remove("show");
+  menuBackdrop.setAttribute("aria-hidden","true");
+}
+
+saveCardBtn.addEventListener("click",saveCurrentCard);
+menuBtn.addEventListener("click",openMenu);
+menuClose.addEventListener("click",closeMenu);
+menuBackdrop.addEventListener("click",e=>{if(e.target===menuBackdrop)closeMenu()});
+menuSpin.addEventListener("click",()=>{closeMenu();window.scrollTo({top:0,behavior:"smooth"});});
+menuHangar.addEventListener("click",()=>{closeMenu();openHangar()});
+menuReleases.addEventListener("click",()=>{
+  closeMenu();
+  releaseBackdrop.classList.add("show");
+  releaseBackdrop.setAttribute("aria-hidden","false");
+});
+hangarClose.addEventListener("click",closeHangar);
+hangarBackdrop.addEventListener("click",e=>{if(e.target===hangarBackdrop)closeHangar()});
+clearHangar.addEventListener("click",()=>{
+  if(confirm("Clear every aircraft from My Hangar on this device?")){
+    localStorage.removeItem(HANGAR_KEY);
+    renderHangar();
+    showToast("My Hangar cleared");
+  }
+});
+renderHangar();
+
+
 spinBtn.addEventListener("click",findRealAircraft);
 spinAgain.addEventListener("click",findRealAircraft);
 showMapBtn.addEventListener("click",startTracking);
@@ -534,7 +884,7 @@ function closeRelease(){
 }
 releaseClose.addEventListener("click",closeRelease);
 releaseBackdrop.addEventListener("click",e=>{if(e.target===releaseBackdrop)closeRelease()});
-document.addEventListener("keydown",e=>{if(e.key==="Escape")closeRelease()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeRelease();closeMenu();closeHangar();}});
 
 window.addEventListener("beforeunload",stopTracking);
 </script>
