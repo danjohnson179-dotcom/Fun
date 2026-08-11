@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#08111b">
 <title>Flight Roulette — Real Aircraft</title>
-<meta name="description" content="Spin the skies and discover a real aircraft being tracked right now.">
+<meta name="description" content="Spin the skies, discover a real aircraft and follow it live on the map.">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+
 <style>
 :root{
   --bg:#07111b;--panel:#0c1d2c;--text:#f7fbff;--muted:#91a7b8;
@@ -61,7 +64,7 @@ h1{max-width:930px;margin:22px auto 15px;font-size:clamp(53px,10vw,106px);line-h
 .globe small{position:relative;z-index:2;display:block;margin-top:7px;font-size:12px;font-weight:900;opacity:.62}
 .scan{min-height:24px;margin-top:18px;color:#8da3b4;font-size:13px;font-weight:800}
 #error{display:none;max-width:720px;margin:18px auto 0;padding:13px 15px;border-radius:16px;color:#ffd3e7;background:rgba(255,120,200,.08);border:1px solid rgba(255,120,200,.20);text-align:left}
-#result{display:none;padding:0 0 76px;animation:rise .42s ease both}
+#result{display:none;padding:0 0 42px;animation:rise .42s ease both}
 @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 .heroCard{position:relative;overflow:hidden;padding:24px;border-radius:30px;background:linear-gradient(135deg,rgba(15,41,63,.96),rgba(9,25,39,.98));border:1px solid var(--line);box-shadow:var(--shadow)}
 .heroCard:after{content:"✈";position:absolute;right:-20px;top:-55px;font-size:230px;opacity:.035;transform:rotate(-15deg)}
@@ -82,10 +85,37 @@ h1{max-width:930px;margin:22px auto 15px;font-size:clamp(53px,10vw,106px);line-h
 .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
 .action{flex:1;min-width:180px;min-height:52px;border-radius:17px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:#fff;font-weight:900;cursor:pointer}
 .action.primary{border:0;color:#06111b;background:linear-gradient(135deg,var(--cyan),#83a2ff)}
+.mapSection{display:none;margin-top:14px;padding:18px;border-radius:28px;background:rgba(13,30,46,.88);border:1px solid var(--line);box-shadow:0 12px 35px rgba(0,0,0,.16)}
+.mapHead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:13px}
+.mapTitle{font-size:26px;font-weight:950;letter-spacing:-.04em}
+.mapSub{margin-top:5px;color:#8ea2b3;font-size:12px;line-height:1.4}
+.trackStatus{padding:8px 11px;border-radius:999px;background:rgba(186,252,112,.09);border:1px solid rgba(186,252,112,.16);color:var(--lime);font-size:11px;font-weight:950}
+#liveMap{height:430px;border-radius:20px;overflow:hidden;background:#08131f}
+.mapControls{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.trackBtn{flex:1;min-width:180px;min-height:48px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.05);color:#fff;font-weight:900;cursor:pointer}
+.trackBtn.active{background:linear-gradient(135deg,var(--cyan),#83a2ff);color:#06111b;border:0}
+.mapMeta{margin-top:10px;color:#7d94a7;font-size:11px;text-align:center}
 .source{margin-top:16px;text-align:center;color:#6f879a;font-size:11px;line-height:1.5}
 .source a{color:#90efff;text-decoration:none;font-weight:850}
-@media(max-width:720px){.hero{padding-top:38px}.card,.card.wide{grid-column:1/-1}}
-@media(max-width:450px){.wrap{width:min(100% - 16px,1120px)}h1{font-size:clamp(50px,16vw,72px)}.live{display:none}.globe{width:min(310px,86vw)}.plane{font-size:68px}.globe strong{font-size:26px}}
+
+footer{padding:22px 0 46px;text-align:center;color:#71889a;font-size:12px}
+.versionBtn{border:0;background:transparent;color:#90efff;font-weight:900;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+
+.modalBackdrop{display:none;position:fixed;inset:0;z-index:9999;background:rgba(3,10,17,.72);backdrop-filter:blur(9px);padding:18px;align-items:center;justify-content:center}
+.modalBackdrop.show{display:flex}
+.releaseModal{width:min(560px,100%);max-height:82vh;overflow:auto;background:#0d1d2c;border:1px solid var(--line);border-radius:26px;padding:22px;box-shadow:var(--shadow)}
+.releaseTop{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.releaseTop h2{margin:0;font-size:28px;letter-spacing:-.04em}
+.releaseClose{width:38px;height:38px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.05);color:#fff;font-size:20px;cursor:pointer}
+.releaseDate{margin-top:5px;color:#7f95a7;font-size:12px}
+.releaseBlock{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.releaseBlock h3{margin:0 0 8px;font-size:16px}
+.releaseBlock p,.releaseBlock li{color:#a0b2c1;line-height:1.55;font-size:13px}
+.releaseBlock ul{padding-left:20px;margin:8px 0}
+.leaflet-container{font-family:Inter,ui-sans-serif,system-ui,sans-serif}
+.planeMarker{font-size:30px;transform-origin:50% 50%;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35))}
+@media(max-width:720px){.hero{padding-top:38px}.card,.card.wide{grid-column:1/-1}#liveMap{height:370px}}
+@media(max-width:450px){.wrap{width:min(100% - 16px,1120px)}h1{font-size:clamp(50px,16vw,72px)}.live{display:none}.globe{width:min(310px,86vw)}.plane{font-size:68px}.globe strong{font-size:26px}#liveMap{height:330px}}
 </style>
 </head>
 <body>
@@ -98,7 +128,7 @@ h1{max-width:930px;margin:22px auto 15px;font-size:clamp(53px,10vw,106px);line-h
 <main class="hero">
   <div class="kicker">🌍 Real aircraft. No API key.</div>
   <h1>Spin the <span class="grad">skies.</span></h1>
-  <p class="sub">Tap the globe and we’ll scan a busy airspace region for an aircraft that is actually being tracked right now.</p>
+  <p class="sub">Tap the globe, find an aircraft that’s actually flying right now, then follow it live across the map.</p>
 </main>
 
 <section class="spinzone">
@@ -140,17 +170,89 @@ h1{max-width:930px;margin:22px auto 15px;font-size:clamp(53px,10vw,106px);line-h
 
   <div class="actions">
     <button class="action primary" id="spinAgain">🎰 SPIN AGAIN</button>
-    <button class="action" id="mapBtn">🗺️ VIEW ON MAP</button>
+    <button class="action" id="showMapBtn">📡 FOLLOW LIVE</button>
   </div>
 
-  <div class="source">Primary live data: <a href="https://adsb.lol/" target="_blank" rel="noopener">adsb.lol ↗</a>. Fallback: <a href="https://airplanes.live/" target="_blank" rel="noopener">Airplanes.live ↗</a>.</div>
+  <div class="mapSection" id="mapSection">
+    <div class="mapHead">
+      <div>
+        <div class="mapTitle">Live flight tracker</div>
+        <div class="mapSub" id="mapSub">Following this aircraft using its ICAO transponder address.</div>
+      </div>
+      <div class="trackStatus" id="trackStatus">● TRACKING</div>
+    </div>
+
+    <div id="liveMap"></div>
+
+    <div class="mapControls">
+      <button class="trackBtn active" id="autoFollowBtn">◎ AUTO-FOLLOW ON</button>
+      <button class="trackBtn" id="centreBtn">⌖ CENTRE AIRCRAFT</button>
+    </div>
+    <div class="mapMeta" id="mapMeta">Waiting for next live position…</div>
+  </div>
+
+  <div class="source">Live aircraft data from <a href="https://adsb.lol/" target="_blank" rel="noopener">adsb.lol ↗</a>, with Airplanes.live used as a discovery fallback.</div>
 </section>
+
+<footer>
+  Flight Roulette • <button class="versionBtn" id="versionBtn">v1.1.0</button>
+</footer>
 </div>
+
+<div class="modalBackdrop" id="releaseBackdrop" aria-hidden="true">
+  <div class="releaseModal" role="dialog" aria-modal="true" aria-labelledby="releaseTitle">
+    <div class="releaseTop">
+      <div>
+        <h2 id="releaseTitle">Flight Roulette v1.1.0</h2>
+        <div class="releaseDate">Released 11 August 2026</div>
+      </div>
+      <button class="releaseClose" id="releaseClose" aria-label="Close">×</button>
+    </div>
+
+    <div class="releaseBlock">
+      <h3>📡 Follow aircraft live</h3>
+      <p>After finding a real aircraft, you can now open an embedded map and continue tracking the same ICAO address as new ADS-B positions arrive.</p>
+    </div>
+
+    <div class="releaseBlock">
+      <h3>🗺️ Live map</h3>
+      <ul>
+        <li>Interactive OpenStreetMap basemap.</li>
+        <li>Aircraft marker rotates with the reported track heading.</li>
+        <li>A trail shows where the aircraft has moved during your session.</li>
+        <li>Auto-follow keeps the aircraft centred as its position changes.</li>
+      </ul>
+    </div>
+
+    <div class="releaseBlock">
+      <h3>⚡ Live telemetry</h3>
+      <p>Altitude, speed, heading and coordinates refresh alongside the map whenever the live feed provides updated values.</p>
+    </div>
+
+    <div class="releaseBlock">
+      <h3>🏷️ Version & release notes</h3>
+      <p>The current version now appears at the bottom of every page. Tap it at any time to read the release notes.</p>
+    </div>
+
+    <div class="releaseBlock">
+      <h3>Data</h3>
+      <p>Flight Roulette uses open ADS-B data. Tracking availability depends on receiver coverage and an aircraft may disappear from the feed temporarily or permanently.</p>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
 <script>
 const $=s=>document.querySelector(s);
-const spinBtn=$("#spinBtn"),spinAgain=$("#spinAgain"),scan=$("#scan"),errorBox=$("#error"),result=$("#result"),mapBtn=$("#mapBtn");
-let lastLat=null,lastLon=null;
+
+const spinBtn=$("#spinBtn"),spinAgain=$("#spinAgain"),scan=$("#scan"),errorBox=$("#error"),result=$("#result");
+const showMapBtn=$("#showMapBtn"),mapSection=$("#mapSection"),autoFollowBtn=$("#autoFollowBtn"),centreBtn=$("#centreBtn");
+const mapMeta=$("#mapMeta"),trackStatus=$("#trackStatus"),versionBtn=$("#versionBtn"),releaseBackdrop=$("#releaseBackdrop"),releaseClose=$("#releaseClose");
+
+let lastLat=null,lastLon=null,currentHex=null,currentZone=null,currentSource=null;
+let map=null,planeMarker=null,trailLine=null,trailPoints=[];
+let trackingTimer=null,trackingBusy=false,autoFollow=true,lastTrack=null;
 
 const zones=[
  ["London",51.4700,-0.4543],["Paris",49.0097,2.5479],["Amsterdam",52.3105,4.7683],["Frankfurt",50.0379,8.5622],
@@ -184,22 +286,33 @@ async function fetchJson(url,timeout=9000){
 }
 
 async function scanAdsbLol(name,lat,lon){
- scan.textContent=`Scanning live aircraft near ${name} via adsb.lol…`;
+ scan.textContent=`Scanning live aircraft near ${name}…`;
  const j=await fetchJson(`https://api.adsb.lol/v2/point/${lat}/${lon}/250`);
- const list=(j.ac||[]).filter(validAircraft);
- return list;
+ return (j.ac||[]).filter(validAircraft);
 }
 
 async function scanAirplanesLive(name,lat,lon){
  scan.textContent=`Trying backup radar near ${name}…`;
  const j=await fetchJson(`https://api.airplanes.live/v2/point/${lat}/${lon}/250`);
- const raw=j.aircraft||j.ac||[];
- return raw.filter(validAircraft);
+ return (j.aircraft||j.ac||[]).filter(validAircraft);
+}
+
+function stopTracking(){
+ if(trackingTimer){clearInterval(trackingTimer);trackingTimer=null}
+ trackingBusy=false;
+}
+
+function resetTrackingMap(){
+ stopTracking();
+ trailPoints=[];
+ if(trailLine){trailLine.setLatLngs([])}
+ mapSection.style.display="none";
 }
 
 async function findRealAircraft(){
  clearError();
  result.style.display="none";
+ resetTrackingMap();
  spinBtn.disabled=true;spinAgain.disabled=true;spinBtn.classList.add("loading");
 
  let technicalErrors=[];
@@ -212,35 +325,28 @@ async function findRealAircraft(){
      try{
        const list=await scanAdsbLol(name,lat,lon);
        if(list.length){
-         const plane=choose(list);
-         renderAircraft(plane,name,"adsb.lol");
+         renderAircraft(choose(list),name,"adsb.lol");
          return;
        }
-     }catch(e){
-       technicalErrors.push(`adsb.lol: ${e.message}`);
-     }
+     }catch(e){technicalErrors.push(`adsb.lol: ${e.message}`)}
 
      await sleep(1050);
 
      try{
        const list2=await scanAirplanesLive(name,lat,lon);
        if(list2.length){
-         const plane=choose(list2);
-         renderAircraft(plane,name,"Airplanes.live");
+         renderAircraft(choose(list2),name,"Airplanes.live");
          return;
        }
-     }catch(e){
-       technicalErrors.push(`Airplanes.live: ${e.message}`);
-     }
+     }catch(e){technicalErrors.push(`Airplanes.live: ${e.message}`)}
 
      if(i<shuffled.length-1) await sleep(1050);
    }
 
    if(technicalErrors.length>=4){
-     throw new Error("The live feeds are being blocked or rate-limited by the browser/network. " + technicalErrors.slice(-2).join(" | "));
+     throw new Error("The live feeds are being blocked or rate-limited. "+technicalErrors.slice(-2).join(" | "));
    }
-
-   throw new Error("The live APIs returned zero usable aircraft in all scanned regions. Try again in a moment.");
+   throw new Error("The live APIs returned zero usable aircraft in all scanned regions.");
  }catch(e){
    showError("Couldn’t find a live aircraft: "+e.message);
    scan.textContent="Live feed unavailable right now.";
@@ -251,15 +357,35 @@ async function findRealAircraft(){
 
 function renderAircraft(a,zone,source){
  const flight=(a.flight||"").trim();
+ currentHex=(a.hex||"").trim().toLowerCase();
+ currentZone=zone;
+ currentSource=source;
+
  $("#callsign").textContent=flight||a.r||a.hex||"UNKNOWN";
  $("#ident").textContent=flight?`Callsign ${flight} • ${source}`:a.r?`Registration ${a.r} • ${source}`:`ICAO ${a.hex||"unknown"} • ${source}`;
 
- const onGround=String(a.alt_baro).toLowerCase()==="ground";
- $("#airState").textContent=onGround?"ON GROUND":"AIRBORNE";
+ updateTelemetry(a);
 
  lastLat=Number(a.lat);lastLon=Number(a.lon);
  $("#where").textContent=`Near ${zone}`;
  $("#whereSub").textContent=`${lastLat.toFixed(3)}, ${lastLon.toFixed(3)} • ${source}`;
+
+ showMapBtn.disabled=!currentHex;
+ showMapBtn.textContent=currentHex?"📡 FOLLOW LIVE":"LIVE FOLLOW UNAVAILABLE";
+
+ result.style.display="block";
+ scan.textContent=`Real aircraft found via ${source} ✈️`;
+ setTimeout(()=>result.scrollIntoView({behavior:"smooth",block:"start"}),80);
+}
+
+function updateTelemetry(a){
+ const onGround=String(a.alt_baro).toLowerCase()==="ground";
+ $("#airState").textContent=onGround?"ON GROUND":"AIRBORNE";
+
+ if(Number.isFinite(Number(a.lat))&&Number.isFinite(Number(a.lon))){
+   lastLat=Number(a.lat);lastLon=Number(a.lon);
+   $("#whereSub").textContent=`${lastLat.toFixed(3)}, ${lastLon.toFixed(3)}${currentSource?` • ${currentSource}`:""}`;
+ }
 
  let alt="Not available";
  if(onGround) alt="Ground";
@@ -271,20 +397,146 @@ function renderAircraft(a,zone,source){
  $("#type").textContent=a.t||"Not available";
  $("#typeMore").textContent=a.desc||"ICAO aircraft type code where available";
  $("#registration").textContent=a.r||"Not available";
- $("#icao").textContent=`ICAO hex: ${a.hex||"Not available"}`;
+ $("#icao").textContent=`ICAO hex: ${a.hex||currentHex||"Not available"}`;
 
- mapBtn.disabled=!(Number.isFinite(lastLat)&&Number.isFinite(lastLon));
- result.style.display="block";
- scan.textContent=`Real aircraft found via ${source} ✈️`;
- setTimeout(()=>result.scrollIntoView({behavior:"smooth",block:"start"}),80);
+ lastTrack=Number.isFinite(Number(a.track))?Number(a.track):lastTrack;
+}
+
+function planeIcon(track){
+ const heading=Number.isFinite(Number(track))?Number(track):0;
+ return L.divIcon({
+   className:"",
+   html:`<div class="planeMarker" style="transform:rotate(${heading-45}deg)">✈️</div>`,
+   iconSize:[36,36],
+   iconAnchor:[18,18]
+ });
+}
+
+function initMap(){
+ if(map) return;
+ map=L.map("liveMap",{zoomControl:true,attributionControl:true});
+ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
+   maxZoom:19,
+   attribution:'&copy; OpenStreetMap contributors'
+ }).addTo(map);
+
+ trailLine=L.polyline([],{weight:4,opacity:.72}).addTo(map);
+}
+
+function updateMapPoint(a,initial=false){
+ if(!Number.isFinite(Number(a.lat))||!Number.isFinite(Number(a.lon))) return;
+
+ const lat=Number(a.lat),lon=Number(a.lon);
+ lastLat=lat;lastLon=lon;
+
+ const point=[lat,lon];
+ const prev=trailPoints[trailPoints.length-1];
+ if(!prev || Math.abs(prev[0]-lat)>.00001 || Math.abs(prev[1]-lon)>.00001){
+   trailPoints.push(point);
+   if(trailPoints.length>120) trailPoints.shift();
+   trailLine.setLatLngs(trailPoints);
+ }
+
+ if(!planeMarker){
+   planeMarker=L.marker(point,{icon:planeIcon(a.track)}).addTo(map);
+ }else{
+   planeMarker.setLatLng(point);
+   planeMarker.setIcon(planeIcon(a.track));
+ }
+
+ const label=((a.flight||"").trim()||a.r||a.hex||"Aircraft");
+ planeMarker.bindPopup(`<strong>${label}</strong><br>${lat.toFixed(4)}, ${lon.toFixed(4)}`);
+
+ if(initial){
+   map.setView(point,8);
+ }else if(autoFollow){
+   map.panTo(point,{animate:true,duration:.7});
+ }
+
+ mapMeta.textContent=`Last live fix: ${new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",second:"2-digit"})} • ${lat.toFixed(4)}, ${lon.toFixed(4)}`;
+}
+
+async function refreshTrackedAircraft(){
+ if(!currentHex||trackingBusy) return;
+ trackingBusy=true;
+
+ try{
+   const j=await fetchJson(`https://api.adsb.lol/v2/icao/${encodeURIComponent(currentHex)}`,8000);
+   const list=(j.ac||[]).filter(validAircraft);
+
+   if(!list.length){
+     trackStatus.textContent="● WAITING";
+     mapMeta.textContent="No fresh position returned. Keeping the last known location and trying again…";
+     return;
+   }
+
+   const a=list[0];
+   currentSource="adsb.lol";
+   updateTelemetry(a);
+   updateMapPoint(a,false);
+   trackStatus.textContent="● TRACKING";
+ }catch(e){
+   trackStatus.textContent="● RETRYING";
+   mapMeta.textContent=`Live refresh failed (${e.message}). The tracker will retry automatically.`;
+ }finally{
+   trackingBusy=false;
+ }
+}
+
+function startTracking(){
+ if(!currentHex){
+   showError("This aircraft does not have a usable ICAO hex address, so live follow is unavailable.");
+   return;
+ }
+
+ initMap();
+ mapSection.style.display="block";
+ setTimeout(()=>map.invalidateSize(),100);
+
+ const initialAircraft={
+   lat:lastLat,
+   lon:lastLon,
+   track:lastTrack,
+   flight:$("#callsign").textContent,
+   hex:currentHex
+ };
+ updateMapPoint(initialAircraft,true);
+
+ stopTracking();
+ refreshTrackedAircraft();
+ trackingTimer=setInterval(refreshTrackedAircraft,5000);
+
+ showMapBtn.textContent="📡 FOLLOWING LIVE";
+ setTimeout(()=>mapSection.scrollIntoView({behavior:"smooth",block:"start"}),120);
 }
 
 spinBtn.addEventListener("click",findRealAircraft);
 spinAgain.addEventListener("click",findRealAircraft);
-mapBtn.addEventListener("click",()=>{
- if(!Number.isFinite(lastLat)||!Number.isFinite(lastLon))return;
- window.open(`https://www.google.com/maps?q=${lastLat},${lastLon}`,"_blank","noopener");
+showMapBtn.addEventListener("click",startTracking);
+
+autoFollowBtn.addEventListener("click",()=>{
+ autoFollow=!autoFollow;
+ autoFollowBtn.classList.toggle("active",autoFollow);
+ autoFollowBtn.textContent=autoFollow?"◎ AUTO-FOLLOW ON":"◎ AUTO-FOLLOW OFF";
 });
+
+centreBtn.addEventListener("click",()=>{
+ if(map&&Number.isFinite(lastLat)&&Number.isFinite(lastLon)) map.setView([lastLat,lastLon],Math.max(map.getZoom(),8),{animate:true});
+});
+
+versionBtn.addEventListener("click",()=>{
+ releaseBackdrop.classList.add("show");
+ releaseBackdrop.setAttribute("aria-hidden","false");
+});
+function closeRelease(){
+ releaseBackdrop.classList.remove("show");
+ releaseBackdrop.setAttribute("aria-hidden","true");
+}
+releaseClose.addEventListener("click",closeRelease);
+releaseBackdrop.addEventListener("click",e=>{if(e.target===releaseBackdrop)closeRelease()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeRelease()});
+
+window.addEventListener("beforeunload",stopTracking);
 </script>
 </body>
 </html>
