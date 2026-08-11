@@ -222,6 +222,50 @@ footer{padding:22px 0 46px;text-align:center;color:#71889a;font-size:12px}
   .hangarGrid{grid-template-columns:1fr}.navRight .live{display:none}
 }
 
+
+/* v1.3.0 — WHAT'S ABOVE ME */
+.aboveBackdrop{
+  display:none;position:fixed;inset:0;z-index:9250;background:rgba(3,10,17,.76);
+  backdrop-filter:blur(10px);padding:18px;align-items:center;justify-content:center
+}
+.aboveBackdrop.show{display:flex}
+.aboveModal{
+  width:min(900px,100%);max-height:88vh;overflow:auto;background:#0b1b2a;border:1px solid var(--line);
+  border-radius:28px;padding:22px;box-shadow:var(--shadow)
+}
+.aboveTop{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.aboveTop h2{margin:0;font-size:32px;letter-spacing:-.045em}
+.aboveClose{width:40px;height:40px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.05);color:#fff;font-size:20px;cursor:pointer}
+.locateHero{
+  margin-top:18px;padding:22px;border-radius:22px;text-align:center;
+  background:linear-gradient(135deg,rgba(99,236,255,.10),rgba(95,141,255,.10),rgba(255,120,200,.08));
+  border:1px solid var(--line)
+}
+.locateHero .pin{font-size:46px}
+.locateHero h3{margin:9px 0 7px;font-size:24px;letter-spacing:-.035em}
+.locateHero p{max-width:570px;margin:0 auto;color:#91a7b8;line-height:1.5;font-size:13px}
+.locateBtn{
+  margin-top:16px;min-height:52px;padding:0 20px;border:0;border-radius:16px;
+  background:linear-gradient(135deg,var(--cyan),#83a2ff);color:#06111b;font-weight:950;cursor:pointer
+}
+.aboveStatus{margin-top:12px;min-height:20px;text-align:center;color:#8ca2b4;font-size:12px;font-weight:850}
+.aboveList{display:grid;gap:10px;margin-top:16px}
+.nearPlane{
+  display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:15px;
+  border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.035)
+}
+.nearPlane h4{margin:0;font-size:20px;letter-spacing:-.03em}
+.nearMeta{margin-top:5px;color:#849aab;font-size:11px;line-height:1.45}
+.nearActions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.nearBtn{
+  min-height:38px;padding:0 11px;border-radius:12px;border:1px solid var(--line);
+  background:rgba(255,255,255,.05);color:#fff;font-size:11px;font-weight:900;cursor:pointer
+}
+.nearBtn.capture{border:0;background:linear-gradient(135deg,#ffd56a,#ff9ccf);color:#07111b}
+.aboveEmpty{padding:25px;text-align:center;color:#849aab;border:1px dashed rgba(255,255,255,.14);border-radius:18px}
+.privacyNote{margin-top:14px;color:#71889a;font-size:10px;line-height:1.5;text-align:center}
+@media(max-width:600px){.nearPlane{grid-template-columns:1fr}.nearActions{justify-content:flex-start}}
+
 </style>
 </head>
 <body>
@@ -302,7 +346,7 @@ footer{padding:22px 0 46px;text-align:center;color:#71889a;font-size:12px}
 </section>
 
 <footer>
-  Flight Roulette • <button class="versionBtn" id="versionBtn">v1.2.0</button>
+  Flight Roulette • <button class="versionBtn" id="versionBtn">v1.3.0</button>
 </footer>
 </div>
 
@@ -317,9 +361,34 @@ footer{padding:22px 0 46px;text-align:center;color:#71889a;font-size:12px}
     <div class="menuLinks">
       <button class="menuLink" id="menuSpin">🎰 Spin the skies <span>→</span></button>
       <button class="menuLink" id="menuHangar">🛩️ My Hangar <span id="menuHangarCount">0</span></button>
-      <button class="menuLink" id="menuReleases">🏷️ Release notes <span>v1.2.0</span></button>
+      <button class="menuLink" id="menuAbove">📍 What’s Above Me? <span>LIVE</span></button>
+      <button class="menuLink" id="menuReleases">🏷️ Release notes <span>v1.3.0</span></button>
     </div>
   </aside>
+</div>
+
+
+<div class="aboveBackdrop" id="aboveBackdrop" aria-hidden="true">
+  <div class="aboveModal" role="dialog" aria-modal="true" aria-labelledby="aboveTitle">
+    <div class="aboveTop">
+      <div>
+        <h2 id="aboveTitle">📍 What’s Above Me?</h2>
+        <div class="releaseDate">Discover real aircraft flying around your current location.</div>
+      </div>
+      <button class="aboveClose" id="aboveClose" aria-label="Close">×</button>
+    </div>
+
+    <div class="locateHero">
+      <div class="pin">📡</div>
+      <h3>Scan your local sky</h3>
+      <p>Your browser will ask for location permission. Your coordinates are used to request nearby live aircraft and are not saved to your Hangar.</p>
+      <button class="locateBtn" id="locateBtn">USE MY LOCATION & SCAN</button>
+      <div class="aboveStatus" id="aboveStatus">Waiting for you to start a scan.</div>
+    </div>
+
+    <div class="aboveList" id="aboveList"></div>
+    <div class="privacyNote">Location access is controlled by your browser. Flight Roulette does not require an account.</div>
+  </div>
 </div>
 
 <div class="hangarBackdrop" id="hangarBackdrop" aria-hidden="true">
@@ -359,9 +428,23 @@ footer{padding:22px 0 46px;text-align:center;color:#71889a;font-size:12px}
     <div class="releaseTop">
       <div>
         <h2 id="releaseTitle">Flight Roulette release notes</h2>
-        <div class="releaseDate">Current version: v1.2.0</div>
+        <div class="releaseDate">Current version: v1.3.0</div>
       </div>
       <button class="releaseClose" id="releaseClose" aria-label="Close">×</button>
+    </div>
+
+    <div class="releaseBlock">
+      <h3>v1.3.0 — What’s Above Me?</h3>
+      <div class="releaseDate">11 August 2026</div>
+      <ul>
+        <li>New location-based What’s Above Me? mode.</li>
+        <li>Ask the browser for location permission and scan the live ADS-B feed around you.</li>
+        <li>Nearby aircraft are sorted by approximate distance from your position.</li>
+        <li>See callsign, aircraft type, altitude, speed and distance at a glance.</li>
+        <li>Capture a nearby aircraft directly into My Hangar.</li>
+        <li>Open any nearby aircraft on the existing live tracker.</li>
+        <li>Added What’s Above Me? to the burger menu.</li>
+      </ul>
     </div>
 
     <div class="releaseBlock">
@@ -416,8 +499,9 @@ const $=s=>document.querySelector(s);
 
 const spinBtn=$("#spinBtn"),spinAgain=$("#spinAgain"),scan=$("#scan"),errorBox=$("#error"),result=$("#result");
 const showMapBtn=$("#showMapBtn"),mapSection=$("#mapSection"),autoFollowBtn=$("#autoFollowBtn"),centreBtn=$("#centreBtn");
-const saveCardBtn=$("#saveCardBtn"),menuBtn=$("#menuBtn"),menuBackdrop=$("#menuBackdrop"),menuClose=$("#menuClose"),menuSpin=$("#menuSpin"),menuHangar=$("#menuHangar"),menuReleases=$("#menuReleases");
+const saveCardBtn=$("#saveCardBtn"),menuBtn=$("#menuBtn"),menuBackdrop=$("#menuBackdrop"),menuClose=$("#menuClose"),menuSpin=$("#menuSpin"),menuHangar=$("#menuHangar"),menuReleases=$("#menuReleases"),menuAbove=$("#menuAbove");
 const hangarBackdrop=$("#hangarBackdrop"),hangarClose=$("#hangarClose"),hangarGrid=$("#hangarGrid"),collectorToast=$("#collectorToast");
+const aboveBackdrop=$("#aboveBackdrop"),aboveClose=$("#aboveClose"),locateBtn=$("#locateBtn"),aboveStatus=$("#aboveStatus"),aboveList=$("#aboveList");
 const totalCards=$("#totalCards"),uniqueTypes=$("#uniqueTypes"),rareCards=$("#rareCards"),uniqueAircraft=$("#uniqueAircraft"),progressText=$("#progressText"),progressFill=$("#progressFill"),menuHangarCount=$("#menuHangarCount"),clearHangar=$("#clearHangar");
 const mapMeta=$("#mapMeta"),trackStatus=$("#trackStatus"),versionBtn=$("#versionBtn"),releaseBackdrop=$("#releaseBackdrop"),releaseClose=$("#releaseClose");
 
@@ -686,6 +770,122 @@ function startTracking(){
 }
 
 
+
+let nearbyAircraft=[];
+
+function openAbove(){
+  closeMenu();
+  aboveBackdrop.classList.add("show");
+  aboveBackdrop.setAttribute("aria-hidden","false");
+}
+function closeAbove(){
+  aboveBackdrop.classList.remove("show");
+  aboveBackdrop.setAttribute("aria-hidden","true");
+}
+function distanceNm(lat1,lon1,lat2,lon2){
+  const R=3440.065;
+  const toRad=x=>x*Math.PI/180;
+  const dLat=toRad(lat2-lat1),dLon=toRad(lon2-lon1);
+  const a=Math.sin(dLat/2)**2+Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+function getBrowserLocation(){
+  return new Promise((resolve,reject)=>{
+    if(!navigator.geolocation) return reject(new Error("This browser does not support location access."));
+    navigator.geolocation.getCurrentPosition(
+      p=>resolve({lat:p.coords.latitude,lon:p.coords.longitude,accuracy:p.coords.accuracy}),
+      e=>{
+        const msg=e.code===1?"Location permission was denied. Enable location access for this site and try again.":
+                  e.code===2?"Your location could not be determined right now.":
+                  "Location request timed out. Try again.";
+        reject(new Error(msg));
+      },
+      {enableHighAccuracy:true,timeout:12000,maximumAge:60000}
+    );
+  });
+}
+async function scanAboveMe(){
+  locateBtn.disabled=true;
+  aboveList.innerHTML="";
+  aboveStatus.textContent="Getting your location…";
+  try{
+    const pos=await getBrowserLocation();
+    aboveStatus.textContent="Scanning the live sky around you…";
+
+    // 50 NM gives a useful local-sky view without claiming aircraft are literally overhead.
+    const j=await fetchJson(`https://api.adsb.lol/v2/point/${pos.lat}/${pos.lon}/50`,10000);
+    nearbyAircraft=(j.ac||[])
+      .filter(validAircraft)
+      .map(a=>({...a,_distance:distanceNm(pos.lat,pos.lon,Number(a.lat),Number(a.lon))}))
+      .sort((a,b)=>a._distance-b._distance)
+      .slice(0,20);
+
+    if(!nearbyAircraft.length){
+      aboveStatus.textContent="No tracked aircraft found within 50 nautical miles.";
+      aboveList.innerHTML='<div class="aboveEmpty">The live feed can’t currently see a usable aircraft near you. Try again in a few minutes.</div>';
+      return;
+    }
+
+    aboveStatus.textContent=`Found ${nearbyAircraft.length} tracked aircraft nearby • location accuracy ±${Math.round(pos.accuracy)} m`;
+    renderNearby();
+  }catch(e){
+    aboveStatus.textContent=e.message;
+    aboveList.innerHTML='<div class="aboveEmpty">Unable to complete the local sky scan.</div>';
+  }finally{
+    locateBtn.disabled=false;
+  }
+}
+function nearbyAltitude(a){
+  if(String(a.alt_baro).toLowerCase()==="ground") return "Ground";
+  if(a.alt_baro!==undefined&&a.alt_baro!==null&&!isNaN(Number(a.alt_baro))) return `${Math.round(Number(a.alt_baro)).toLocaleString("en-GB")} ft`;
+  return "Altitude unavailable";
+}
+function renderNearby(){
+  aboveList.innerHTML=nearbyAircraft.map((a,i)=>{
+    const flight=(a.flight||"").trim();
+    const title=flight||a.r||a.hex||"Unknown aircraft";
+    const type=a.t||"Type unknown";
+    const speed=(a.gs!==undefined&&a.gs!==null&&!isNaN(Number(a.gs)))?`${Math.round(Number(a.gs))} kt`:"Speed unavailable";
+    return `<article class="nearPlane">
+      <div>
+        <h4>✈️ ${safeText(title)}</h4>
+        <div class="nearMeta">${safeText(type)} • ${safeText(nearbyAltitude(a))} • ${safeText(speed)} • ${a._distance.toFixed(1)} NM away</div>
+      </div>
+      <div class="nearActions">
+        <button class="nearBtn" data-track="${i}">FOLLOW LIVE</button>
+        <button class="nearBtn capture" data-capture="${i}">SAVE TO HANGAR</button>
+      </div>
+    </article>`;
+  }).join("");
+
+  aboveList.querySelectorAll("[data-track]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const a=nearbyAircraft[Number(btn.dataset.track)];
+      closeAbove();
+      renderAircraft(a,"your location","adsb.lol");
+      setTimeout(startTracking,180);
+    });
+  });
+
+  aboveList.querySelectorAll("[data-capture]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const a=nearbyAircraft[Number(btn.dataset.capture)];
+      currentAircraft={...a,_zone:"your location",_source:"adsb.lol"};
+      currentHex=(a.hex||"").trim().toLowerCase();
+      currentZone="your location";
+      currentSource="adsb.lol";
+      lastLat=Number(a.lat);lastLon=Number(a.lon);
+      saveCurrentCard();
+      btn.textContent="SAVED ✓";
+    });
+  });
+}
+menuAbove.addEventListener("click",openAbove);
+aboveClose.addEventListener("click",closeAbove);
+aboveBackdrop.addEventListener("click",e=>{if(e.target===aboveBackdrop)closeAbove()});
+locateBtn.addEventListener("click",scanAboveMe);
+
+
 const HANGAR_KEY="flightRouletteHangarV1";
 const TARGET_TYPES=30;
 
@@ -884,7 +1084,7 @@ function closeRelease(){
 }
 releaseClose.addEventListener("click",closeRelease);
 releaseBackdrop.addEventListener("click",e=>{if(e.target===releaseBackdrop)closeRelease()});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeRelease();closeMenu();closeHangar();}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeRelease();closeMenu();closeHangar();closeAbove();}});
 
 window.addEventListener("beforeunload",stopTracking);
 </script>
