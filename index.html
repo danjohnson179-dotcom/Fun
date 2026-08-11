@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050609">
-<title>SKYHUNT v3.2-beta · AI Finder — v3.0.1 — Live Aircraft Discovery</title>
-<meta name="description" content="Find, track and collect real aircraft flying right now.">
+<title>SKYHUNT — Live Aircraft Discovery</title>
+<meta name="description" content="Discover, track and collect real aircraft flying now with SKYHUNT.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <style>
 :root{
@@ -607,6 +607,115 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
 .aiNotice{padding:8px 16px 0;color:#59697a;font-size:7px;line-height:1.35}
 @media(max-width:520px){.aiFinderBackdrop{padding:0}.aiFinderApp{height:100%;border-radius:0;border:0}.aiMessages{padding:13px}.aiBubble{max-width:92%}.aiResultStats{grid-template-columns:repeat(3,1fr)}}
 
+
+/* ======================================================
+   SKYHUNT v4.0.0-demo — RELEASE READY DEMO
+   ====================================================== */
+:root{
+  --launch-lime:#d6ff63;
+  --launch-cyan:#63eaff;
+  --launch-violet:#8d83ff;
+  --launch-rose:#ff70b7;
+}
+body{
+  background:
+    radial-gradient(circle at 10% -5%,rgba(99,234,255,.12),transparent 34rem),
+    radial-gradient(circle at 100% 22%,rgba(141,131,255,.09),transparent 30rem),
+    linear-gradient(180deg,#05070a,#06090e 62%,#05070a)!important;
+}
+.topbar{
+  border-bottom:1px solid rgba(255,255,255,.035);
+  background:linear-gradient(180deg,rgba(5,7,10,.92),rgba(5,7,10,.64),transparent)!important;
+}
+.brandMark{background:linear-gradient(135deg,var(--launch-lime),var(--launch-cyan))!important}
+.heroV2{padding-top:60px!important}
+.heroV2 h1{font-size:clamp(62px,9.8vw,120px)!important}
+.heroV2 p{font-size:17px!important;max-width:640px!important}
+.heroRadar{
+  min-height:360px!important;
+  background:
+    radial-gradient(circle at 50% 50%,rgba(99,234,255,.10),transparent 18%),
+    radial-gradient(circle at 50% 50%,transparent 0 26%,rgba(99,234,255,.08) 26.4% 26.8%,transparent 27.2% 40%,rgba(99,234,255,.055) 40.4% 40.8%,transparent 41.2%),
+    linear-gradient(145deg,#09131c,#070c12)!important;
+}
+.mode{transition:.18s ease}
+.mode:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.14)}
+.globe{transition:.18s ease}
+.globe:hover{transform:translateY(-3px) scale(1.01)}
+.globe:active{transform:scale(.985)}
+.releaseReadyBadge{
+  display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border-radius:999px;
+  border:1px solid rgba(214,255,99,.16);background:rgba(214,255,99,.06);
+  color:var(--launch-lime);font-size:8px;font-weight:950;letter-spacing:.11em
+}
+.footerLinks{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:10px}
+.footerLinks button{
+  border:0;background:transparent;color:#6f7d8e;font-size:9px;text-decoration:underline;
+  text-underline-offset:3px;cursor:pointer
+}
+.legalBackdrop{
+  display:none;position:fixed;inset:0;z-index:12000;background:rgba(2,5,8,.82);
+  backdrop-filter:blur(14px);padding:18px;align-items:center;justify-content:center
+}
+.legalBackdrop.show{display:flex}
+.legalModal{
+  width:min(760px,100%);max-height:88vh;overflow:auto;border:1px solid var(--line);
+  border-radius:26px;background:#0a1017;padding:22px;box-shadow:0 35px 110px rgba(0,0,0,.55)
+}
+.legalTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.legalTop h2{margin:0;font-size:30px;letter-spacing:-.045em}
+.legalTop p{margin:5px 0 0;color:#758295;font-size:10px}
+.legalClose{
+  width:38px;height:38px;border:1px solid var(--line);border-radius:12px;
+  background:rgba(255,255,255,.035);color:#fff;font-size:18px
+}
+.legalSection{padding-top:15px;margin-top:15px;border-top:1px solid var(--line)}
+.legalSection h3{margin:0 0 7px;font-size:15px}
+.legalSection p,.legalSection li{color:#8b98a8;font-size:11px;line-height:1.55}
+.legalSection ul{padding-left:18px}
+.firstRunGate{
+  display:none;position:fixed;inset:0;z-index:13000;
+  background:radial-gradient(circle at 50% 12%,rgba(99,234,255,.11),transparent 28rem),#05070a;
+  padding:20px;align-items:center;justify-content:center
+}
+.firstRunGate.show{display:flex}
+.firstRunCard{
+  width:min(520px,100%);padding:24px;border-radius:28px;border:1px solid rgba(255,255,255,.09);
+  background:linear-gradient(180deg,#0d141d,#091018);box-shadow:0 40px 120px rgba(0,0,0,.52)
+}
+.firstRunMark{
+  width:52px;height:52px;border-radius:17px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--launch-lime),var(--launch-cyan));
+  color:#071006;font-size:24px
+}
+.firstRunCard h2{font-size:36px;letter-spacing:-.05em;margin:16px 0 7px}
+.firstRunCard>p{margin:0;color:#8592a3;font-size:11px;line-height:1.55}
+.consentList{display:grid;gap:8px;margin-top:16px}
+.consentRow{
+  display:flex;gap:9px;align-items:flex-start;padding:10px;border:1px solid var(--line);
+  border-radius:14px;background:rgba(255,255,255,.025)
+}
+.consentRow span{font-size:17px}
+.consentRow div{font-size:10px;color:#9aa6b5;line-height:1.4}
+.consentRow b{color:#fff}
+.firstRunActions{display:grid;gap:8px;margin-top:16px}
+.acceptBtn{
+  min-height:50px;border:0;border-radius:15px;
+  background:linear-gradient(135deg,var(--launch-lime),var(--launch-cyan));
+  color:#071006;font-weight:950
+}
+.readTermsBtn{
+  min-height:46px;border:1px solid var(--line);border-radius:15px;
+  background:rgba(255,255,255,.035);color:#fff;font-weight:900
+}
+.firstRunTiny{margin-top:10px!important;font-size:8px!important;color:#607082!important}
+@media(max-width:520px){
+  .heroRadar{min-height:250px!important}
+  .heroV2{padding-top:34px!important}
+  .firstRunCard{padding:20px}
+  .firstRunCard h2{font-size:32px}
+}
+
 </style>
 </head>
 <body>
@@ -628,11 +737,12 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
       <div>
         <div class="eyebrow"><span class="livePulse"></span> REAL AIRCRAFT · LIVE NOW</div>
         <h1>Find something<br><span class="gradient">in the sky.</span></h1>
-        <p>Spin the world, hunt live aircraft, follow them in real time and build a collection from the sky above us.</p>
+        <p>Discover real aircraft flying now. Hunt globally, scan your local sky, follow live targets and build a collection from real ADS-B data.</p>
         <div class="heroMeta">
-          <span class="metaChip">NO ACCOUNT</span>
+          <span class="metaChip">NO ACCOUNT REQUIRED</span>
           <span class="metaChip">NO API KEY</span>
           <span class="metaChip">LIVE ADS-B</span>
+          <span class="releaseReadyBadge">RELEASE-READY DEMO</span>
         </div>
       </div>
 
@@ -764,7 +874,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
   </div>
 
   <div class="worldTip">
-    World Radar is a live sample rather than a claim to display every aircraft currently airborne.
+    World Radar is a live sample, not a complete global traffic picture. Coverage and update timing vary by connected receiver networks and feeds.
   </div>
 </section>
 
@@ -788,7 +898,15 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
   </article>
 </section>
 
-<footer>SKYHUNT • <button class="versionBtn" id="versionBtn">v3.2.0-beta</button></footer>
+<footer>
+  SKYHUNT • <button class="versionBtn" id="versionBtn">v4.0.0-demo</button>
+  <div class="footerLinks">
+    <button id="termsLink">Terms</button>
+    <button id="privacyLink">Privacy</button>
+    <button id="sourcesLink">Data & Sources</button>
+    <button id="safetyLink">Safety</button>
+  </div>
+</footer>
 </div>
 
 <nav class="bottomNav">
@@ -797,6 +915,39 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
   <button data-view="hangar"><i>▱</i>Hangar</button>
   <button data-view="passport"><i>◈</i>Flight ID</button>
 </nav>
+
+
+<div class="firstRunGate" id="firstRunGate" aria-hidden="true">
+  <div class="firstRunCard">
+    <div class="firstRunMark">✦</div>
+    <div class="releaseReadyBadge">SKYHUNT v4.0 · RELEASE-READY DEMO</div>
+    <h2>Before you enter the sky.</h2>
+    <p>SKYHUNT is an entertainment and aircraft-discovery product using third-party live aviation data. Review the essentials before continuing.</p>
+
+    <div class="consentList">
+      <div class="consentRow"><span>✈</span><div><b>Not for navigation.</b><br>Aircraft position, altitude, speed and identity can be delayed, incomplete or inaccurate.</div></div>
+      <div class="consentRow"><span>⌖</span><div><b>Location and camera are optional.</b><br>Above Me and Sky Lens only request these permissions when you choose to use them.</div></div>
+      <div class="consentRow"><span>▱</span><div><b>Your Hangar is local.</b><br>Collections are stored in this browser and can be lost if website data is cleared.</div></div>
+      <div class="consentRow"><span>◎</span><div><b>Third-party services apply.</b><br>Live aircraft feeds, maps and connected services may have outages, limits or separate terms.</div></div>
+    </div>
+
+    <div class="firstRunActions">
+      <button class="acceptBtn" id="acceptTermsBtn">ACCEPT & ENTER SKYHUNT</button>
+      <button class="readTermsBtn" id="readTermsBtn">READ FULL TERMS</button>
+    </div>
+    <p class="firstRunTiny">By continuing, you agree to the SKYHUNT Terms of Use and acknowledge the Privacy & Data Notice. Acceptance is stored only in this browser.</p>
+  </div>
+</div>
+
+<div class="legalBackdrop" id="legalBackdrop" aria-hidden="true">
+  <div class="legalModal">
+    <div class="legalTop">
+      <div><h2 id="legalTitle">SKYHUNT Terms</h2><p>Release-ready demo · 11 August 2026</p></div>
+      <button class="legalClose" id="legalClose">×</button>
+    </div>
+    <div id="legalContent"></div>
+  </div>
+</div>
 
 <div class="menuBackdrop" id="menuBackdrop">
   <aside class="sideMenu">
@@ -807,7 +958,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
       <button class="menuLink" id="menuAbove">⌖ Above Me <span>LIVE</span></button>
       <button class="menuLink" id="menuSkyLens">◉ Sky Lens <span>BETA</span></button>
       <button class="menuLink" id="menuAiFinder">✦ AI Finder <span>BETA</span></button>
-      <button class="menuLink" id="menuReleases">◈ Release notes <span>v3.2 BETA</span></button>
+      <button class="menuLink" id="menuReleases">◈ Release notes <span>v4.0 DEMO</span></button>
     </div>
   </aside>
 </div>
@@ -898,9 +1049,10 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
 
 <div class="modalBackdrop" id="releaseBackdrop">
   <div class="releaseModal">
-    <div class="releaseTop"><div><h2>SKYHUNT releases</h2><div class="releaseDate">Current version: v3.2.0-beta</div></div><button class="releaseClose" id="releaseClose">×</button></div>
+    <div class="releaseTop"><div><h2>SKYHUNT releases</h2><div class="releaseDate">Current version: v4.0.0-demo</div></div><button class="releaseClose" id="releaseClose">×</button></div>
 
-    <div class="releaseBlock"><h3>v3.2.0-beta — AI Finder</h3><div class="releaseDate">11 August 2026</div><ul><li>New natural-language live aircraft finder.</li><li>Understands common airline names, aircraft families, altitude and speed constraints, and superlatives such as highest, lowest and fastest.</li><li>Searches sampled live ADS-B data rather than inventing aircraft.</li><li>No AI API key required: query interpretation runs locally in the browser.</li><li>Open, follow or capture matched live aircraft.</li><li>Clearly reports when the current live sample contains no match.</li></ul></div>
+    <div class="releaseBlock"><h3>v4.0.0-demo — Release-Ready Demo</h3><div class="releaseDate">11 August 2026</div><ul><li>Final major UX and copy overhaul before release testing.</li><li>New first-run Terms acceptance flow.</li><li>New Terms, Privacy, Data & Sources and Safety notices.</li><li>Dual live-data architecture retained: adsb.lol primary with Airplanes.live fallback where already implemented.</li><li>Clearer accuracy, permission and local-storage language.</li><li>Existing Hangar storage preserved.</li><li>Random Hunt, World Radar, Above Me, Live Tracking, Hangar, Flight ID, Sky Lens and AI Finder retained.</li></ul></div>
+<div class="releaseBlock"><h3>v3.2.0-beta — AI Finder</h3><div class="releaseDate">11 August 2026</div><ul><li>New natural-language live aircraft finder.</li><li>Understands common airline names, aircraft families, altitude and speed constraints, and superlatives such as highest, lowest and fastest.</li><li>Searches sampled live ADS-B data rather than inventing aircraft.</li><li>No AI API key required: query interpretation runs locally in the browser.</li><li>Open, follow or capture matched live aircraft.</li><li>Clearly reports when the current live sample contains no match.</li></ul></div>
 <div class="releaseBlock"><h3>v3.1.0-beta — Sky Lens</h3><div class="releaseDate">11 August 2026</div><ul><li>Introduced SKYHUNT LABS.</li><li>New experimental camera-based Sky Lens mode.</li><li>Uses camera, location and device orientation to estimate where nearby live aircraft are in the sky.</li><li>Live target labels show callsign, aircraft type, altitude and approximate distance.</li><li>Nearest/in-view target receives a highlighted treatment.</li><li>Open a target directly in the main live tracker.</li><li>Clearly labelled BETA because phone compass/orientation and ADS-B timing are approximate.</li></ul></div>
 <div class="releaseBlock"><h3>v3.0.1 — Radar Map Upgrade</h3><div class="releaseDate">11 August 2026</div><ul><li>Completely redesigned World Radar map presentation.</li><li>New dark tactical basemap treatment.</li><li>Animated radar rings and sweep overlay.</li><li>Glowing aircraft target markers.</li><li>Floating live radar HUD with target count and scan/reset controls.</li><li>New aircraft preview bottom sheet when a target is tapped.</li><li>Open or capture an aircraft directly from the map.</li><li>Improved mobile map proportions and controls.</li></ul></div>
 <div class="releaseBlock"><h3>v3.0.0 — SKYHUNT</h3><div class="releaseDate">11 August 2026</div><ul><li>Complete rebrand from Flight Roulette to SKYHUNT.</li><li>New visual identity and design system.</li><li>New radar-inspired landing experience.</li><li>New Hunt / Radar / Hangar / Flight ID navigation language.</li><li>Redesigned collector cards, tracking UI and world radar.</li><li>All proven live-aircraft functionality retained.</li></ul></div>
@@ -1911,7 +2063,7 @@ function closeRelease(){
 }
 releaseClose.addEventListener("click",closeRelease);
 releaseBackdrop.addEventListener("click",e=>{if(e.target===releaseBackdrop)closeRelease()});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeRelease();closeMenu();closeHangar();closeAbove();closeSkyLens();closeAiFinder();}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeRelease();closeMenu();closeHangar();closeAbove();closeSkyLens();closeAiFinder();closeLegal();}});
 
 
 // ===== v2.0.0 LIVE WORLD =====
@@ -2131,6 +2283,81 @@ $("#v2ClearHangar").addEventListener("click",()=>{
 
 // Upgrade old navigation targets into v2 views
 menuHangar.addEventListener("click",()=>showV2View("hangar"));
+
+
+// ===== v4.0.0-demo — TERMS / PRIVACY / DATA / SAFETY =====
+const firstRunGate=$("#firstRunGate"),acceptTermsBtn=$("#acceptTermsBtn"),readTermsBtn=$("#readTermsBtn");
+const legalBackdrop=$("#legalBackdrop"),legalClose=$("#legalClose"),legalTitle=$("#legalTitle"),legalContent=$("#legalContent");
+const termsLink=$("#termsLink"),privacyLink=$("#privacyLink"),sourcesLink=$("#sourcesLink"),safetyLink=$("#safetyLink");
+const SKYHUNT_TERMS_KEY="skyhuntTermsAccepted_v4_demo";
+
+const LEGAL_DOCS={
+terms:{
+ title:"Terms of Use",
+ html:`
+ <div class="legalSection"><h3>1. What SKYHUNT is</h3><p>SKYHUNT is an entertainment, discovery and educational web application that displays and derives information from public or third-party aviation data. It is not an air-navigation, air-traffic-control, emergency, operational or safety system.</p></div>
+ <div class="legalSection"><h3>2. No operational reliance</h3><p>Do not rely on SKYHUNT to navigate, operate, dispatch, intercept, identify, avoid or make safety decisions concerning any aircraft. Data may be delayed, incomplete, inaccurate, unavailable or misidentified.</p></div>
+ <div class="legalSection"><h3>3. Availability</h3><p>SKYHUNT is provided on an “as available” basis. Features may stop working because of browser restrictions, device permissions, network conditions, third-party service changes, API limits or outages.</p></div>
+ <div class="legalSection"><h3>4. Acceptable use</h3><p>Use SKYHUNT only for lawful discovery, entertainment and educational purposes. Do not use it to harass, stalk, threaten, interfere with aviation operations, facilitate unlawful activity, bypass service limits or overload connected services.</p></div>
+ <div class="legalSection"><h3>5. Collector features</h3><p>Hangar cards, rarity labels, levels and collection mechanics are SKYHUNT game features. They are not official aviation classifications and do not imply ownership of, affiliation with or rights in an aircraft.</p></div>
+ <div class="legalSection"><h3>6. Third-party data</h3><p>SKYHUNT relies on third-party aircraft-data and mapping services. Their availability, licensing and terms are separate from SKYHUNT and may change.</p></div>
+ <div class="legalSection"><h3>7. Demo status</h3><p>This build is a release-ready demonstration. Before commercial use, data-provider licensing, hosting, legal terms, privacy obligations and infrastructure should be reviewed for the intended deployment.</p></div>`
+},
+privacy:{
+ title:"Privacy & Data Notice",
+ html:`
+ <div class="legalSection"><h3>Browser storage</h3><p>SKYHUNT stores your Hangar, collection progress and acceptance of these terms in your browser using localStorage. This data is local to the browser/device unless a future account service is introduced.</p></div>
+ <div class="legalSection"><h3>Location</h3><p>Above Me and Sky Lens request location only after you choose to start them. Coordinates are used to request nearby aircraft from connected live-data services. SKYHUNT does not intentionally add your personal location to Hangar cards.</p></div>
+ <div class="legalSection"><h3>Camera & orientation</h3><p>Sky Lens may request camera and device-orientation access. The camera stream is displayed locally in the browser and is not intentionally recorded or uploaded by SKYHUNT. Device orientation is used to estimate target direction.</p></div>
+ <div class="legalSection"><h3>Third parties</h3><p>Aircraft-data providers, map-tile providers and other third-party services can receive ordinary technical request data such as IP address, user agent and requested coordinates as part of normal internet requests.</p></div>
+ <div class="legalSection"><h3>Accounts</h3><p>This demo does not require a SKYHUNT account and does not intentionally collect passwords or payment-card details.</p></div>`
+},
+sources:{
+ title:"Data & Sources",
+ html:`
+ <div class="legalSection"><h3>Live aircraft data</h3><p>SKYHUNT uses open live ADS-B/MLAT aircraft data. adsb.lol is used as a primary feed in the current build. Airplanes.live is retained as a fallback in selected demo features.</p></div>
+ <div class="legalSection"><h3>Maps</h3><p>Interactive maps use Leaflet and OpenStreetMap tiles/attribution in the current demo.</p></div>
+ <div class="legalSection"><h3>What the data means</h3><p>Aircraft fields are shown only when returned by the connected feed where practical. Coverage depends on receivers, aircraft broadcasts, MLAT availability and the upstream service. “Live” does not mean zero-delay or guaranteed completeness.</p></div>
+ <div class="legalSection"><h3>AI Finder</h3><p>AI Finder currently uses a local natural-language query parser rather than a generative AI service. It searches sampled live aircraft data and does not invent a target when no match is found.</p></div>
+ <div class="legalSection"><h3>Game rarity</h3><p>Common, Uncommon, Rare and Ultra Rare labels are SKYHUNT gameplay classifications, not authoritative measures of worldwide aircraft rarity.</p></div>`
+},
+safety:{
+ title:"Safety Notice",
+ html:`
+ <div class="legalSection"><h3>Do not use while driving or operating equipment</h3><p>Do not interact with SKYHUNT, maps or Sky Lens while driving, cycling, operating machinery or doing anything that requires your full attention.</p></div>
+ <div class="legalSection"><h3>Sky Lens</h3><p>Sky Lens is experimental approximate AR. Phone compass drift, pitch estimation, camera field-of-view assumptions, ADS-B latency and coverage can place labels away from the aircraft you can actually see.</p></div>
+ <div class="legalSection"><h3>Respect people and property</h3><p>Do not trespass, enter restricted areas, obstruct roads, airports or emergency access, or use SKYHUNT to target or harass individuals.</p></div>
+ <div class="legalSection"><h3>Emergency information</h3><p>SKYHUNT is not an emergency information source. Follow official authorities and aviation services for safety-critical information.</p></div>`
+}
+};
+
+function openLegal(which){
+  const d=LEGAL_DOCS[which]||LEGAL_DOCS.terms;
+  legalTitle.textContent=d.title;
+  legalContent.innerHTML=d.html;
+  legalBackdrop.classList.add("show");
+  legalBackdrop.setAttribute("aria-hidden","false");
+}
+function closeLegal(){
+  legalBackdrop.classList.remove("show");
+  legalBackdrop.setAttribute("aria-hidden","true");
+}
+termsLink.addEventListener("click",()=>openLegal("terms"));
+privacyLink.addEventListener("click",()=>openLegal("privacy"));
+sourcesLink.addEventListener("click",()=>openLegal("sources"));
+safetyLink.addEventListener("click",()=>openLegal("safety"));
+readTermsBtn.addEventListener("click",()=>openLegal("terms"));
+legalClose.addEventListener("click",closeLegal);
+legalBackdrop.addEventListener("click",e=>{if(e.target===legalBackdrop)closeLegal()});
+acceptTermsBtn.addEventListener("click",()=>{
+  localStorage.setItem(SKYHUNT_TERMS_KEY,new Date().toISOString());
+  firstRunGate.classList.remove("show");
+  firstRunGate.setAttribute("aria-hidden","true");
+});
+if(!localStorage.getItem(SKYHUNT_TERMS_KEY)){
+  firstRunGate.classList.add("show");
+  firstRunGate.setAttribute("aria-hidden","false");
+}
 
 window.addEventListener("beforeunload",stopTracking);
 </script>
