@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050b12">
-<title>Flight Roulette 2.0 — Live World</title>
+<title>Flight Roulette 2.0.1 — Live World</title>
 <meta name="description" content="Discover, track and collect real aircraft flying right now.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <style>
@@ -17,13 +17,54 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 .modeGrid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:12px;margin:28px 0 50px}.mode{position:relative;overflow:hidden;min-height:170px;border:1px solid var(--line);border-radius:25px;background:linear-gradient(145deg,#0b1d2c,#09151f);color:#fff;text-align:left;padding:20px;cursor:pointer}.mode.primary{background:radial-gradient(circle at 80% 10%,rgba(98,237,255,.24),transparent 16rem),linear-gradient(145deg,#102a3f,#0a1723)}.modeIcon{font-size:34px}.mode h3{font-size:25px;margin:22px 0 5px;letter-spacing:-.045em}.mode p{font-size:12px;color:#7f96a8;margin:0;line-height:1.4}.mode .go{position:absolute;right:17px;bottom:17px;width:37px;height:37px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08)}
 .spinzone{text-align:center;padding:25px 0 48px}.globe{width:min(330px,82vw);aspect-ratio:1;border:0;border-radius:50%;position:relative;overflow:hidden;background:radial-gradient(circle at 30% 23%,#fff 0,transparent 7%),radial-gradient(circle,#64e8ff,#5d8dff 55%,#9c79ff 75%,#ff76c8);box-shadow:0 30px 110px rgba(82,135,255,.28),inset 0 0 0 10px rgba(255,255,255,.12);font-weight:950;color:#06111b}.globe .plane{font-size:72px;display:block}.globe strong{font-size:26px;display:block}.globe small{font-size:10px;opacity:.65}.globe.loading .plane{animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.scan{margin-top:16px;color:#7d94a7;font-size:12px;font-weight:850}#error{display:none;max-width:700px;margin:14px auto;padding:13px;border-radius:15px;border:1px solid rgba(255,117,200,.2);background:rgba(255,117,200,.07);color:#ffd3e9}
 #result{display:none;padding:0 0 30px}.heroCard,.card,.mapSection{border:1px solid var(--line);background:#0a1926;border-radius:24px}.heroCard{padding:22px}.top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.callsign{font-size:clamp(44px,8vw,76px);font-weight:950;letter-spacing:-.06em}.ident,.whereSub,.small{color:#7f96a8;font-size:12px}.badge{padding:8px 10px;border-radius:999px;color:var(--lime);background:rgba(185,255,115,.08);height:max-content;font-size:10px;font-weight:900}.mainline{display:flex;gap:10px;align-items:center;margin-top:20px}.flag{font-size:35px}.where{font-size:30px;font-weight:950;letter-spacing:-.04em}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:10px;margin-top:10px}.card{grid-column:span 4;padding:16px}.card.wide{grid-column:span 6}.label{font-size:9px;color:#6f8798;letter-spacing:.1em;font-weight:900}.value{font-size:22px;font-weight:950;margin-top:7px}.actions{display:flex;gap:9px;margin-top:10px}.action,.saveCardBtn,.trackBtn{min-height:49px;border-radius:15px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#fff;font-weight:900;flex:1}.action.primary,.saveCardBtn{border:0;background:linear-gradient(135deg,var(--cyan),#83a2ff);color:#06111b}.saveCardBtn{width:100%;margin-top:9px}.mapSection{display:none;margin-top:10px;padding:15px}.mapHead{display:flex;justify-content:space-between}.mapTitle{font-size:23px;font-weight:950}.trackStatus{color:var(--lime);font-size:10px;font-weight:900}#liveMap{height:390px;border-radius:18px;margin-top:12px}.mapControls{display:flex;gap:8px;margin-top:8px}.mapMeta{text-align:center;color:#71889a;font-size:10px;margin-top:8px}.source{text-align:center;color:#637b8e;font-size:10px;margin:14px}.source a{color:#83eaff}
-.sectionHead{display:flex;justify-content:space-between;align-items:end;padding:30px 0 16px}.sectionHead h2{font-size:clamp(38px,7vw,66px);letter-spacing:-.065em;margin:0}.sectionHead p{color:#7d94a7;margin:6px 0 0}.worldWrap{height:calc(100vh - 190px);min-height:560px;border-radius:28px;overflow:hidden;border:1px solid var(--line);position:relative;background:#07111a}.worldWrap #worldMap{height:100%;width:100%}.worldHUD{position:absolute;z-index:500;left:14px;right:14px;top:14px;display:flex;justify-content:space-between;gap:10px;pointer-events:none}.hudCard{pointer-events:auto;background:rgba(5,14,22,.84);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:17px;padding:12px 14px}.hudCard b{font-size:21px}.hudCard small{display:block;color:#7f96a8;margin-top:3px}.scanWorld{border:0;border-radius:14px;padding:0 15px;background:linear-gradient(135deg,var(--cyan),#83a2ff);color:#06111b;font-weight:950}.radarPlane{font-size:19px;color:#76f0ff;text-shadow:0 0 9px #62edff}.leaflet-container{background:#07111a;filter:saturate(.72) brightness(.82)}
+.sectionHead{display:flex;justify-content:space-between;align-items:end;padding:26px 2px 14px}
+.sectionHead h2{font-size:clamp(36px,7vw,60px);letter-spacing:-.06em;margin:0}
+.sectionHead p{color:#7d94a7;margin:5px 0 0;font-size:14px}
+.worldIntro{
+  display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+  padding:14px 15px;margin-bottom:10px;border:1px solid var(--line);border-radius:19px;
+  background:linear-gradient(135deg,rgba(98,237,255,.055),rgba(114,140,255,.04))
+}
+.worldIntro strong{display:block;font-size:16px}
+.worldIntro p{margin:4px 0 0;color:#7f96a8;font-size:11px;line-height:1.4}
+.worldScanPrimary{
+  min-height:48px;border:0;border-radius:15px;padding:0 17px;
+  background:linear-gradient(135deg,var(--cyan),#83a2ff);color:#06111b;font-weight:950
+}
+.worldStatusBar{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-bottom:10px;padding:10px 12px;border:1px solid var(--line);border-radius:15px;
+  background:rgba(255,255,255,.025)
+}
+.worldStatusLeft{display:flex;align-items:center;gap:9px;min-width:0}
+.radarDot{width:9px;height:9px;border-radius:50%;background:#61798c;flex:none}
+.radarDot.scanning{background:var(--cyan);box-shadow:0 0 0 6px rgba(98,237,255,.09);animation:radarpulse .8s infinite alternate}
+.radarDot.liveNow{background:var(--lime);box-shadow:0 0 0 5px rgba(185,255,115,.08)}
+@keyframes radarpulse{to{opacity:.38}}
+.worldStatusText{font-size:10px;font-weight:900;color:#8ba0b0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.worldCountChip{font-size:10px;font-weight:950;color:#d9e5ed;white-space:nowrap}
+.worldWrap{
+  height:min(56vh,520px);min-height:390px;border-radius:24px;overflow:hidden;
+  border:1px solid var(--line);position:relative;background:#07111a
+}
+.worldWrap #worldMap{height:100%;width:100%}
+.worldLegend{
+  position:absolute;z-index:500;left:10px;bottom:10px;
+  padding:8px 10px;border:1px solid var(--line);border-radius:13px;
+  background:rgba(5,14,22,.80);backdrop-filter:blur(10px);font-size:9px;color:#8ba0b0
+}
+.worldTip{
+  margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid var(--line);
+  color:#8298a9;font-size:11px;line-height:1.45;background:rgba(255,255,255,.02)
+}
+.radarPlane{font-size:18px;color:#76f0ff;text-shadow:0 0 9px #62edff}
+.leaflet-container{background:#07111a;filter:saturate(.72) brightness(.82)}
 .hangarSummary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.summaryBox{padding:16px;border:1px solid var(--line);border-radius:20px;background:#0a1926}.summaryBox b{font-size:30px}.summaryBox span{display:block;color:#758da0;font-size:10px;font-weight:900;margin-top:4px}.v2HangarGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}.v2CollectCard{min-height:330px;border-radius:25px;padding:17px;position:relative;overflow:hidden;background:linear-gradient(145deg,#11283b,#091722);border:1px solid var(--line);box-shadow:0 22px 50px rgba(0,0,0,.22)}.v2CollectCard.rare{background:linear-gradient(145deg,#122b45,#161a3b)}.v2CollectCard.ultra{background:radial-gradient(circle at 70% 20%,rgba(255,213,106,.23),transparent 13rem),linear-gradient(145deg,#27213a,#0b1a27)}.foil{position:absolute;inset:-50%;background:linear-gradient(120deg,transparent 40%,rgba(255,255,255,.08),transparent 60%);transform:rotate(18deg)}.v2Rarity{position:relative;font-size:9px;letter-spacing:.1em;font-weight:950;color:#9eb2c1}.cardPlane{position:relative;font-size:75px;text-align:center;margin:40px 0 25px;transform:rotate(-15deg)}.v2Call{position:relative;font-size:29px;font-weight:950;letter-spacing:-.05em}.v2Type{position:relative;color:#8399aa;font-size:11px}.v2Stats{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:15px}.v2Stats span{padding:9px;background:rgba(255,255,255,.04);border-radius:11px;font-weight:900}.v2Stats small{display:block;color:#657d90;font-size:8px;margin-top:3px}.v2Reg{position:relative;color:#6e8698;font-size:9px;margin-top:12px}.v2Dup{position:absolute;right:12px;top:12px;border-radius:999px;padding:5px 7px;background:rgba(255,255,255,.08);font-size:9px}.emptyV2{text-align:center;padding:50px;border:1px dashed rgba(255,255,255,.12);border-radius:24px;color:#748b9d;margin-top:18px}
 .passport{max-width:680px;margin:25px auto;padding:25px;border-radius:30px;background:radial-gradient(circle at 100% 0,rgba(98,237,255,.16),transparent 25rem),#0b1b29;border:1px solid var(--line)}.passportLogo{font-size:48px}.passport h2{font-size:42px;letter-spacing:-.055em;margin:12px 0 0}.passportLevel{color:var(--cyan);font-size:11px;font-weight:950;letter-spacing:.1em;margin-top:5px}.passportStats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:25px}.passportStats div{padding:14px;background:rgba(255,255,255,.04);border-radius:16px}.passportStats b{font-size:27px}.passportStats span{display:block;color:#748b9d;font-size:9px;margin-top:4px}.passportBar{height:9px;background:rgba(255,255,255,.07);border-radius:99px;margin-top:22px;overflow:hidden}.passportFill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--pink));width:0}.passportNext{color:#7b92a4;font-size:10px;margin-top:7px}
 .bottomNav{position:fixed;z-index:8000;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(560px,calc(100% - 18px));height:68px;border:1px solid var(--line);border-radius:22px;background:rgba(8,19,29,.88);backdrop-filter:blur(18px);display:grid;grid-template-columns:repeat(4,1fr);padding:6px;box-shadow:0 18px 60px rgba(0,0,0,.35)}.bottomNav button{border:0;background:transparent;color:#71899b;border-radius:16px;font-size:10px;font-weight:850}.bottomNav button i{display:block;font-style:normal;font-size:20px;margin-bottom:2px}.bottomNav button.active{background:rgba(255,255,255,.06);color:#fff}
 footer{text-align:center;color:#60798b;font-size:10px;padding:35px}.versionBtn{border:0;background:transparent;color:#7beaff;text-decoration:underline}
 .menuBackdrop,.hangarBackdrop,.aboveBackdrop,.modalBackdrop{display:none;position:fixed;inset:0;z-index:9000;background:rgba(2,8,13,.75);backdrop-filter:blur(10px);padding:18px;align-items:center;justify-content:center}.menuBackdrop.show,.hangarBackdrop.show,.aboveBackdrop.show,.modalBackdrop.show{display:flex}.sideMenu,.hangarModal,.aboveModal,.releaseModal{width:min(760px,100%);max-height:88vh;overflow:auto;background:#0a1926;border:1px solid var(--line);border-radius:26px;padding:20px}.sideMenu{width:min(340px,90vw);height:100%;position:absolute;right:0;top:0;border-radius:0}.menuTop,.hangarTop,.aboveTop,.releaseTop{display:flex;justify-content:space-between;gap:12px}.menuClose,.hangarClose,.aboveClose,.releaseClose{width:38px;height:38px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.04);color:#fff;font-size:19px}.menuLinks{display:grid;gap:8px;margin-top:20px}.menuLink{min-height:50px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.04);color:#fff;text-align:left;padding:0 13px;font-weight:900}.menuLink span{float:right;color:#6f8798}.locateHero{text-align:center;padding:20px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:20px;margin-top:15px}.pin{font-size:40px}.locateBtn{min-height:50px;border:0;border-radius:14px;background:linear-gradient(135deg,var(--cyan),#83a2ff);font-weight:950;padding:0 16px}.aboveStatus,.privacyNote,.releaseDate{color:#7b92a4;font-size:11px;margin-top:10px}.aboveList{display:grid;gap:8px;margin-top:12px}.nearPlane{padding:13px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.03);display:flex;justify-content:space-between;gap:8px}.nearPlane h4{margin:0}.nearMeta{color:#7890a3;font-size:10px}.nearBtn{min-height:35px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.04);color:#fff;font-size:9px;font-weight:900}.nearBtn.capture{background:linear-gradient(135deg,#ffd56a,#ff9ccf);color:#06111b;border:0}.collectorToast{position:fixed;z-index:9999;bottom:90px;left:50%;transform:translateX(-50%);padding:11px 14px;border-radius:13px;background:#102334;border:1px solid var(--line);opacity:0;pointer-events:none}.collectorToast.show{opacity:1}.hangarStats,.progressWrap,.hangarGrid,.hangarActions{display:none}.releaseBlock{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}.releaseBlock li,.releaseBlock p{color:#8da1b1;font-size:12px;line-height:1.5}
-@media(max-width:760px){.modeGrid{grid-template-columns:1fr 1fr}.mode.primary{grid-column:1/-1}.grid .card,.grid .card.wide{grid-column:1/-1}.v2HangarGrid{grid-template-columns:1fr 1fr}.worldWrap{height:68vh}.live{display:none}}
+@media(max-width:760px){.modeGrid{grid-template-columns:1fr 1fr}.mode.primary{grid-column:1/-1}.grid .card,.grid .card.wide{grid-column:1/-1}.v2HangarGrid{grid-template-columns:1fr 1fr}.worldWrap{height:min(54vh,500px)}.live{display:none}}
 @media(max-width:500px){.shell{width:calc(100% - 16px)}.heroV2{padding-top:40px}.modeGrid{grid-template-columns:1fr}.mode.primary{grid-column:auto}.mode{min-height:140px}.v2HangarGrid{grid-template-columns:1fr}.hangarSummary{grid-template-columns:repeat(3,1fr)}.passportStats{grid-template-columns:repeat(3,1fr)}.actions,.mapControls{flex-direction:column}}
 </style>
 </head>
@@ -72,8 +113,37 @@ footer{text-align:center;color:#60798b;font-size:10px;padding:35px}.versionBtn{b
 </section>
 
 <section class="view" id="worldView">
-  <div class="sectionHead"><div><h2>Live World</h2><p>Hunt the live sky yourself.</p></div></div>
-  <div class="worldWrap"><div id="worldMap"></div><div class="worldHUD"><div class="hudCard"><b><span id="worldCount">0</span> aircraft</b><small id="worldStatus">READY FOR RADAR SWEEP</small></div><button class="scanWorld" id="worldScanBtn">SCAN WORLD</button></div></div>
+  <div class="sectionHead">
+    <div>
+      <h2>Live World</h2>
+      <p>Hunt real aircraft yourself.</p>
+    </div>
+  </div>
+
+  <div class="worldIntro">
+    <div>
+      <strong>Global radar sample</strong>
+      <p>We scan several busy aviation regions and plot the live aircraft actually returned by the feeds.</p>
+    </div>
+    <button class="worldScanPrimary" id="worldScanBtn">SCAN</button>
+  </div>
+
+  <div class="worldStatusBar">
+    <div class="worldStatusLeft">
+      <span class="radarDot" id="worldRadarDot"></span>
+      <span class="worldStatusText" id="worldStatus">RADAR STANDING BY</span>
+    </div>
+    <div class="worldCountChip"><span id="worldCount">0</span> LIVE</div>
+  </div>
+
+  <div class="worldWrap">
+    <div id="worldMap"></div>
+    <div class="worldLegend">✈ TAP AN AIRCRAFT TO OPEN IT</div>
+  </div>
+
+  <div class="worldTip">
+    Live World is a sampled discovery radar, not a claim to show every aircraft on Earth. Each dot is a real aircraft position returned by the current ADS-B feeds.
+  </div>
 </section>
 
 <section class="view" id="hangarViewV2">
@@ -89,20 +159,21 @@ footer{text-align:center;color:#60798b;font-size:10px;padding:35px}.versionBtn{b
   <article class="passport"><div class="passportLogo">🛂</div><div class="passportLevel" id="passportLevel">LEVEL 1</div><h2 id="passportTitle">Passenger</h2><div class="passportStats"><div><b id="passportCaptures">0</b><span>CAPTURES</span></div><div><b id="passportTypes">0</b><span>TYPES</span></div><div><b id="passportRare">0</b><span>RARE+</span></div></div><div class="passportBar"><div class="passportFill" id="passportProgress"></div></div><div class="passportNext" id="passportNext">5 captures to next level</div></article>
 </section>
 
-<footer>Flight Roulette • <button class="versionBtn" id="versionBtn">v2.0.0</button></footer>
+<footer>Flight Roulette • <button class="versionBtn" id="versionBtn">v2.0.1</button></footer>
 </div>
 
 <nav class="bottomNav"><button class="active" data-view="spin"><i>🎰</i>Spin</button><button data-view="world"><i>🌎</i>World</button><button data-view="hangar"><i>🛩️</i>Hangar</button><button data-view="passport"><i>🛂</i>Passport</button></nav>
 
 <!-- Legacy-compatible menu / feature overlays -->
-<div class="menuBackdrop" id="menuBackdrop"><aside class="sideMenu"><div class="menuTop"><strong>Flight Roulette 2.0</strong><button class="menuClose" id="menuClose">×</button></div><div class="menuLinks"><button class="menuLink" id="menuSpin">🎰 Spin <span>→</span></button><button class="menuLink" id="menuHangar">🛩️ My Hangar <span id="menuHangarCount">0</span></button><button class="menuLink" id="menuAbove">📍 What’s Above Me? <span>LIVE</span></button><button class="menuLink" id="menuReleases">🏷️ Release notes <span>v2.0.0</span></button></div></aside></div>
+<div class="menuBackdrop" id="menuBackdrop"><aside class="sideMenu"><div class="menuTop"><strong>Flight Roulette 2.0</strong><button class="menuClose" id="menuClose">×</button></div><div class="menuLinks"><button class="menuLink" id="menuSpin">🎰 Spin <span>→</span></button><button class="menuLink" id="menuHangar">🛩️ My Hangar <span id="menuHangarCount">0</span></button><button class="menuLink" id="menuAbove">📍 What’s Above Me? <span>LIVE</span></button><button class="menuLink" id="menuReleases">🏷️ Release notes <span>v2.0.1</span></button></div></aside></div>
 
 <div class="aboveBackdrop" id="aboveBackdrop"><div class="aboveModal"><div class="aboveTop"><div><h2>📍 What’s Above Me?</h2><div class="releaseDate">Discover real aircraft around your current location.</div></div><button class="aboveClose" id="aboveClose">×</button></div><div class="locateHero"><div class="pin">📡</div><h3>Scan your local sky</h3><p>Your browser will ask for location permission.</p><button class="locateBtn" id="locateBtn">USE MY LOCATION & SCAN</button><div class="aboveStatus" id="aboveStatus">Waiting for you to start a scan.</div></div><div class="aboveList" id="aboveList"></div><div class="privacyNote">Your location is used for the nearby-aircraft request and is not stored in your Hangar.</div></div></div>
 
 <div class="hangarBackdrop" id="hangarBackdrop"><div class="hangarModal"><div class="hangarTop"><h2>My Hangar</h2><button class="hangarClose" id="hangarClose">×</button></div><div class="hangarStats"><b id="totalCards">0</b><b id="uniqueTypes">0</b><b id="rareCards">0</b><b id="uniqueAircraft">0</b></div><div class="progressWrap"><span id="progressText"></span><div id="progressFill"></div></div><div id="hangarGrid" class="hangarGrid"></div><div class="hangarActions"><button id="clearHangar">Clear</button></div></div></div>
 <div class="collectorToast" id="collectorToast">Captured ✓</div>
 
-<div class="modalBackdrop" id="releaseBackdrop"><div class="releaseModal"><div class="releaseTop"><div><h2>Flight Roulette releases</h2><div class="releaseDate">Current version: v2.0.0</div></div><button class="releaseClose" id="releaseClose">×</button></div>
+<div class="modalBackdrop" id="releaseBackdrop"><div class="releaseModal"><div class="releaseTop"><div><h2>Flight Roulette releases</h2><div class="releaseDate">Current version: v2.0.1</div></div><button class="releaseClose" id="releaseClose">×</button></div>
+<div class="releaseBlock"><h3>v2.0.1 — World Radar Fix</h3><div class="releaseDate">11 August 2026</div><ul><li>Completely redesigned the Live World mobile screen.</li><li>Reduced the oversized map and removed the bulky floating HUD.</li><li>Added a compact radar status bar and live aircraft counter.</li><li>Rebuilt world scanning with staged requests instead of rapid-fire API calls.</li><li>Added Airplanes.live fallback when adsb.lol fails for a region.</li><li>Requests are deliberately spaced to respect public API limits.</li><li>Improved world-radar failure/status messaging.</li></ul></div>
 <div class="releaseBlock"><h3>v2.0.0 — LIVE WORLD</h3><div class="releaseDate">11 August 2026</div><ul><li>Complete mobile-first visual redesign.</li><li>New Live World radar for hunting aircraft yourself.</li><li>New persistent bottom navigation.</li><li>Premium redesigned Hangar collector cards.</li><li>New Pilot Passport with levels and collection stats.</li><li>Spin, World, Hangar and Passport are now first-class app views.</li><li>Retains live tracking, What’s Above Me and v1 Hangar data.</li></ul></div>
 <div class="releaseBlock"><h3>v1.3.1 — Local Radar Fix</h3><p>Dual-feed local radar with staged radius fallback.</p></div>
 <div class="releaseBlock"><h3>v1.3.0 — What’s Above Me?</h3><p>Location-based nearby aircraft discovery.</p></div>
@@ -816,37 +887,100 @@ function radarPlaneIcon(a){
 }
 async function scanWorldRadar(){
   if(worldBusy)return;
-  worldBusy=true; initWorldMap(); worldLayer.clearLayers(); worldPlanes=[];
-  worldStatus.textContent="RADAR SWEEP IN PROGRESS…";
-  const sample=[...zones].sort(()=>Math.random()-.5).slice(0,10);
-  let errors=0;
-  for(let i=0;i<sample.length;i++){
-    const [name,lat,lon]=sample[i];
-    worldStatus.textContent=`SCANNING ${name.toUpperCase()} • ${i+1}/${sample.length}`;
-    try{
-      const j=await fetchJson(`https://api.adsb.lol/v2/point/${lat}/${lon}/100`,8000);
-      const ac=(j.ac||[]).filter(validAircraft).slice(0,45);
-      ac.forEach(a=>worldPlanes.push({...a,_zone:name}));
-    }catch(e){errors++}
-    await sleep(250);
-  }
-  // de-dupe
-  const seen=new Set();
-  worldPlanes=worldPlanes.filter(a=>{const k=(a.hex||`${a.lat}-${a.lon}`);if(seen.has(k))return false;seen.add(k);return true}).slice(0,300);
-  worldPlanes.forEach((a,i)=>{
-    const marker=L.marker([Number(a.lat),Number(a.lon)],{icon:radarPlaneIcon(a)}).addTo(worldLayer);
-    const flight=(a.flight||"").trim()||a.r||a.hex||"Aircraft";
-    marker.bindTooltip(`${flight} • ${a.t||"Unknown type"}`,{direction:"top"});
-    marker.on("click",()=>{
-      renderAircraft(a,a._zone||"Live World","adsb.lol");
-      showV2View("spin");
-      setTimeout(()=>result.scrollIntoView({behavior:"smooth"}),150);
+
+  worldBusy=true;
+  initWorldMap();
+  worldLayer.clearLayers();
+  worldPlanes=[];
+
+  const radarDot=$("#worldRadarDot");
+  const scanButton=$("#worldScanBtn");
+
+  radarDot.className="radarDot scanning";
+  scanButton.disabled=true;
+  scanButton.textContent="SCANNING…";
+  worldStatus.textContent="STARTING RADAR SWEEP";
+  worldCount.textContent="0";
+
+  // Fewer regions + deliberate spacing keeps us friendly to public APIs
+  // and avoids Airplanes.live's documented 1 request/sec rate limit.
+  const sample=[...zones].sort(()=>Math.random()-.5).slice(0,5);
+  const errors=[];
+
+  try{
+    for(let i=0;i<sample.length;i++){
+      const [name,lat,lon]=sample[i];
+      worldStatus.textContent=`${i+1}/${sample.length} • ${name.toUpperCase()}`;
+
+      let aircraft=[];
+      let source="adsb.lol";
+
+      try{
+        const primary=await scanAdsbLol(name,lat,lon);
+        aircraft=primary.slice(0,60);
+      }catch(err){
+        errors.push(`adsb.lol ${name}: ${friendlyLocalError(err)}`);
+
+        // Leave enough time before the documented 1 req/sec fallback.
+        await sleep(1100);
+
+        try{
+          const fallback=await scanAirplanesLive(name,lat,lon);
+          aircraft=fallback.slice(0,60);
+          source="Airplanes.live";
+        }catch(err2){
+          errors.push(`Airplanes.live ${name}: ${friendlyLocalError(err2)}`);
+        }
+      }
+
+      aircraft.forEach(a=>worldPlanes.push({...a,_zone:name,_worldSource:source}));
+
+      // Deliberate pause between regions.
+      if(i<sample.length-1) await sleep(1100);
+    }
+
+    const seen=new Set();
+    worldPlanes=worldPlanes.filter(a=>{
+      const key=(a.hex||`${Number(a.lat).toFixed(4)}-${Number(a.lon).toFixed(4)}`).toLowerCase();
+      if(seen.has(key))return false;
+      seen.add(key);
+      return true;
+    }).slice(0,250);
+
+    worldPlanes.forEach(a=>{
+      const marker=L.marker([Number(a.lat),Number(a.lon)],{icon:radarPlaneIcon(a)}).addTo(worldLayer);
+      const flight=(a.flight||"").trim()||a.r||a.hex||"Aircraft";
+      marker.bindTooltip(`${flight} • ${a.t||"Unknown type"}`,{direction:"top"});
+      marker.on("click",()=>{
+        renderAircraft(a,a._zone||"Live World",a._worldSource||"Live ADS-B");
+        showV2View("spin");
+        setTimeout(()=>result.scrollIntoView({behavior:"smooth",block:"start"}),150);
+      });
     });
-  });
-  worldCount.textContent=worldPlanes.length;
-  worldStatus.textContent=worldPlanes.length?`${worldPlanes.length} LIVE AIRCRAFT IN THIS RADAR SAMPLE`:(errors?"LIVE FEEDS TEMPORARILY UNAVAILABLE":"NO AIRCRAFT RETURNED");
-  worldBusy=false;
+
+    worldCount.textContent=worldPlanes.length;
+
+    if(worldPlanes.length){
+      radarDot.className="radarDot liveNow";
+      worldStatus.textContent=`RADAR LIVE • ${sample.length} REGIONS SCANNED`;
+    }else if(errors.length){
+      radarDot.className="radarDot";
+      worldStatus.textContent="LIVE FEEDS DIDN’T RETURN A USABLE SAMPLE";
+    }else{
+      radarDot.className="radarDot";
+      worldStatus.textContent="NO AIRCRAFT RETURNED IN THIS SAMPLE";
+    }
+
+  }catch(err){
+    radarDot.className="radarDot";
+    worldStatus.textContent=`RADAR ERROR • ${friendlyLocalError(err)}`;
+  }finally{
+    worldBusy=false;
+    scanButton.disabled=false;
+    scanButton.textContent="SCAN AGAIN";
+  }
 }
+
 $("#worldScanBtn").addEventListener("click",scanWorldRadar);
 $("#heroWorldBtn").addEventListener("click",()=>{showV2View("world");setTimeout(scanWorldRadar,200)});
 $("#heroNearbyBtn").addEventListener("click",()=>{openAbove()});
