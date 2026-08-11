@@ -475,6 +475,112 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
   .sheetStats{grid-template-columns:repeat(3,1fr)}
 }
 
+
+/* v3.1.0-beta — SKY LENS */
+.labsBadge{
+  display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border-radius:999px;
+  background:rgba(200,255,82,.08);border:1px solid rgba(200,255,82,.15);
+  color:var(--lime);font-size:8px;font-weight:950;letter-spacing:.11em
+}
+.skyLensBackdrop{
+  display:none;position:fixed;inset:0;z-index:9800;background:#000;overflow:hidden
+}
+.skyLensBackdrop.show{display:block}
+.skyLensVideo{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000
+}
+.skyLensShade{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.54),transparent 20%,transparent 68%,rgba(0,0,0,.62)),
+    radial-gradient(circle at 50% 48%,transparent 0 33%,rgba(0,0,0,.11) 58%,rgba(0,0,0,.25) 100%);
+}
+.skyLensGrid{
+  position:absolute;inset:0;pointer-events:none;opacity:.18;
+  background-image:
+    linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px);
+  background-size:58px 58px
+}
+.skyLensCrosshair{
+  position:absolute;left:50%;top:50%;width:74px;height:74px;transform:translate(-50%,-50%);
+  border:1px solid rgba(200,255,82,.48);border-radius:50%;pointer-events:none
+}
+.skyLensCrosshair:before,.skyLensCrosshair:after{content:"";position:absolute;background:rgba(200,255,82,.56)}
+.skyLensCrosshair:before{width:24px;height:1px;left:25px;top:36px}
+.skyLensCrosshair:after{height:24px;width:1px;top:25px;left:36px}
+.skyLensTop{
+  position:absolute;left:14px;right:14px;top:max(14px,env(safe-area-inset-top));
+  display:flex;justify-content:space-between;align-items:flex-start;gap:10px;z-index:3
+}
+.skyLensTopGroup{display:flex;gap:7px;flex-wrap:wrap}
+.lensChip{
+  min-height:34px;padding:0 11px;border-radius:999px;display:inline-flex;align-items:center;gap:7px;
+  background:rgba(6,11,16,.76);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.10);
+  color:#fff;font-size:8px;font-weight:900;letter-spacing:.07em
+}
+.lensChip.beta{color:var(--lime)}
+.lensClose{
+  width:38px;height:38px;border-radius:13px;border:1px solid rgba(255,255,255,.12);
+  background:rgba(6,11,16,.76);backdrop-filter:blur(12px);color:#fff;font-size:18px
+}
+.skyLensHeading{
+  position:absolute;top:82px;left:50%;transform:translateX(-50%);z-index:3;
+  padding:8px 12px;border-radius:999px;background:rgba(6,11,16,.7);border:1px solid rgba(255,255,255,.08);
+  color:#dce5ec;font-size:10px;font-weight:950;letter-spacing:.08em
+}
+.skyLensTargets{position:absolute;inset:0;z-index:2;pointer-events:none}
+.lensTarget{
+  position:absolute;left:50%;top:50%;min-width:118px;max-width:170px;
+  transform:translate(-50%,-50%);padding:9px 10px;border-radius:13px;
+  background:rgba(7,12,17,.79);backdrop-filter:blur(10px);
+  border:1px solid rgba(98,231,255,.22);box-shadow:0 10px 30px rgba(0,0,0,.28);
+  color:#fff;pointer-events:auto;transition:transform .12s linear,opacity .12s linear
+}
+.lensTarget.best{
+  border-color:rgba(200,255,82,.58);
+  box-shadow:0 0 0 3px rgba(200,255,82,.07),0 14px 34px rgba(0,0,0,.34)
+}
+.lensCall{font-size:14px;font-weight:950;letter-spacing:-.025em}
+.lensMeta{margin-top:3px;color:#9eacb8;font-size:8px;line-height:1.35}
+.lensArrow{position:absolute;right:8px;top:8px;color:var(--lime);font-size:12px}
+.skyLensBottom{
+  position:absolute;left:14px;right:14px;bottom:max(14px,env(safe-area-inset-bottom));z-index:4
+}
+.lensPanel{
+  border-radius:20px;padding:13px;background:rgba(6,11,16,.76);backdrop-filter:blur(15px);
+  border:1px solid rgba(255,255,255,.10)
+}
+.lensStatus{color:#dce4ea;font-size:10px;font-weight:900}
+.lensHelp{margin-top:5px;color:#8795a3;font-size:8px;line-height:1.4}
+.lensActions{display:flex;gap:8px;margin-top:10px}
+.lensBtn{
+  flex:1;min-height:44px;border-radius:13px;border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.04);color:#fff;font-size:9px;font-weight:950
+}
+.lensBtn.primary{border:0;background:linear-gradient(135deg,var(--lime),var(--cyan));color:#071006}
+.skyLensStart{
+  position:absolute;inset:0;z-index:8;display:flex;align-items:center;justify-content:center;padding:22px;
+  background:radial-gradient(circle at 50% 35%,rgba(98,231,255,.10),transparent 25rem),#05080c
+}
+.skyLensStart.hidden{display:none}
+.lensStartCard{
+  width:min(440px,100%);padding:22px;border-radius:25px;border:1px solid var(--line);
+  background:#0b1119;text-align:center
+}
+.lensStartIcon{font-size:50px}
+.lensStartCard h2{margin:12px 0 7px;font-size:34px;letter-spacing:-.05em}
+.lensStartCard p{margin:0;color:#8491a2;font-size:11px;line-height:1.5}
+.lensStartBtn{
+  width:100%;min-height:50px;margin-top:16px;border:0;border-radius:15px;
+  background:linear-gradient(135deg,var(--lime),var(--cyan));color:#071006;font-weight:950
+}
+.lensWarning{margin-top:11px;color:#647386;font-size:8px;line-height:1.4}
+.lensUnsupported{
+  margin-top:11px;padding:10px;border-radius:12px;background:rgba(255,111,183,.06);
+  border:1px solid rgba(255,111,183,.14);color:#ffbad8;font-size:9px;display:none
+}
+
 </style>
 </head>
 <body>
@@ -656,7 +762,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
   </article>
 </section>
 
-<footer>SKYHUNT • <button class="versionBtn" id="versionBtn">v3.0.1</button></footer>
+<footer>SKYHUNT • <button class="versionBtn" id="versionBtn">v3.1.0-beta</button></footer>
 </div>
 
 <nav class="bottomNav">
@@ -673,7 +779,8 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
       <button class="menuLink" id="menuSpin">✦ Random Hunt <span>→</span></button>
       <button class="menuLink" id="menuHangar">▱ Hangar <span id="menuHangarCount">0</span></button>
       <button class="menuLink" id="menuAbove">⌖ Above Me <span>LIVE</span></button>
-      <button class="menuLink" id="menuReleases">◈ Release notes <span>v3.0.1</span></button>
+      <button class="menuLink" id="menuSkyLens">◉ Sky Lens <span>BETA</span></button>
+      <button class="menuLink" id="menuReleases">◈ Release notes <span>v3.1 BETA</span></button>
     </div>
   </aside>
 </div>
@@ -690,11 +797,54 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
 <div class="hangarBackdrop" id="hangarBackdrop"><div class="hangarModal"><div class="hangarTop"><h2>Hangar</h2><button class="hangarClose" id="hangarClose">×</button></div><div class="hangarStats"><b id="totalCards">0</b><b id="uniqueTypes">0</b><b id="rareCards">0</b><b id="uniqueAircraft">0</b></div><div class="progressWrap"><span id="progressText"></span><div id="progressFill"></div></div><div id="hangarGrid" class="hangarGrid"></div><div class="hangarActions"><button id="clearHangar">Clear</button></div></div></div>
 <div class="collectorToast" id="collectorToast">Captured ✓</div>
 
+
+<div class="skyLensBackdrop" id="skyLensBackdrop" aria-hidden="true">
+  <video class="skyLensVideo" id="skyLensVideo" autoplay playsinline muted></video>
+  <div class="skyLensShade"></div>
+  <div class="skyLensGrid"></div>
+  <div class="skyLensCrosshair"></div>
+
+  <div class="skyLensTop">
+    <div class="skyLensTopGroup">
+      <div class="lensChip beta">SKYHUNT LABS · BETA</div>
+      <div class="lensChip" id="lensTargetCount">0 TARGETS</div>
+    </div>
+    <button class="lensClose" id="skyLensClose" aria-label="Close Sky Lens">×</button>
+  </div>
+
+  <div class="skyLensHeading" id="skyLensHeading">HEADING —</div>
+  <div class="skyLensTargets" id="skyLensTargets"></div>
+
+  <div class="skyLensBottom">
+    <div class="lensPanel">
+      <div class="lensStatus" id="lensStatus">Sky Lens standing by.</div>
+      <div class="lensHelp" id="lensHelp">Move your phone slowly. Target positions are approximate and depend on compass accuracy.</div>
+      <div class="lensActions">
+        <button class="lensBtn" id="lensRescanBtn">◎ RESCAN SKY</button>
+        <button class="lensBtn primary" id="lensOpenBestBtn">OPEN NEAREST TARGET</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="skyLensStart" id="skyLensStart">
+    <div class="lensStartCard">
+      <div class="lensStartIcon">◉</div>
+      <div class="labsBadge">SKYHUNT LABS · BETA</div>
+      <h2>Sky Lens</h2>
+      <p>Turn your phone into an experimental aircraft finder. SKYHUNT uses your camera, location and device heading to place nearby live aircraft in roughly the right direction.</p>
+      <button class="lensStartBtn" id="lensStartBtn">START SKY LENS</button>
+      <div class="lensWarning">This is approximate AR, not a precision navigation tool. Compass drift, receiver coverage and aircraft data latency can move targets away from their true visual position.</div>
+      <div class="lensUnsupported" id="lensUnsupported"></div>
+    </div>
+  </div>
+</div>
+
 <div class="modalBackdrop" id="releaseBackdrop">
   <div class="releaseModal">
-    <div class="releaseTop"><div><h2>SKYHUNT releases</h2><div class="releaseDate">Current version: v3.0.1</div></div><button class="releaseClose" id="releaseClose">×</button></div>
+    <div class="releaseTop"><div><h2>SKYHUNT releases</h2><div class="releaseDate">Current version: v3.1.0-beta</div></div><button class="releaseClose" id="releaseClose">×</button></div>
 
-    <div class="releaseBlock"><h3>v3.0.1 — Radar Map Upgrade</h3><div class="releaseDate">11 August 2026</div><ul><li>Completely redesigned World Radar map presentation.</li><li>New dark tactical basemap treatment.</li><li>Animated radar rings and sweep overlay.</li><li>Glowing aircraft target markers.</li><li>Floating live radar HUD with target count and scan/reset controls.</li><li>New aircraft preview bottom sheet when a target is tapped.</li><li>Open or capture an aircraft directly from the map.</li><li>Improved mobile map proportions and controls.</li></ul></div>
+    <div class="releaseBlock"><h3>v3.1.0-beta — Sky Lens</h3><div class="releaseDate">11 August 2026</div><ul><li>Introduced SKYHUNT LABS.</li><li>New experimental camera-based Sky Lens mode.</li><li>Uses camera, location and device orientation to estimate where nearby live aircraft are in the sky.</li><li>Live target labels show callsign, aircraft type, altitude and approximate distance.</li><li>Nearest/in-view target receives a highlighted treatment.</li><li>Open a target directly in the main live tracker.</li><li>Clearly labelled BETA because phone compass/orientation and ADS-B timing are approximate.</li></ul></div>
+<div class="releaseBlock"><h3>v3.0.1 — Radar Map Upgrade</h3><div class="releaseDate">11 August 2026</div><ul><li>Completely redesigned World Radar map presentation.</li><li>New dark tactical basemap treatment.</li><li>Animated radar rings and sweep overlay.</li><li>Glowing aircraft target markers.</li><li>Floating live radar HUD with target count and scan/reset controls.</li><li>New aircraft preview bottom sheet when a target is tapped.</li><li>Open or capture an aircraft directly from the map.</li><li>Improved mobile map proportions and controls.</li></ul></div>
 <div class="releaseBlock"><h3>v3.0.0 — SKYHUNT</h3><div class="releaseDate">11 August 2026</div><ul><li>Complete rebrand from Flight Roulette to SKYHUNT.</li><li>New visual identity and design system.</li><li>New radar-inspired landing experience.</li><li>New Hunt / Radar / Hangar / Flight ID navigation language.</li><li>Redesigned collector cards, tracking UI and world radar.</li><li>All proven live-aircraft functionality retained.</li></ul></div>
     <div class="releaseBlock"><h3>v2.0.1 — World Radar Fix</h3><p>Rate-conscious Live World scanner and mobile radar redesign.</p></div>
     <div class="releaseBlock"><h3>v2.0.0 — LIVE WORLD</h3><p>Introduced World Radar, bottom navigation and Pilot Passport.</p></div>
@@ -713,7 +863,7 @@ const $=s=>document.querySelector(s);
 
 const spinBtn=$("#spinBtn"),spinAgain=$("#spinAgain"),scan=$("#scan"),errorBox=$("#error"),result=$("#result");
 const showMapBtn=$("#showMapBtn"),mapSection=$("#mapSection"),autoFollowBtn=$("#autoFollowBtn"),centreBtn=$("#centreBtn");
-const saveCardBtn=$("#saveCardBtn"),menuBtn=$("#menuBtn"),menuBackdrop=$("#menuBackdrop"),menuClose=$("#menuClose"),menuSpin=$("#menuSpin"),menuHangar=$("#menuHangar"),menuReleases=$("#menuReleases"),menuAbove=$("#menuAbove");
+const saveCardBtn=$("#saveCardBtn"),menuBtn=$("#menuBtn"),menuBackdrop=$("#menuBackdrop"),menuClose=$("#menuClose"),menuSpin=$("#menuSpin"),menuHangar=$("#menuHangar"),menuReleases=$("#menuReleases"),menuAbove=$("#menuAbove"),menuSkyLens=$("#menuSkyLens");
 const hangarBackdrop=$("#hangarBackdrop"),hangarClose=$("#hangarClose"),hangarGrid=$("#hangarGrid"),collectorToast=$("#collectorToast");
 const aboveBackdrop=$("#aboveBackdrop"),aboveClose=$("#aboveClose"),locateBtn=$("#locateBtn"),aboveStatus=$("#aboveStatus"),aboveList=$("#aboveList");
 const totalCards=$("#totalCards"),uniqueTypes=$("#uniqueTypes"),rareCards=$("#rareCards"),uniqueAircraft=$("#uniqueAircraft"),progressText=$("#progressText"),progressFill=$("#progressFill"),menuHangarCount=$("#menuHangarCount"),clearHangar=$("#clearHangar");
@@ -1180,6 +1330,201 @@ aboveBackdrop.addEventListener("click",e=>{if(e.target===aboveBackdrop)closeAbov
 locateBtn.addEventListener("click",scanAboveMe);
 
 
+
+// ===== v3.1.0-beta SKY LENS =====
+const skyLensBackdrop=$("#skyLensBackdrop"),skyLensVideo=$("#skyLensVideo"),skyLensClose=$("#skyLensClose");
+const skyLensStart=$("#skyLensStart"),lensStartBtn=$("#lensStartBtn"),lensUnsupported=$("#lensUnsupported");
+const skyLensTargets=$("#skyLensTargets"),skyLensHeading=$("#skyLensHeading"),lensStatus=$("#lensStatus");
+const lensHelp=$("#lensHelp"),lensTargetCount=$("#lensTargetCount"),lensRescanBtn=$("#lensRescanBtn"),lensOpenBestBtn=$("#lensOpenBestBtn");
+
+let lensStream=null,lensPosition=null,lensHeading=0,lensPitch=0,lensAircraft=[],lensBest=null,lensActive=false;
+let lensOrientationHandler=null;
+
+function normalizeDeg(x){return ((x%360)+360)%360}
+function shortestAngle(target,current){
+  let d=normalizeDeg(target)-normalizeDeg(current);
+  if(d>180)d-=360;
+  if(d<-180)d+=360;
+  return d;
+}
+function bearingDeg(lat1,lon1,lat2,lon2){
+  const r=Math.PI/180;
+  const p1=lat1*r,p2=lat2*r,dl=(lon2-lon1)*r;
+  const y=Math.sin(dl)*Math.cos(p2);
+  const x=Math.cos(p1)*Math.sin(p2)-Math.sin(p1)*Math.cos(p2)*Math.cos(dl);
+  return normalizeDeg(Math.atan2(y,x)/r);
+}
+function distanceKm(lat1,lon1,lat2,lon2){
+  const R=6371,r=Math.PI/180,dlat=(lat2-lat1)*r,dlon=(lon2-lon1)*r;
+  const a=Math.sin(dlat/2)**2+Math.cos(lat1*r)*Math.cos(lat2*r)*Math.sin(dlon/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+function estimatedElevationDeg(distanceKmValue,altFeet){
+  const altKm=(Number(altFeet)||0)*0.0003048;
+  if(distanceKmValue<=0.01)return 90;
+  return Math.atan2(Math.max(0,altKm),distanceKmValue)*180/Math.PI;
+}
+function lensAltitudeFeet(a){
+  if(String(a.alt_baro).toLowerCase()==="ground")return 0;
+  return Number.isFinite(Number(a.alt_baro))?Number(a.alt_baro):0;
+}
+function getLensLocation(){
+  return new Promise((resolve,reject)=>{
+    if(!navigator.geolocation)return reject(new Error("Location is not supported on this browser."));
+    navigator.geolocation.getCurrentPosition(
+      p=>resolve({lat:p.coords.latitude,lon:p.coords.longitude,accuracy:p.coords.accuracy}),
+      e=>reject(new Error(e.code===1?"Location permission was denied.":"Unable to determine your location.")),
+      {enableHighAccuracy:true,timeout:12000,maximumAge:30000}
+    )
+  })
+}
+async function requestOrientationPermissionIfNeeded(){
+  if(typeof DeviceOrientationEvent!=="undefined" && typeof DeviceOrientationEvent.requestPermission==="function"){
+    const result=await DeviceOrientationEvent.requestPermission();
+    if(result!=="granted")throw new Error("Motion & Orientation permission was not granted.");
+  }
+}
+function orientationHeading(e){
+  // iOS Safari exposes webkitCompassHeading; otherwise alpha is used as a best-effort fallback.
+  if(typeof e.webkitCompassHeading==="number")return normalizeDeg(e.webkitCompassHeading);
+  if(typeof e.alpha==="number")return normalizeDeg(360-e.alpha);
+  return lensHeading;
+}
+function startOrientation(){
+  lensOrientationHandler=e=>{
+    lensHeading=orientationHeading(e);
+    lensPitch=Number.isFinite(Number(e.beta))?Number(e.beta):0;
+    skyLensHeading.textContent=`HEADING ${Math.round(lensHeading).toString().padStart(3,"0")}°`;
+    renderLensTargets();
+  };
+  window.addEventListener("deviceorientation",lensOrientationHandler,true);
+}
+function stopOrientation(){
+  if(lensOrientationHandler)window.removeEventListener("deviceorientation",lensOrientationHandler,true);
+  lensOrientationHandler=null;
+}
+async function scanLensAircraft(){
+  if(!lensPosition)return;
+  lensStatus.textContent="Scanning nearby live aircraft…";
+  const result=await localFeedRequest("adsb.lol",lensPosition,40).catch(async()=>{
+    await sleep(1100);
+    return localFeedRequest("Airplanes.live",lensPosition,40);
+  });
+  lensAircraft=(result.aircraft||[]).map(a=>{
+    const dist=distanceKm(lensPosition.lat,lensPosition.lon,Number(a.lat),Number(a.lon));
+    return {...a,_lensDistanceKm:dist,_lensBearing:bearingDeg(lensPosition.lat,lensPosition.lon,Number(a.lat),Number(a.lon)),_lensSource:result.source};
+  }).sort((a,b)=>a._lensDistanceKm-b._lensDistanceKm).slice(0,18);
+  lensTargetCount.textContent=`${lensAircraft.length} TARGET${lensAircraft.length===1?"":"S"}`;
+  lensStatus.textContent=lensAircraft.length?`Tracking ${lensAircraft.length} nearby aircraft via ${result.source}.`:"No nearby tracked aircraft found.";
+  renderLensTargets();
+}
+function renderLensTargets(){
+  if(!lensActive||!lensAircraft.length){
+    skyLensTargets.innerHTML="";
+    lensBest=null;
+    return;
+  }
+
+  const fovH=58; // approximate mobile camera horizontal FOV
+  const fovV=72; // approximate vertical FOV
+  const w=window.innerWidth,h=window.innerHeight;
+  let candidates=[];
+
+  lensAircraft.forEach(a=>{
+    const az=shortestAngle(a._lensBearing,lensHeading);
+    const elev=estimatedElevationDeg(a._lensDistanceKm,lensAltitudeFeet(a));
+    // beta is ~90 when phone held upright; turn that into a rough camera elevation.
+    const cameraElev=Math.max(-30,Math.min(70,90-Math.abs(lensPitch)));
+    const elDiff=elev-cameraElev;
+    const visible=Math.abs(az)<fovH*.72 && Math.abs(elDiff)<fovV*.62;
+    if(!visible)return;
+
+    const x=w/2+(az/(fovH/2))*(w*.43);
+    const y=h/2-(elDiff/(fovV/2))*(h*.34);
+    const score=Math.abs(az)+Math.abs(elDiff)*.7+a._lensDistanceKm*.03;
+    candidates.push({a,x,y,score});
+  });
+
+  candidates.sort((a,b)=>a.score-b.score);
+  lensBest=candidates[0]?.a||lensAircraft[0]||null;
+
+  skyLensTargets.innerHTML=candidates.slice(0,7).map((o,i)=>{
+    const a=o.a,call=(a.flight||"").trim()||a.r||a.hex||"UNKNOWN";
+    const alt=String(a.alt_baro).toLowerCase()==="ground"?"Ground":Number.isFinite(Number(a.alt_baro))?`${Math.round(Number(a.alt_baro)).toLocaleString("en-GB")} ft`:"Alt —";
+    return `<button class="lensTarget ${i===0?"best":""}" data-lens-index="${lensAircraft.indexOf(a)}" style="left:${Math.max(72,Math.min(w-72,o.x))}px;top:${Math.max(120,Math.min(h-155,o.y))}px">
+      <span class="lensArrow">⌃</span>
+      <div class="lensCall">${safeText(call)}</div>
+      <div class="lensMeta">${safeText(a.t||"Unknown type")} · ${safeText(alt)}<br>${a._lensDistanceKm.toFixed(1)} km · ${Math.round(a._lensBearing)}°</div>
+    </button>`;
+  }).join("");
+
+  skyLensTargets.querySelectorAll("[data-lens-index]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const a=lensAircraft[Number(btn.dataset.lensIndex)];
+      if(a)openLensAircraft(a);
+    })
+  });
+
+  if(!candidates.length){
+    lensHelp.textContent="No aircraft are currently inside the estimated camera field of view. Turn slowly while keeping the phone upright.";
+  }else{
+    lensHelp.textContent="Target positions are approximate. Turn slowly and use the highlighted target as the best current match.";
+  }
+}
+function openLensAircraft(a){
+  closeSkyLens();
+  renderAircraft(a,"Sky Lens",a._lensSource||"Live ADS-B");
+  showV2View("spin");
+  setTimeout(()=>result.scrollIntoView({behavior:"smooth",block:"start"}),180);
+}
+async function startSkyLens(){
+  lensUnsupported.style.display="none";
+  lensStartBtn.disabled=true;
+  lensStartBtn.textContent="STARTING…";
+  try{
+    if(!navigator.mediaDevices?.getUserMedia)throw new Error("Camera access is not supported in this browser.");
+    await requestOrientationPermissionIfNeeded();
+    lensPosition=await getLensLocation();
+    lensStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}},audio:false});
+    skyLensVideo.srcObject=lensStream;
+    await skyLensVideo.play();
+    lensActive=true;
+    skyLensStart.classList.add("hidden");
+    startOrientation();
+    await scanLensAircraft();
+  }catch(e){
+    lensUnsupported.textContent=e.message||"Sky Lens could not start.";
+    lensUnsupported.style.display="block";
+  }finally{
+    lensStartBtn.disabled=false;
+    lensStartBtn.textContent="START SKY LENS";
+  }
+}
+function openSkyLens(){
+  closeMenu();
+  skyLensBackdrop.classList.add("show");
+  skyLensBackdrop.setAttribute("aria-hidden","false");
+  skyLensStart.classList.remove("hidden");
+}
+function closeSkyLens(){
+  lensActive=false;
+  stopOrientation();
+  if(lensStream){lensStream.getTracks().forEach(t=>t.stop());lensStream=null}
+  skyLensVideo.srcObject=null;
+  skyLensTargets.innerHTML="";
+  lensAircraft=[];
+  lensBest=null;
+  skyLensBackdrop.classList.remove("show");
+  skyLensBackdrop.setAttribute("aria-hidden","true");
+}
+menuSkyLens.addEventListener("click",openSkyLens);
+skyLensClose.addEventListener("click",closeSkyLens);
+lensStartBtn.addEventListener("click",startSkyLens);
+lensRescanBtn.addEventListener("click",scanLensAircraft);
+lensOpenBestBtn.addEventListener("click",()=>{if(lensBest)openLensAircraft(lensBest)});
+window.addEventListener("resize",renderLensTargets);
+
+
 const HANGAR_KEY="flightRouletteHangarV1";
 const TARGET_TYPES=30;
 
@@ -1378,7 +1723,7 @@ function closeRelease(){
 }
 releaseClose.addEventListener("click",closeRelease);
 releaseBackdrop.addEventListener("click",e=>{if(e.target===releaseBackdrop)closeRelease()});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeRelease();closeMenu();closeHangar();closeAbove();}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeRelease();closeMenu();closeHangar();closeAbove();closeSkyLens();}});
 
 
 // ===== v2.0.0 LIVE WORLD =====
