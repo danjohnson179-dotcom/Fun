@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07111f">
+<title>Flight Roulette</title>
+<meta name="description" content="Spin the world and discover a random live flight.">
+<style>
+:root{
+  --bg:#06111e;
+  --panel:#0d1d30;
+  --panel2:#10263d;
+  --text:#f5fbff;
+  --muted:#94a9bc;
+  --line:rgba(255,255,255,.10);
+  --cyan:#5ee7ff;
+  --blue:#4ea1ff;
+  --lime:#b8ff6a;
+  --pink:#ff6ec7;
+  --yellow:#ffd166;
+  --shadow:0 25px 80px rgba(0,0,0,.34);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at 10% 0%,rgba(78,161,255,.20),transparent 28rem),
+    radial-gradient(circle at 100% 20%,rgba(94,231,255,.12),transparent 25rem),
+    linear-gradient(180deg,#07111f 0%,#06101b 100%);
+}
+body:before{
+  content:"";
+  position:fixed;inset:0;pointer-events:none;opacity:.24;
+  background-image:radial-gradient(rgba(255,255,255,.65) 1px,transparent 1px);
+  background-size:34px 34px;
+  mask-image:linear-gradient(to bottom,black,transparent 65%);
+}
+.wrap{width:min(1120px,calc(100% - 22px));margin:auto;position:relative;z-index:1}
+nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0}
+.brand{display:flex;align-items:center;gap:10px;font-weight:950;letter-spacing:-.04em}
+.logo{
+  width:40px;height:40px;display:grid;place-items:center;border-radius:13px;
+  background:linear-gradient(135deg,var(--cyan),var(--blue));color:#04111c;
+  box-shadow:0 12px 30px rgba(78,161,255,.25);font-size:20px
+}
+.live{
+  display:flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid var(--line);
+  border-radius:999px;background:rgba(255,255,255,.04);color:#c9d6e1;font-size:12px;font-weight:800
+}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 6px rgba(184,255,106,.09)}
+.hero{text-align:center;padding:60px 0 34px}
+.kicker{
+  display:inline-flex;gap:8px;align-items:center;padding:9px 13px;border:1px solid var(--line);
+  border-radius:999px;background:rgba(255,255,255,.04);font-size:12px;font-weight:850;color:#c8d7e5
+}
+h1{
+  max-width:900px;margin:22px auto 16px;font-size:clamp(52px,10vw,104px);
+  line-height:.90;letter-spacing:-.072em;font-weight:950
+}
+.grad{
+  background:linear-gradient(90deg,var(--cyan),#7da7ff 52%,var(--pink));
+  -webkit-background-clip:text;background-clip:text;color:transparent
+}
+.sub{max-width:650px;margin:auto;color:var(--muted);font-size:clamp(17px,2.2vw,21px);line-height:1.55}
+.setup{
+  max-width:760px;margin:30px auto 0;padding:13px;border:1px solid var(--line);border-radius:26px;
+  background:rgba(10,26,43,.78);box-shadow:var(--shadow);backdrop-filter:blur(18px)
+}
+.apirow{display:grid;grid-template-columns:1fr auto;gap:10px}
+.field{
+  text-align:left;padding:10px 14px;border-radius:18px;background:#081522;border:1px solid var(--line)
+}
+.field label{
+  display:block;margin-bottom:5px;color:#7890a6;font-size:10px;font-weight:900;
+  text-transform:uppercase;letter-spacing:.12em
+}
+.field input{width:100%;border:0;outline:0;background:transparent;color:#fff;font-size:15px}
+.save{
+  min-height:62px;padding:0 18px;border:0;border-radius:18px;color:#06111d;font-weight:950;
+  background:linear-gradient(135deg,var(--cyan),#7da7ff);cursor:pointer
+}
+.note{margin:10px 4px 0;text-align:left;color:#71889d;font-size:11px;line-height:1.45}
+.spinarea{padding:22px 0 64px;text-align:center}
+.spin{
+  width:min(360px,88vw);aspect-ratio:1;border:0;border-radius:50%;cursor:pointer;
+  color:#06111d;background:
+   radial-gradient(circle at 35% 28%,#fff 0,transparent 13%),
+   linear-gradient(135deg,#78f3ff 0%,#7ba4ff 48%,#ff7cc8 100%);
+  box-shadow:0 30px 90px rgba(85,154,255,.32),inset 0 0 0 10px rgba(255,255,255,.14);
+  transition:.18s ease;position:relative
+}
+.spin:hover{transform:translateY(-4px) scale(1.01)}
+.spin:active{transform:scale(.985)}
+.spin .plane{display:block;font-size:78px;line-height:1;margin-bottom:11px;transform:rotate(-12deg)}
+.spin strong{display:block;font-size:31px;letter-spacing:-.04em}
+.spin small{display:block;margin-top:7px;font-size:13px;font-weight:850;opacity:.65}
+.spin.loading{animation:spinPulse .75s infinite alternate}
+.spin.loading .plane{animation:planeSpin .7s linear infinite}
+@keyframes spinPulse{to{box-shadow:0 30px 110px rgba(85,154,255,.52),inset 0 0 0 10px rgba(255,255,255,.20)}}
+@keyframes planeSpin{to{transform:rotate(348deg)}}
+.statusline{min-height:24px;margin-top:17px;color:#8ea7bb;font-size:13px;font-weight:750}
+#error{display:none;max-width:760px;margin:18px auto 0;padding:13px 15px;border-radius:16px;text-align:left;color:#ffd7e9;background:rgba(255,82,147,.08);border:1px solid rgba(255,110,199,.22)}
+#result{display:none;padding:0 0 80px;animation:rise .42s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.flightHero{
+  position:relative;overflow:hidden;padding:24px;border-radius:30px;
+  background:linear-gradient(135deg,rgba(15,39,63,.94),rgba(10,26,43,.96));
+  border:1px solid var(--line);box-shadow:var(--shadow)
+}
+.flightHero:after{
+  content:"â";position:absolute;right:-20px;top:-50px;font-size:220px;opacity:.035;transform:rotate(-12deg)
+}
+.topline{display:flex;gap:12px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}
+.airline{font-size:14px;color:#9bb0c3;font-weight:850}
+.flightno{font-size:clamp(42px,8vw,76px);line-height:.95;letter-spacing:-.06em;font-weight:950;margin-top:5px}
+.status{
+  padding:9px 12px;border-radius:999px;background:rgba(184,255,106,.10);color:var(--lime);
+  border:1px solid rgba(184,255,106,.18);font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.06em
+}
+.route{
+  display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;margin-top:30px
+}
+.airport .code{font-size:clamp(38px,7vw,64px);font-weight:950;letter-spacing:-.055em}
+.airport .name{margin-top:6px;color:#9badbd;line-height:1.35}
+.airport.right{text-align:right}
+.routeplane{font-size:34px;color:var(--cyan);animation:float 2s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-5px)}}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:13px;margin-top:13px}
+.card{
+  grid-column:span 4;padding:18px;border-radius:23px;background:rgba(13,29,48,.86);
+  border:1px solid var(--line);box-shadow:0 12px 34px rgba(0,0,0,.16)
+}
+.card.wide{grid-column:span 6}
+.label{font-size:10px;text-transform:uppercase;letter-spacing:.11em;color:#758da3;font-weight:900}
+.value{margin-top:9px;font-size:25px;letter-spacing:-.035em;font-weight:950}
+.small{margin-top:5px;color:#8da2b5;font-size:12px;line-height:1.4}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.action{
+  flex:1;min-width:180px;min-height:52px;border-radius:17px;border:1px solid var(--line);
+  background:rgba(255,255,255,.05);color:#fff;font-weight:900;cursor:pointer
+}
+.action.primary{border:0;color:#06111d;background:linear-gradient(135deg,var(--cyan),#7da7ff)}
+.source{margin-top:15px;color:#71889d;font-size:11px;line-height:1.5;text-align:center}
+.source a{color:#8eefff;text-decoration:none;font-weight:850}
+@media(max-width:720px){
+ .hero{padding-top:38px}.apirow{grid-template-columns:1fr}.save{min-height:58px}
+ .route{grid-template-columns:1fr auto 1fr;gap:8px}
+ .card,.card.wide{grid-column:1/-1}
+}
+@media(max-width:450px){
+ .wrap{width:min(100% - 16px,1120px)}h1{font-size:clamp(50px,16vw,72px)}
+ .spin{width:min(310px,88vw)}.spin .plane{font-size:66px}.spin strong{font-size:27px}
+ .routeplane{font-size:24px}.airport .name{font-size:12px}.live{display:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <div class="brand"><div class="logo">â</div> FLIGHT ROULETTE</div>
+  <div class="live"><span class="dot"></span> LIVE AVIATION DATA</div>
+</nav>
+
+<main class="hero">
+  <div class="kicker">ð Somewhere, someone is flying right now</div>
+  <h1>Spin a <span class="grad">real flight.</span></h1>
+  <p class="sub">Hit the button and Flight Roulette will pull a random flight from Aviationstack and reveal where itâs going.</p>
+
+  <div class="setup">
+    <div class="apirow">
+      <div class="field">
+        <label>Aviationstack API key</label>
+        <input id="apiKey" type="password" placeholder="Paste your access key">
+      </div>
+      <button class="save" id="saveKey">SAVE KEY</button>
+    </div>
+    <div class="note">Stored only in this browser using localStorage. On a public static site, browser-side API use should still be treated as experimental rather than secure.</div>
+  </div>
+</main>
+
+<section class="spinarea">
+  <button class="spin" id="spinBtn">
+    <span class="plane">âï¸</span>
+    <strong>SPIN A FLIGHT</strong>
+    <small>REAL DATA â¢ RANDOM RESULT</small>
+  </button>
+  <div class="statusline" id="statusLine">Ready when you are.</div>
+  <div id="error"></div>
+</section>
+
+<section id="result">
+  <div class="flightHero">
+    <div class="topline">
+      <div>
+        <div class="airline" id="airline">Airline</div>
+        <div class="flightno" id="flightNo">â</div>
+      </div>
+      <div class="status" id="flightStatus">LIVE</div>
+    </div>
+
+    <div class="route">
+      <div class="airport">
+        <div class="code" id="depCode">â</div>
+        <div class="name" id="depName">Departure airport</div>
+      </div>
+      <div class="routeplane">â</div>
+      <div class="airport right">
+        <div class="code" id="arrCode">â</div>
+        <div class="name" id="arrName">Arrival airport</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <article class="card">
+      <div class="label">Scheduled departure</div>
+      <div class="value" id="departureTime">â</div>
+      <div class="small" id="departureZone">Local airport time where available</div>
+    </article>
+
+    <article class="card">
+      <div class="label">Scheduled arrival</div>
+      <div class="value" id="arrivalTime">â</div>
+      <div class="small">From Aviationstack flight data</div>
+    </article>
+
+    <article class="card">
+      <div class="label">Aircraft</div>
+      <div class="value" id="aircraft">â</div>
+      <div class="small" id="registration">Registration not available</div>
+    </article>
+
+    <article class="card wide">
+      <div class="label">Live position</div>
+      <div class="value" id="position">Not available</div>
+      <div class="small" id="positionMore">Live coordinates depend on the returned flight record and your API plan.</div>
+    </article>
+
+    <article class="card wide">
+      <div class="label">Live telemetry</div>
+      <div class="value" id="telemetry">Not available</div>
+      <div class="small" id="telemetryMore">Altitude / speed / direction are shown only when Aviationstack returns them.</div>
+    </article>
+  </div>
+
+  <div class="actions">
+    <button class="action primary" id="spinAgain">ð° SPIN AGAIN</button>
+    <button class="action" id="mapBtn">ðºï¸ OPEN POSITION IN MAPS</button>
+  </div>
+
+  <div class="source">Flight data: <a href="https://aviationstack.com/" target="_blank" rel="noopener">Aviationstack â</a>. Missing fields are shown as unavailable rather than estimated.</div>
+</section>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+
+const apiKeyInput = $("#apiKey");
+const saveKey = $("#saveKey");
+const spinBtn = $("#spinBtn");
+const spinAgain = $("#spinAgain");
+const result = $("#result");
+const errorBox = $("#error");
+const statusLine = $("#statusLine");
+const mapBtn = $("#mapBtn");
+
+let lastLat = null;
+let lastLon = null;
+
+apiKeyInput.value = localStorage.getItem("flightRouletteAviationstackKey") || "";
+
+saveKey.addEventListener("click", () => {
+  const key = apiKeyInput.value.trim();
+  if(!key){
+    localStorage.removeItem("flightRouletteAviationstackKey");
+    statusLine.textContent = "API key cleared.";
+    return;
+  }
+  localStorage.setItem("flightRouletteAviationstackKey", key);
+  statusLine.textContent = "API key saved in this browser â";
+});
+
+function val(v, fallback="Not available"){
+  return (v !== undefined && v !== null && String(v).trim() !== "") ? v : fallback;
+}
+function shortTime(iso){
+  if(!iso) return "Not available";
+  const d = new Date(iso);
+  if(Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleString("en-GB",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
+}
+function niceStatus(s){
+  if(!s) return "UNKNOWN";
+  return String(s).replaceAll("_"," ").toUpperCase();
+}
+function showError(msg){
+  errorBox.textContent = msg;
+  errorBox.style.display = "block";
+}
+function clearError(){
+  errorBox.style.display = "none";
+  errorBox.textContent = "";
+}
+function randomOffset(){
+  // Different offsets help avoid repeatedly seeing the same first page of global flights.
+  return Math.floor(Math.random() * 900);
+}
+function pickUsefulFlight(data){
+  const useful = (data || []).filter(f =>
+    f?.departure?.iata &&
+    f?.arrival?.iata &&
+    f?.flight?.iata
+  );
+  const pool = useful.length ? useful : (data || []);
+  if(!pool.length) return null;
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+
+async function fetchRandomFlight(){
+  const key = apiKeyInput.value.trim() || localStorage.getItem("flightRouletteAviationstackKey");
+  if(!key){
+    showError("Paste your Aviationstack API key first, then press SAVE KEY.");
+    apiKeyInput.focus();
+    return;
+  }
+
+  clearError();
+  spinBtn.classList.add("loading");
+  spinBtn.disabled = true;
+  if(spinAgain) spinAgain.disabled = true;
+  statusLine.textContent = "Scanning the skiesâ¦";
+
+  try{
+    const offset = randomOffset();
+    const url = `https://api.aviationstack.com/v1/flights?access_key=${encodeURIComponent(key)}&limit=100&offset=${offset}`;
+    const r = await fetch(url);
+    const j = await r.json();
+
+    if(!r.ok || j?.error){
+      const message = j?.error?.message || `Aviationstack returned HTTP ${r.status}.`;
+      throw new Error(message);
+    }
+
+    const flight = pickUsefulFlight(j.data);
+    if(!flight) throw new Error("No flight records were returned. Try spinning again.");
+
+    renderFlight(flight);
+    result.style.display = "block";
+    statusLine.textContent = "Flight found âï¸";
+    setTimeout(()=>result.scrollIntoView({behavior:"smooth",block:"start"}),100);
+  }catch(err){
+    showError(`Couldnât load a flight: ${err.message}`);
+    statusLine.textContent = "The radar went quiet.";
+  }finally{
+    spinBtn.classList.remove("loading");
+    spinBtn.disabled = false;
+    if(spinAgain) spinAgain.disabled = false;
+  }
+}
+
+function renderFlight(f){
+  $("#airline").textContent = val(f?.airline?.name,"Unknown airline");
+  $("#flightNo").textContent = val(f?.flight?.iata, val(f?.flight?.icao,"Unknown flight"));
+  $("#flightStatus").textContent = niceStatus(f?.flight_status);
+
+  $("#depCode").textContent = val(f?.departure?.iata,"???");
+  $("#depName").textContent = val(f?.departure?.airport,"Unknown departure airport");
+  $("#arrCode").textContent = val(f?.arrival?.iata,"???");
+  $("#arrName").textContent = val(f?.arrival?.airport,"Unknown arrival airport");
+
+  $("#departureTime").textContent = shortTime(f?.departure?.scheduled);
+  $("#departureZone").textContent = val(f?.departure?.timezone,"Timezone not available");
+  $("#arrivalTime").textContent = shortTime(f?.arrival?.scheduled);
+
+  const aircraftText =
+    f?.aircraft?.iata ||
+    f?.aircraft?.icao ||
+    "Not available";
+  $("#aircraft").textContent = aircraftText;
+  $("#registration").textContent = f?.aircraft?.registration
+    ? `Registration: ${f.aircraft.registration}`
+    : "Registration not available";
+
+  const live = f?.live || null;
+  lastLat = live?.latitude ?? null;
+  lastLon = live?.longitude ?? null;
+
+  if(lastLat !== null && lastLon !== null){
+    $("#position").textContent = `${Number(lastLat).toFixed(3)}, ${Number(lastLon).toFixed(3)}`;
+    $("#positionMore").textContent = live?.updated
+      ? `Position updated: ${shortTime(live.updated)}`
+      : "Live coordinates returned by Aviationstack.";
+    mapBtn.disabled = false;
+  }else{
+    $("#position").textContent = "Not available";
+    $("#positionMore").textContent = "This flight record did not include live coordinates.";
+    mapBtn.disabled = true;
+  }
+
+  const telemetryBits = [];
+  if(live?.altitude !== null && live?.altitude !== undefined) telemetryBits.push(`${Math.round(live.altitude).toLocaleString("en-GB")} m altitude`);
+  if(live?.speed_horizontal !== null && live?.speed_horizontal !== undefined) telemetryBits.push(`${Math.round(live.speed_horizontal)} km/h`);
+  if(live?.direction !== null && live?.direction !== undefined) telemetryBits.push(`${Math.round(live.direction)}Â° heading`);
+
+  $("#telemetry").textContent = telemetryBits.length ? telemetryBits.join(" â¢ ") : "Not available";
+  $("#telemetryMore").textContent = live?.is_ground === true
+    ? "Aviationstack currently marks this aircraft as on the ground."
+    : live?.is_ground === false
+      ? "Aviationstack currently marks this aircraft as airborne."
+      : "Ground/airborne telemetry was not returned.";
+}
+
+spinBtn.addEventListener("click", fetchRandomFlight);
+spinAgain.addEventListener("click", fetchRandomFlight);
+
+mapBtn.addEventListener("click",()=>{
+  if(lastLat === null || lastLon === null) return;
+  const url = `https://www.google.com/maps?q=${encodeURIComponent(lastLat+","+lastLon)}`;
+  window.open(url,"_blank","noopener");
+});
+</script>
+</body>
+</html>
