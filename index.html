@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050609">
-<title>SKYHUNT v3.0.1 — Live Aircraft Discovery</title>
+<title>SKYHUNT v3.2-beta · AI Finder — v3.0.1 — Live Aircraft Discovery</title>
 <meta name="description" content="Find, track and collect real aircraft flying right now.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <style>
@@ -581,6 +581,32 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
   border:1px solid rgba(255,111,183,.14);color:#ffbad8;font-size:9px;display:none
 }
 
+
+/* v3.2.0-beta — SKYHUNT AI FINDER */
+.aiFinderBackdrop{display:none;position:fixed;inset:0;z-index:9750;background:rgba(3,6,9,.92);backdrop-filter:blur(18px);padding:10px}
+.aiFinderBackdrop.show{display:flex;align-items:center;justify-content:center}
+.aiFinderApp{width:min(760px,100%);height:min(880px,calc(100vh - 20px));display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg,#0b1119,#070b10);box-shadow:0 35px 110px rgba(0,0,0,.55)}
+.aiHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:17px;border-bottom:1px solid var(--line)}
+.aiIdentity{display:flex;gap:11px;align-items:center}.aiOrb{width:43px;height:43px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,var(--lime),var(--cyan));color:#071006;font-size:20px;box-shadow:0 0 35px rgba(98,231,255,.16)}
+.aiTitle{font-size:18px;font-weight:950;letter-spacing:-.04em}.aiSub{color:#738194;font-size:8px;font-weight:900;letter-spacing:.1em;margin-top:3px}
+.aiClose{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.035);color:#fff;font-size:18px}
+.aiMessages{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.aiBubble{max-width:88%;padding:12px 13px;border-radius:17px;font-size:11px;line-height:1.5}
+.aiBubble.bot{align-self:flex-start;background:#111923;border:1px solid var(--line);color:#d9e1e8;border-bottom-left-radius:6px}
+.aiBubble.user{align-self:flex-end;background:linear-gradient(135deg,var(--lime),var(--cyan));color:#071006;font-weight:850;border-bottom-right-radius:6px}
+.aiExamples{display:flex;gap:7px;overflow-x:auto;padding:0 16px 10px;scrollbar-width:none}.aiExamples::-webkit-scrollbar{display:none}
+.aiExample{white-space:nowrap;min-height:34px;padding:0 11px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.025);color:#9aa7b6;font-size:8px;font-weight:900}
+.aiComposer{padding:11px 12px max(11px,env(safe-area-inset-bottom));border-top:1px solid var(--line);background:rgba(7,11,16,.94)}
+.aiInputRow{display:flex;gap:8px}.aiInput{flex:1;min-width:0;min-height:48px;padding:0 14px;border:1px solid var(--line);border-radius:15px;background:#0e151e;color:#fff;outline:none;font-size:12px}.aiInput:focus{border-color:rgba(98,231,255,.34)}
+.aiSend{width:50px;border:0;border-radius:15px;background:linear-gradient(135deg,var(--lime),var(--cyan));color:#071006;font-size:18px;font-weight:950}
+.aiThinking{display:inline-flex;gap:5px;align-items:center}.aiThinking i{width:5px;height:5px;border-radius:50%;background:var(--cyan);animation:aiDot .8s infinite alternate}.aiThinking i:nth-child(2){animation-delay:.2s}.aiThinking i:nth-child(3){animation-delay:.4s}@keyframes aiDot{to{opacity:.25;transform:translateY(-3px)}}
+.aiResult{padding:13px;border:1px solid rgba(200,255,82,.18);border-radius:18px;background:radial-gradient(circle at 100% 0,rgba(200,255,82,.08),transparent 14rem),#0d151c}
+.aiResultTop{display:flex;justify-content:space-between;gap:10px}.aiResultCall{font-size:25px;font-weight:950;letter-spacing:-.05em}.aiResultType{color:#8290a0;font-size:9px;margin-top:2px}.aiMatch{color:var(--lime);font-size:8px;font-weight:950}
+.aiResultStats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:11px}.aiResultStats div{padding:8px;border-radius:11px;background:rgba(255,255,255,.035)}.aiResultStats b{display:block;font-size:12px}.aiResultStats span{display:block;color:#657386;font-size:7px;margin-top:2px}
+.aiResultActions{display:flex;gap:7px;margin-top:9px}.aiResultBtn{flex:1;min-height:39px;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,.035);color:#fff;font-size:8px;font-weight:950}.aiResultBtn.primary{border:0;background:linear-gradient(135deg,var(--lime),var(--cyan));color:#071006}
+.aiNotice{padding:8px 16px 0;color:#59697a;font-size:7px;line-height:1.35}
+@media(max-width:520px){.aiFinderBackdrop{padding:0}.aiFinderApp{height:100%;border-radius:0;border:0}.aiMessages{padding:13px}.aiBubble{max-width:92%}.aiResultStats{grid-template-columns:repeat(3,1fr)}}
+
 </style>
 </head>
 <body>
@@ -762,7 +788,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
   </article>
 </section>
 
-<footer>SKYHUNT • <button class="versionBtn" id="versionBtn">v3.1.0-beta</button></footer>
+<footer>SKYHUNT • <button class="versionBtn" id="versionBtn">v3.2.0-beta</button></footer>
 </div>
 
 <nav class="bottomNav">
@@ -780,7 +806,8 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
       <button class="menuLink" id="menuHangar">▱ Hangar <span id="menuHangarCount">0</span></button>
       <button class="menuLink" id="menuAbove">⌖ Above Me <span>LIVE</span></button>
       <button class="menuLink" id="menuSkyLens">◉ Sky Lens <span>BETA</span></button>
-      <button class="menuLink" id="menuReleases">◈ Release notes <span>v3.1 BETA</span></button>
+      <button class="menuLink" id="menuAiFinder">✦ AI Finder <span>BETA</span></button>
+      <button class="menuLink" id="menuReleases">◈ Release notes <span>v3.2 BETA</span></button>
     </div>
   </aside>
 </div>
@@ -839,11 +866,42 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
   </div>
 </div>
 
+
+<div class="aiFinderBackdrop" id="aiFinderBackdrop">
+  <section class="aiFinderApp">
+    <header class="aiHead">
+      <div class="aiIdentity">
+        <div class="aiOrb">✦</div>
+        <div><div class="aiTitle">SKYHUNT AI Finder</div><div class="aiSub">NATURAL-LANGUAGE LIVE AIRCRAFT SEARCH · BETA</div></div>
+      </div>
+      <button class="aiClose" id="aiClose">×</button>
+    </header>
+    <div class="aiNotice">Describe an aircraft or ask for a live target. Finder interprets your request locally, then searches live ADS-B samples. It does not use a generative AI service and may not see every aircraft worldwide.</div>
+    <main class="aiMessages" id="aiMessages">
+      <div class="aiBubble bot">Tell me what you want to hunt. Try <b>“Find me a British Airways A380”</b>, <b>“show me the highest aircraft”</b>, or <b>“find a 747 above 30,000 feet.”</b></div>
+    </main>
+    <div class="aiExamples">
+      <button class="aiExample">British Airways A380</button>
+      <button class="aiExample">Highest aircraft</button>
+      <button class="aiExample">Fastest aircraft</button>
+      <button class="aiExample">Boeing 747</button>
+      <button class="aiExample">Ryanair below 10,000 ft</button>
+    </div>
+    <footer class="aiComposer">
+      <div class="aiInputRow">
+        <input class="aiInput" id="aiInput" maxlength="180" placeholder="Describe the aircraft you want to find…" autocomplete="off">
+        <button class="aiSend" id="aiSend">↑</button>
+      </div>
+    </footer>
+  </section>
+</div>
+
 <div class="modalBackdrop" id="releaseBackdrop">
   <div class="releaseModal">
-    <div class="releaseTop"><div><h2>SKYHUNT releases</h2><div class="releaseDate">Current version: v3.1.0-beta</div></div><button class="releaseClose" id="releaseClose">×</button></div>
+    <div class="releaseTop"><div><h2>SKYHUNT releases</h2><div class="releaseDate">Current version: v3.2.0-beta</div></div><button class="releaseClose" id="releaseClose">×</button></div>
 
-    <div class="releaseBlock"><h3>v3.1.0-beta — Sky Lens</h3><div class="releaseDate">11 August 2026</div><ul><li>Introduced SKYHUNT LABS.</li><li>New experimental camera-based Sky Lens mode.</li><li>Uses camera, location and device orientation to estimate where nearby live aircraft are in the sky.</li><li>Live target labels show callsign, aircraft type, altitude and approximate distance.</li><li>Nearest/in-view target receives a highlighted treatment.</li><li>Open a target directly in the main live tracker.</li><li>Clearly labelled BETA because phone compass/orientation and ADS-B timing are approximate.</li></ul></div>
+    <div class="releaseBlock"><h3>v3.2.0-beta — AI Finder</h3><div class="releaseDate">11 August 2026</div><ul><li>New natural-language live aircraft finder.</li><li>Understands common airline names, aircraft families, altitude and speed constraints, and superlatives such as highest, lowest and fastest.</li><li>Searches sampled live ADS-B data rather than inventing aircraft.</li><li>No AI API key required: query interpretation runs locally in the browser.</li><li>Open, follow or capture matched live aircraft.</li><li>Clearly reports when the current live sample contains no match.</li></ul></div>
+<div class="releaseBlock"><h3>v3.1.0-beta — Sky Lens</h3><div class="releaseDate">11 August 2026</div><ul><li>Introduced SKYHUNT LABS.</li><li>New experimental camera-based Sky Lens mode.</li><li>Uses camera, location and device orientation to estimate where nearby live aircraft are in the sky.</li><li>Live target labels show callsign, aircraft type, altitude and approximate distance.</li><li>Nearest/in-view target receives a highlighted treatment.</li><li>Open a target directly in the main live tracker.</li><li>Clearly labelled BETA because phone compass/orientation and ADS-B timing are approximate.</li></ul></div>
 <div class="releaseBlock"><h3>v3.0.1 — Radar Map Upgrade</h3><div class="releaseDate">11 August 2026</div><ul><li>Completely redesigned World Radar map presentation.</li><li>New dark tactical basemap treatment.</li><li>Animated radar rings and sweep overlay.</li><li>Glowing aircraft target markers.</li><li>Floating live radar HUD with target count and scan/reset controls.</li><li>New aircraft preview bottom sheet when a target is tapped.</li><li>Open or capture an aircraft directly from the map.</li><li>Improved mobile map proportions and controls.</li></ul></div>
 <div class="releaseBlock"><h3>v3.0.0 — SKYHUNT</h3><div class="releaseDate">11 August 2026</div><ul><li>Complete rebrand from Flight Roulette to SKYHUNT.</li><li>New visual identity and design system.</li><li>New radar-inspired landing experience.</li><li>New Hunt / Radar / Hangar / Flight ID navigation language.</li><li>Redesigned collector cards, tracking UI and world radar.</li><li>All proven live-aircraft functionality retained.</li></ul></div>
     <div class="releaseBlock"><h3>v2.0.1 — World Radar Fix</h3><p>Rate-conscious Live World scanner and mobile radar redesign.</p></div>
@@ -1525,6 +1583,136 @@ lensOpenBestBtn.addEventListener("click",()=>{if(lensBest)openLensAircraft(lensB
 window.addEventListener("resize",renderLensTargets);
 
 
+
+// ===== v3.2.0-beta — AI FINDER =====
+const aiFinderBackdrop=$("#aiFinderBackdrop"),aiMessages=$("#aiMessages"),aiInput=$("#aiInput");
+const aiSend=$("#aiSend"),aiClose=$("#aiClose"),menuAiFinder=$("#menuAiFinder");
+let aiLastMatches=[];
+
+const AI_AIRLINES={
+  "british airways":["BAW","SHT"],"ba":["BAW","SHT"],"ryanair":["RYR"],"easyjet":["EZY"],
+  "lufthansa":["DLH"],"emirates":["UAE"],"qatar":["QTR"],"qatar airways":["QTR"],
+  "american airlines":["AAL"],"delta":["DAL"],"united":["UAL"],"klm":["KLM"],
+  "air france":["AFR"],"virgin atlantic":["VIR"],"turkish":["THY"],"wizz":["WZZ"],
+  "wizz air":["WZZ"],"jet2":["EXS"],"tui":["TOM"],"singapore airlines":["SIA"],
+  "cathay pacific":["CPA"],"etihad":["ETD"],"southwest":["SWA"],"fedex":["FDX"],"ups":["UPS"]
+};
+const AI_TYPES={
+  "a380":["A388"],"airbus a380":["A388"],"747":["B741","B742","B743","B744","B748"],
+  "boeing 747":["B741","B742","B743","B744","B748"],"787":["B788","B789","B78X"],
+  "dreamliner":["B788","B789","B78X"],"777":["B772","B773","B77L","B77W"],
+  "a350":["A359","A35K"],"a330":["A332","A333","A338","A339"],
+  "a320":["A318","A319","A320","A321","A20N","A21N"],"737":["B736","B737","B738","B739","B38M","B39M"]
+};
+function aiEsc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function aiAddBubble(text,who="bot",htmlMode=false){
+  const d=document.createElement("div");d.className=`aiBubble ${who}`;
+  if(htmlMode)d.innerHTML=text;else d.textContent=text;
+  aiMessages.appendChild(d);aiMessages.scrollTop=aiMessages.scrollHeight;return d;
+}
+function aiParse(q){
+  const s=q.toLowerCase().trim(),p={raw:q,airline:[],types:[],minAlt:null,maxAlt:null,minSpeed:null,maxSpeed:null,sort:null,direction:null};
+  for(const [name,codes] of Object.entries(AI_AIRLINES))if(s.includes(name)){p.airline=codes;break}
+  for(const [name,codes] of Object.entries(AI_TYPES))if(s.includes(name)){p.types=codes;break}
+  const above=s.match(/(?:above|over|higher than)\s*([\d,]+)\s*(?:ft|feet)?/);
+  const below=s.match(/(?:below|under|lower than)\s*([\d,]+)\s*(?:ft|feet)?/);
+  const speedAbove=s.match(/(?:above|over|faster than)\s*([\d,]+)\s*(?:kt|kts|knots)/);
+  if(above)p.minAlt=Number(above[1].replace(/,/g,""));
+  if(below)p.maxAlt=Number(below[1].replace(/,/g,""));
+  if(speedAbove)p.minSpeed=Number(speedAbove[1].replace(/,/g,""));
+  if(/\bhighest\b/.test(s))p.sort="highest";
+  else if(/\blowest\b/.test(s))p.sort="lowest";
+  else if(/\bfastest\b/.test(s))p.sort="fastest";
+  else if(/\bslowest\b/.test(s))p.sort="slowest";
+  if(/\bwest(?:bound|ward)?\b/.test(s))p.direction="west";
+  if(/\beast(?:bound|ward)?\b/.test(s))p.direction="east";
+  if(/\bnorth(?:bound|ward)?\b/.test(s))p.direction="north";
+  if(/\bsouth(?:bound|ward)?\b/.test(s))p.direction="south";
+  return p;
+}
+function aiAlt(a){return String(a.alt_baro).toLowerCase()==="ground"?0:Number(a.alt_baro)}
+function aiDirectionOK(track,dir){
+  const t=Number(track);if(!Number.isFinite(t)||!dir)return !dir;
+  if(dir==="north")return t>=315||t<45;if(dir==="east")return t>=45&&t<135;
+  if(dir==="south")return t>=135&&t<225;if(dir==="west")return t>=225&&t<315;return true;
+}
+function aiMatchScore(a,p){
+  const flight=(a.flight||"").trim().toUpperCase(),type=(a.t||"").toUpperCase();
+  if(p.airline.length&&!p.airline.some(c=>flight.startsWith(c)))return -1;
+  if(p.types.length&&!p.types.includes(type))return -1;
+  const alt=aiAlt(a),speed=Number(a.gs);
+  if(p.minAlt!==null&&(!Number.isFinite(alt)||alt<p.minAlt))return -1;
+  if(p.maxAlt!==null&&(!Number.isFinite(alt)||alt>p.maxAlt))return -1;
+  if(p.minSpeed!==null&&(!Number.isFinite(speed)||speed<p.minSpeed))return -1;
+  if(!aiDirectionOK(a.track,p.direction))return -1;
+  let score=0;if(p.airline.length)score+=5;if(p.types.length)score+=5;
+  if(p.minAlt!==null||p.maxAlt!==null)score+=2;if(p.direction)score+=1;
+  return score;
+}
+async function aiLiveSample(){
+  // Reuse an existing fresh World Radar sample when available.
+  if(Array.isArray(worldPlanes)&&worldPlanes.length>20)return worldPlanes;
+  const sample=[...zones].sort(()=>Math.random()-.5).slice(0,5),all=[];
+  for(let i=0;i<sample.length;i++){
+    const [name,lat,lon]=sample[i];let rows=[];
+    try{rows=(await scanAdsbLol(name,lat,lon)).slice(0,100)}
+    catch(e){await sleep(1100);try{rows=(await scanAirplanesLive(name,lat,lon)).slice(0,100)}catch(_){}}
+    rows.forEach(a=>all.push({...a,_zone:name,_worldSource:"Live ADS-B"}));
+    if(i<sample.length-1)await sleep(1100);
+  }
+  const seen=new Set();
+  return all.filter(a=>{const k=(a.hex||"").toLowerCase();if(!k||seen.has(k))return false;seen.add(k);return true});
+}
+function aiResultCard(a,index){
+  const call=(a.flight||"").trim()||a.r||a.hex||"UNKNOWN";
+  const alt=Number.isFinite(aiAlt(a))?`${Math.round(aiAlt(a)).toLocaleString("en-GB")} ft`:"—";
+  const sp=Number.isFinite(Number(a.gs))?`${Math.round(Number(a.gs))} kt`:"—";
+  return `<div class="aiResult">
+    <div class="aiResultTop"><div><div class="aiResultCall">${aiEsc(call)}</div><div class="aiResultType">${aiEsc(a.t||"Unknown type")} · ${aiEsc(a.r||a.hex||"Unknown registration")}</div></div><div class="aiMatch">LIVE MATCH</div></div>
+    <div class="aiResultStats"><div><b>${aiEsc(alt)}</b><span>ALTITUDE</span></div><div><b>${aiEsc(sp)}</b><span>SPEED</span></div><div><b>${Math.round(Number(a.track)||0)}°</b><span>TRACK</span></div></div>
+    <div class="aiResultActions"><button class="aiResultBtn primary" data-ai-open="${index}">OPEN TARGET</button><button class="aiResultBtn" data-ai-save="${index}">＋ CAPTURE</button></div>
+  </div>`;
+}
+async function aiSearch(q){
+  const p=aiParse(q),thinking=aiAddBubble('<span class="aiThinking"><i></i><i></i><i></i></span> Searching the live sky…',"bot",true);
+  try{
+    const planes=await aiLiveSample();
+    let matches=planes.map(a=>({a,score:aiMatchScore(a,p)})).filter(x=>x.score>=0);
+    if(p.sort==="highest")matches.sort((x,y)=>(aiAlt(y.a)||-1)-(aiAlt(x.a)||-1));
+    else if(p.sort==="lowest")matches.sort((x,y)=>(aiAlt(x.a)||1e9)-(aiAlt(y.a)||1e9));
+    else if(p.sort==="fastest")matches.sort((x,y)=>(Number(y.a.gs)||-1)-(Number(x.a.gs)||-1));
+    else if(p.sort==="slowest")matches.sort((x,y)=>(Number(x.a.gs)||1e9)-(Number(y.a.gs)||1e9));
+    else matches.sort((x,y)=>y.score-x.score);
+    aiLastMatches=matches.slice(0,3).map(x=>x.a);
+    thinking.remove();
+    if(!aiLastMatches.length){
+      aiAddBubble(`I searched ${planes.length} live aircraft in the current radar sample but couldn't find a match. That doesn't prove none are flying — try a broader description or scan again later.`);
+      return;
+    }
+    aiAddBubble(`I found ${matches.length} matching live target${matches.length===1?"":"s"}. Best ${Math.min(3,matches.length)} shown below.`);
+    aiLastMatches.forEach((a,i)=>aiAddBubble(aiResultCard(a,i),"bot",true));
+    aiMessages.querySelectorAll("[data-ai-open]").forEach(b=>b.onclick=()=>aiOpen(Number(b.dataset.aiOpen)));
+    aiMessages.querySelectorAll("[data-ai-save]").forEach(b=>b.onclick=()=>aiSave(Number(b.dataset.aiSave),b));
+  }catch(e){thinking.remove();aiAddBubble(`The live search couldn't complete: ${e.message||"feed unavailable"}. Try again in a moment.`)}
+}
+function aiOpen(i){
+  const a=aiLastMatches[i];if(!a)return;closeAiFinder();
+  renderAircraft(a,a._zone||"AI Finder",a._worldSource||"Live ADS-B");showV2View("spin");
+  setTimeout(()=>result.scrollIntoView({behavior:"smooth",block:"start"}),160);
+}
+function aiSave(i,btn){
+  const a=aiLastMatches[i];if(!a)return;
+  currentAircraft={...a,_zone:a._zone||"AI Finder",_source:a._worldSource||"Live ADS-B"};
+  currentHex=(a.hex||"").trim().toLowerCase();currentZone=a._zone||"AI Finder";currentSource=a._worldSource||"Live ADS-B";
+  lastLat=Number(a.lat);lastLon=Number(a.lon);saveCurrentCard();btn.textContent="CAPTURED ✓";
+}
+function openAiFinder(){closeMenu();aiFinderBackdrop.classList.add("show");setTimeout(()=>aiInput.focus(),150)}
+function closeAiFinder(){aiFinderBackdrop.classList.remove("show")}
+function aiSubmit(){const q=aiInput.value.trim();if(!q)return;aiAddBubble(q,"user");aiInput.value="";aiSearch(q)}
+menuAiFinder.addEventListener("click",openAiFinder);aiClose.addEventListener("click",closeAiFinder);aiSend.addEventListener("click",aiSubmit);
+aiInput.addEventListener("keydown",e=>{if(e.key==="Enter")aiSubmit()});
+document.querySelectorAll(".aiExample").forEach(b=>b.addEventListener("click",()=>{aiInput.value=b.textContent;aiSubmit()}));
+
 const HANGAR_KEY="flightRouletteHangarV1";
 const TARGET_TYPES=30;
 
@@ -1723,7 +1911,7 @@ function closeRelease(){
 }
 releaseClose.addEventListener("click",closeRelease);
 releaseBackdrop.addEventListener("click",e=>{if(e.target===releaseBackdrop)closeRelease()});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeRelease();closeMenu();closeHangar();closeAbove();closeSkyLens();}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeRelease();closeMenu();closeHangar();closeAbove();closeSkyLens();closeAiFinder();}});
 
 
 // ===== v2.0.0 LIVE WORLD =====
