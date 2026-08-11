@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050609">
-<title>SKYHUNT — Live Aircraft Discovery</title>
+<title>SKYHUNT v3.0.1 — Live Aircraft Discovery</title>
 <meta name="description" content="Find, track and collect real aircraft flying right now.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <style>
@@ -286,6 +286,195 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
   .actions,.mapControls{flex-direction:column}
   .nearPlane{flex-direction:column}
 }
+
+/* v3.0.1 — RADAR MAP UPGRADE */
+.worldWrap{
+  height:min(64vh,620px)!important;
+  min-height:460px!important;
+  border-radius:28px!important;
+  border:1px solid rgba(255,255,255,.10)!important;
+  box-shadow:0 30px 90px rgba(0,0,0,.34);
+  position:relative;
+  overflow:hidden;
+  background:#05090d!important;
+}
+#worldMap{
+  height:100%;
+  width:100%;
+  background:#05090d;
+}
+.worldWrap .leaflet-tile-pane{
+  filter:grayscale(1) saturate(.25) brightness(.42) contrast(1.22) hue-rotate(150deg);
+}
+.worldWrap::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:420;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 50% 50%,transparent 0 14%,rgba(98,231,255,.06) 14.4% 14.8%,transparent 15.2% 28%,rgba(98,231,255,.045) 28.4% 28.8%,transparent 29.2% 42%,rgba(98,231,255,.035) 42.4% 42.8%,transparent 43.2%);
+  mix-blend-mode:screen;
+}
+.worldWrap::after{
+  content:"";
+  position:absolute;
+  inset:-20%;
+  z-index:421;
+  pointer-events:none;
+  background:conic-gradient(from 0deg at 50% 50%,transparent 0 338deg,rgba(98,231,255,.16) 352deg,transparent 360deg);
+  animation:worldSweep 5.5s linear infinite;
+  opacity:.6;
+}
+@keyframes worldSweep{to{transform:rotate(360deg)}}
+
+.worldTopHud{
+  position:absolute;
+  z-index:700;
+  top:12px;left:12px;right:12px;
+  display:flex;justify-content:space-between;gap:10px;align-items:flex-start;
+  pointer-events:none;
+}
+.worldTopLeft,.worldTopRight{display:flex;gap:8px;flex-wrap:wrap;pointer-events:auto}
+.radarChip{
+  display:inline-flex;align-items:center;gap:7px;
+  min-height:34px;padding:0 11px;
+  border-radius:999px;
+  background:rgba(6,11,16,.78);
+  border:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(12px);
+  color:#c7d0da;
+  font-size:9px;font-weight:900;letter-spacing:.06em;
+}
+.radarChip strong{color:#fff}
+.radarChip.live{color:var(--lime)}
+.radarChip .tinyDot{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 5px rgba(200,255,82,.07)}
+.radarAction{
+  min-height:34px;padding:0 12px;border-radius:999px;border:1px solid rgba(255,255,255,.08);
+  background:rgba(6,11,16,.78);backdrop-filter:blur(12px);
+  color:#fff;font-size:9px;font-weight:900;cursor:pointer
+}
+.radarAction.primary{
+  background:linear-gradient(135deg,var(--lime),var(--cyan));
+  color:#071006;border:0
+}
+
+.worldBottomHud{
+  position:absolute;
+  z-index:700;
+  left:12px;right:12px;bottom:12px;
+  display:flex;justify-content:space-between;gap:10px;align-items:flex-end;
+  pointer-events:none
+}
+.worldLegend{
+  position:static!important;
+  padding:9px 11px!important;
+  border-radius:999px!important;
+  background:rgba(6,11,16,.78)!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  backdrop-filter:blur(12px);
+  color:#9aa7b6!important;
+  font-size:8px!important;
+  pointer-events:auto
+}
+.mapHint{
+  pointer-events:auto;
+  max-width:250px;
+  padding:9px 11px;border-radius:14px;
+  background:rgba(6,11,16,.78);
+  border:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(12px);
+  color:#8391a2;font-size:8px;line-height:1.35;
+  text-align:right
+}
+.radarPlane{
+  width:26px;height:26px;
+  display:grid;place-items:center;
+  border-radius:50%;
+  color:#071006!important;
+  background:linear-gradient(135deg,var(--lime),var(--cyan));
+  font-size:13px!important;
+  font-weight:950;
+  box-shadow:0 0 0 4px rgba(98,231,255,.08),0 0 18px rgba(98,231,255,.45);
+  text-shadow:none!important;
+  border:1px solid rgba(255,255,255,.35);
+  transform-origin:center center;
+}
+.radarPlane:hover{
+  box-shadow:0 0 0 5px rgba(200,255,82,.12),0 0 28px rgba(200,255,82,.55);
+}
+.leaflet-control-zoom{
+  border:0!important;
+  box-shadow:none!important;
+}
+.leaflet-control-zoom a{
+  background:rgba(6,11,16,.82)!important;
+  color:#fff!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  backdrop-filter:blur(12px);
+}
+.leaflet-control-attribution{
+  background:rgba(6,11,16,.62)!important;
+  color:#748194!important;
+  font-size:8px!important
+}
+.leaflet-control-attribution a{color:#8defff!important}
+
+.aircraftSheet{
+  position:absolute;
+  z-index:760;
+  left:12px;right:12px;bottom:12px;
+  display:none;
+  padding:14px;
+  border-radius:20px;
+  background:rgba(8,13,19,.92);
+  border:1px solid rgba(255,255,255,.10);
+  backdrop-filter:blur(18px);
+  box-shadow:0 18px 55px rgba(0,0,0,.35);
+}
+.aircraftSheet.show{display:block;animation:sheetUp .22s ease both}
+@keyframes sheetUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.sheetTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.sheetCall{font-size:24px;font-weight:950;letter-spacing:-.045em}
+.sheetType{margin-top:3px;color:#7d8a9b;font-size:9px}
+.sheetClose{
+  width:32px;height:32px;border-radius:10px;border:1px solid var(--line);
+  background:rgba(255,255,255,.04);color:#fff;font-size:16px
+}
+.sheetStats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}
+.sheetStat{padding:9px;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid var(--line)}
+.sheetStat b{display:block;font-size:14px}.sheetStat span{display:block;color:#657386;font-size:7px;margin-top:3px}
+.sheetActions{display:flex;gap:7px;margin-top:10px}
+.sheetBtn{
+  flex:1;min-height:40px;border-radius:12px;border:1px solid var(--line);
+  background:rgba(255,255,255,.04);color:#fff;font-size:9px;font-weight:900
+}
+.sheetBtn.primary{border:0;background:linear-gradient(135deg,var(--lime),var(--cyan));color:#071006}
+
+.worldStatusBar{display:none!important}
+.worldIntro{
+  margin-bottom:10px!important;
+  grid-template-columns:1fr!important;
+  padding:12px 14px!important;
+}
+.worldIntro .worldScanPrimary{display:none!important}
+.worldTip{
+  margin-top:10px!important;
+  padding:10px 12px!important;
+  border-radius:14px!important;
+  background:rgba(255,255,255,.02)!important;
+}
+
+@media(max-width:520px){
+  .worldWrap{height:62vh!important;min-height:500px!important;border-radius:24px!important}
+  .worldTopHud{top:9px;left:9px;right:9px}
+  .worldBottomHud{left:9px;right:9px;bottom:9px}
+  .mapHint{display:none}
+  .radarChip{min-height:31px;padding:0 9px;font-size:8px}
+  .radarAction{min-height:31px;padding:0 10px;font-size:8px}
+  .sheetStats{grid-template-columns:repeat(3,1fr)}
+}
+
 </style>
 </head>
 <body>
@@ -380,11 +569,71 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
 </section>
 
 <section class="view" id="worldView">
-  <div class="sectionHead"><div><h2>World Radar</h2><p>Scan real aviation hotspots and choose your own aircraft.</p></div></div>
-  <div class="worldIntro"><div><strong>Global radar sample</strong><p>Live positions from several busy regions.</p></div><button class="worldScanPrimary" id="worldScanBtn">SCAN</button></div>
-  <div class="worldStatusBar"><div class="worldStatusLeft"><span class="radarDot" id="worldRadarDot"></span><span class="worldStatusText" id="worldStatus">RADAR STANDING BY</span></div><div class="worldCountChip"><span id="worldCount">0</span> LIVE</div></div>
-  <div class="worldWrap"><div id="worldMap"></div><div class="worldLegend">✈ TAP A TARGET TO OPEN</div></div>
-  <div class="worldTip">World Radar is a live sample, not a claim to show every aircraft currently airborne.</div>
+  <div class="sectionHead">
+    <div>
+      <h2>World Radar</h2>
+      <p>Scan live aviation hotspots and hunt your own target.</p>
+    </div>
+  </div>
+
+  <div class="worldIntro">
+    <div>
+      <strong>SKYHUNT global radar</strong>
+      <p>Each sweep samples several busy airspaces and plots the real aircraft returned by the live feeds.</p>
+    </div>
+    <button class="worldScanPrimary" id="worldScanBtn">SCAN</button>
+  </div>
+
+  <div class="worldStatusBar">
+    <div class="worldStatusLeft">
+      <span class="radarDot" id="worldRadarDot"></span>
+      <span class="worldStatusText" id="worldStatus">RADAR STANDING BY</span>
+    </div>
+    <div class="worldCountChip"><span id="worldCount">0</span> LIVE</div>
+  </div>
+
+  <div class="worldWrap">
+    <div id="worldMap"></div>
+
+    <div class="worldTopHud">
+      <div class="worldTopLeft">
+        <div class="radarChip live"><span class="tinyDot"></span> LIVE RADAR</div>
+        <div class="radarChip"><strong id="worldHudCount">0</strong> TARGETS</div>
+      </div>
+      <div class="worldTopRight">
+        <button class="radarAction" id="worldRecenterBtn">⌖ RESET</button>
+        <button class="radarAction primary" id="worldHudScanBtn">◎ SCAN</button>
+      </div>
+    </div>
+
+    <div class="worldBottomHud">
+      <div class="worldLegend">✈ TAP A TARGET</div>
+      <div class="mapHint">Real ADS-B positions from the current radar sample.</div>
+    </div>
+
+    <div class="aircraftSheet" id="aircraftSheet">
+      <div class="sheetTop">
+        <div>
+          <div class="sheetCall" id="sheetCall">—</div>
+          <div class="sheetType" id="sheetType">Aircraft</div>
+        </div>
+        <button class="sheetClose" id="sheetClose">×</button>
+      </div>
+      <div class="sheetStats">
+        <div class="sheetStat"><b id="sheetAlt">—</b><span>ALTITUDE</span></div>
+        <div class="sheetStat"><b id="sheetSpeed">—</b><span>SPEED</span></div>
+        <div class="sheetStat"><b id="sheetReg">—</b><span>REGISTRATION</span></div>
+      </div>
+      <div class="sheetActions">
+        <button class="sheetBtn primary" id="sheetOpenBtn">OPEN TARGET</button>
+        <button class="sheetBtn" id="sheetCaptureBtn">＋ CAPTURE</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="worldTip">
+    World Radar is a live sample rather than a claim to display every aircraft currently airborne.
+  </div>
 </section>
 
 <section class="view" id="hangarViewV2">
@@ -407,7 +656,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
   </article>
 </section>
 
-<footer>SKYHUNT • <button class="versionBtn" id="versionBtn">v3.0.0</button></footer>
+<footer>SKYHUNT • <button class="versionBtn" id="versionBtn">v3.0.1</button></footer>
 </div>
 
 <nav class="bottomNav">
@@ -424,7 +673,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
       <button class="menuLink" id="menuSpin">✦ Random Hunt <span>→</span></button>
       <button class="menuLink" id="menuHangar">▱ Hangar <span id="menuHangarCount">0</span></button>
       <button class="menuLink" id="menuAbove">⌖ Above Me <span>LIVE</span></button>
-      <button class="menuLink" id="menuReleases">◈ Release notes <span>v3.0.0</span></button>
+      <button class="menuLink" id="menuReleases">◈ Release notes <span>v3.0.1</span></button>
     </div>
   </aside>
 </div>
@@ -443,9 +692,10 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
 
 <div class="modalBackdrop" id="releaseBackdrop">
   <div class="releaseModal">
-    <div class="releaseTop"><div><h2>SKYHUNT releases</h2><div class="releaseDate">Current version: v3.0.0</div></div><button class="releaseClose" id="releaseClose">×</button></div>
+    <div class="releaseTop"><div><h2>SKYHUNT releases</h2><div class="releaseDate">Current version: v3.0.1</div></div><button class="releaseClose" id="releaseClose">×</button></div>
 
-    <div class="releaseBlock"><h3>v3.0.0 — SKYHUNT</h3><div class="releaseDate">11 August 2026</div><ul><li>Complete rebrand from Flight Roulette to SKYHUNT.</li><li>New visual identity and design system.</li><li>New radar-inspired landing experience.</li><li>New Hunt / Radar / Hangar / Flight ID navigation language.</li><li>Redesigned collector cards, tracking UI and world radar.</li><li>All proven live-aircraft functionality retained.</li></ul></div>
+    <div class="releaseBlock"><h3>v3.0.1 — Radar Map Upgrade</h3><div class="releaseDate">11 August 2026</div><ul><li>Completely redesigned World Radar map presentation.</li><li>New dark tactical basemap treatment.</li><li>Animated radar rings and sweep overlay.</li><li>Glowing aircraft target markers.</li><li>Floating live radar HUD with target count and scan/reset controls.</li><li>New aircraft preview bottom sheet when a target is tapped.</li><li>Open or capture an aircraft directly from the map.</li><li>Improved mobile map proportions and controls.</li></ul></div>
+<div class="releaseBlock"><h3>v3.0.0 — SKYHUNT</h3><div class="releaseDate">11 August 2026</div><ul><li>Complete rebrand from Flight Roulette to SKYHUNT.</li><li>New visual identity and design system.</li><li>New radar-inspired landing experience.</li><li>New Hunt / Radar / Hangar / Flight ID navigation language.</li><li>Redesigned collector cards, tracking UI and world radar.</li><li>All proven live-aircraft functionality retained.</li></ul></div>
     <div class="releaseBlock"><h3>v2.0.1 — World Radar Fix</h3><p>Rate-conscious Live World scanner and mobile radar redesign.</p></div>
     <div class="releaseBlock"><h3>v2.0.0 — LIVE WORLD</h3><p>Introduced World Radar, bottom navigation and Pilot Passport.</p></div>
     <div class="releaseBlock"><h3>v1.3.1 — Local Radar Fix</h3><p>Dual-feed local radar.</p></div>
@@ -1136,6 +1386,7 @@ const worldView=$("#worldView"), homeView=$("#homeView"), hangarView=$("#hangarV
 const bottomBtns=[...document.querySelectorAll(".bottomNav button")];
 const worldStatus=$("#worldStatus"), worldMapEl=$("#worldMap"), worldCount=$("#worldCount");
 let worldMap=null, worldLayer=null, worldPlanes=[], worldBusy=false;
+let selectedWorldAircraft=null;
 
 function showV2View(name){
   [homeView,worldView,hangarView,passportView].forEach(v=>v&&v.classList.remove("activeView"));
@@ -1227,13 +1478,13 @@ async function scanWorldRadar(){
       const flight=(a.flight||"").trim()||a.r||a.hex||"Aircraft";
       marker.bindTooltip(`${flight} • ${a.t||"Unknown type"}`,{direction:"top"});
       marker.on("click",()=>{
-        renderAircraft(a,a._zone||"Live World",a._worldSource||"Live ADS-B");
-        showV2View("spin");
-        setTimeout(()=>result.scrollIntoView({behavior:"smooth",block:"start"}),150);
+        selectedWorldAircraft=a;
+        showAircraftSheet(a);
       });
     });
 
     worldCount.textContent=worldPlanes.length;
+    if($("#worldHudCount")) $("#worldHudCount").textContent=worldPlanes.length;
 
     if(worldPlanes.length){
       radarDot.className="radarDot liveNow";
@@ -1255,6 +1506,50 @@ async function scanWorldRadar(){
     scanButton.textContent="SCAN AGAIN";
   }
 }
+
+
+function worldDisplayAlt(a){
+  if(String(a?.alt_baro).toLowerCase()==="ground") return "Ground";
+  if(a?.alt_baro!==undefined&&a?.alt_baro!==null&&!isNaN(Number(a.alt_baro))) return `${Math.round(Number(a.alt_baro)).toLocaleString("en-GB")} ft`;
+  return "—";
+}
+function worldDisplaySpeed(a){
+  if(a?.gs!==undefined&&a?.gs!==null&&!isNaN(Number(a.gs))) return `${Math.round(Number(a.gs))} kt`;
+  return "—";
+}
+function showAircraftSheet(a){
+  const flight=(a.flight||"").trim()||a.r||a.hex||"UNKNOWN";
+  $("#sheetCall").textContent=flight;
+  $("#sheetType").textContent=`${a.t||"Unknown type"} • ${a._zone||"Live World"}`;
+  $("#sheetAlt").textContent=worldDisplayAlt(a);
+  $("#sheetSpeed").textContent=worldDisplaySpeed(a);
+  $("#sheetReg").textContent=a.r||"—";
+  $("#aircraftSheet").classList.add("show");
+}
+$("#sheetClose").addEventListener("click",()=>$("#aircraftSheet").classList.remove("show"));
+$("#sheetOpenBtn").addEventListener("click",()=>{
+  if(!selectedWorldAircraft)return;
+  const a=selectedWorldAircraft;
+  $("#aircraftSheet").classList.remove("show");
+  renderAircraft(a,a._zone||"Live World",a._worldSource||"Live ADS-B");
+  showV2View("spin");
+  setTimeout(()=>result.scrollIntoView({behavior:"smooth",block:"start"}),150);
+});
+$("#sheetCaptureBtn").addEventListener("click",()=>{
+  if(!selectedWorldAircraft)return;
+  const a=selectedWorldAircraft;
+  currentAircraft={...a,_zone:a._zone||"Live World",_source:a._worldSource||"Live ADS-B"};
+  currentHex=(a.hex||"").trim().toLowerCase();
+  currentZone=a._zone||"Live World";
+  currentSource=a._worldSource||"Live ADS-B";
+  lastLat=Number(a.lat);lastLon=Number(a.lon);
+  saveCurrentCard();
+  $("#sheetCaptureBtn").textContent="CAPTURED ✓";
+});
+$("#worldHudScanBtn").addEventListener("click",scanWorldRadar);
+$("#worldRecenterBtn").addEventListener("click",()=>{
+  if(worldMap) worldMap.setView([22,8],2);
+});
 
 $("#worldScanBtn").addEventListener("click",scanWorldRadar);
 $("#heroWorldBtn").addEventListener("click",()=>{showV2View("world");setTimeout(scanWorldRadar,200)});
