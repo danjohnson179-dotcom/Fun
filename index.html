@@ -3,509 +3,113 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#08111b">
-<title>Flight Roulette — Real Aircraft</title>
-<meta name="description" content="Spin the skies, discover a real aircraft and follow it live on the map.">
-
+<meta name="theme-color" content="#050b12">
+<title>Flight Roulette 2.0 — Live World</title>
+<meta name="description" content="Discover, track and collect real aircraft flying right now.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
-
 <style>
-:root{
-  --bg:#07111b;--panel:#0c1d2c;--text:#f7fbff;--muted:#91a7b8;
-  --cyan:#63ecff;--blue:#5f8dff;--pink:#ff78c8;--lime:#bafc70;
-  --line:rgba(255,255,255,.09);--shadow:0 28px 90px rgba(0,0,0,.36)
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
- margin:0;min-height:100vh;color:var(--text);
- font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
- background:
-   radial-gradient(circle at 15% 0%,rgba(95,141,255,.20),transparent 30rem),
-   radial-gradient(circle at 100% 20%,rgba(99,236,255,.12),transparent 26rem),
-   linear-gradient(180deg,#08131f 0%,#06101a 100%);
- overflow-x:hidden
-}
-body:before{
- content:"";position:fixed;inset:0;pointer-events:none;opacity:.22;
- background-image:radial-gradient(rgba(255,255,255,.55) 1px,transparent 1px);
- background-size:34px 34px;mask-image:linear-gradient(to bottom,black,transparent 70%)
-}
-.wrap{width:min(1120px,calc(100% - 22px));margin:auto;position:relative;z-index:1}
-nav{display:flex;justify-content:space-between;align-items:center;padding:20px 0}
-.brand{display:flex;gap:10px;align-items:center;font-weight:950;letter-spacing:-.045em}
-.logo{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;color:#07111b;background:linear-gradient(135deg,var(--cyan),var(--blue));font-size:20px;box-shadow:0 12px 30px rgba(95,141,255,.28);transform:rotate(-5deg)}
-.live{display:flex;align-items:center;gap:7px;padding:8px 11px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:12px;font-weight:850;color:#c7d6e2}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 6px rgba(186,252,112,.09)}
-.hero{text-align:center;padding:58px 0 18px}
-.kicker{display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.04);color:#c5d3df;font-size:12px;font-weight:850}
-h1{max-width:930px;margin:22px auto 15px;font-size:clamp(53px,10vw,106px);line-height:.89;letter-spacing:-.075em;font-weight:950}
-.grad{background:linear-gradient(90deg,var(--cyan),#8ca7ff 52%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
-.sub{max-width:670px;margin:auto;color:var(--muted);font-size:clamp(17px,2.2vw,21px);line-height:1.55}
-.spinzone{text-align:center;padding:38px 0 58px}
-.globe{
- width:min(350px,86vw);aspect-ratio:1;border-radius:50%;border:0;cursor:pointer;position:relative;overflow:hidden;
- background:
-  radial-gradient(circle at 31% 24%,rgba(255,255,255,.92) 0,transparent 8%),
-  radial-gradient(circle at 50% 50%,#6deaff 0%,#508cff 52%,#927cff 72%,#ff7fc9 100%);
- box-shadow:0 35px 110px rgba(82,135,255,.35),inset 0 0 0 11px rgba(255,255,255,.13);
- transition:.18s ease;color:#05101b
-}
-.globe:before,.globe:after{content:"";position:absolute;border:2px solid rgba(3,16,27,.18);border-radius:50%}
-.globe:before{inset:18% 8%}.globe:after{inset:8% 34%}
-.globe:hover{transform:translateY(-4px) scale(1.01)}
-.globe:active{transform:scale(.985)}
-.globe.loading{animation:glow .75s infinite alternate}
-.globe.loading .plane{animation:orbit .9s linear infinite}
-@keyframes glow{to{box-shadow:0 35px 140px rgba(82,135,255,.58),inset 0 0 0 11px rgba(255,255,255,.18)}}
-@keyframes orbit{to{transform:rotate(360deg)}}
-.plane{position:relative;z-index:2;font-size:82px;line-height:1;display:block;margin-bottom:12px;filter:drop-shadow(0 10px 15px rgba(0,0,0,.12))}
-.globe strong{position:relative;z-index:2;display:block;font-size:29px;letter-spacing:-.04em}
-.globe small{position:relative;z-index:2;display:block;margin-top:7px;font-size:12px;font-weight:900;opacity:.62}
-.scan{min-height:24px;margin-top:18px;color:#8da3b4;font-size:13px;font-weight:800}
-#error{display:none;max-width:720px;margin:18px auto 0;padding:13px 15px;border-radius:16px;color:#ffd3e7;background:rgba(255,120,200,.08);border:1px solid rgba(255,120,200,.20);text-align:left}
-#result{display:none;padding:0 0 42px;animation:rise .42s ease both}
-@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-.heroCard{position:relative;overflow:hidden;padding:24px;border-radius:30px;background:linear-gradient(135deg,rgba(15,41,63,.96),rgba(9,25,39,.98));border:1px solid var(--line);box-shadow:var(--shadow)}
-.heroCard:after{content:"✈";position:absolute;right:-20px;top:-55px;font-size:230px;opacity:.035;transform:rotate(-15deg)}
-.top{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;flex-wrap:wrap}
-.callsign{font-size:clamp(48px,9vw,82px);line-height:.92;letter-spacing:-.065em;font-weight:950}
-.ident{margin-top:7px;color:#98acbc;font-size:13px;font-weight:800}
-.badge{padding:9px 12px;border-radius:999px;border:1px solid rgba(186,252,112,.18);background:rgba(186,252,112,.09);color:var(--lime);font-size:11px;font-weight:950;letter-spacing:.06em;text-transform:uppercase}
-.mainline{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:26px}
-.flag{font-size:42px}
-.where{font-size:clamp(26px,5vw,42px);letter-spacing:-.045em;font-weight:950}
-.whereSub{margin-top:6px;color:#8fa4b5}
-.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:13px;margin-top:13px}
-.card{grid-column:span 4;padding:18px;border-radius:23px;background:rgba(13,30,46,.88);border:1px solid var(--line);box-shadow:0 12px 35px rgba(0,0,0,.16)}
-.card.wide{grid-column:span 6}
-.label{font-size:10px;text-transform:uppercase;letter-spacing:.11em;color:#748ca1;font-weight:900}
-.value{margin-top:9px;font-size:25px;letter-spacing:-.035em;font-weight:950}
-.small{margin-top:5px;color:#8ea2b3;font-size:12px;line-height:1.4}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-.action{flex:1;min-width:180px;min-height:52px;border-radius:17px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:#fff;font-weight:900;cursor:pointer}
-.action.primary{border:0;color:#06111b;background:linear-gradient(135deg,var(--cyan),#83a2ff)}
-.mapSection{display:none;margin-top:14px;padding:18px;border-radius:28px;background:rgba(13,30,46,.88);border:1px solid var(--line);box-shadow:0 12px 35px rgba(0,0,0,.16)}
-.mapHead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:13px}
-.mapTitle{font-size:26px;font-weight:950;letter-spacing:-.04em}
-.mapSub{margin-top:5px;color:#8ea2b3;font-size:12px;line-height:1.4}
-.trackStatus{padding:8px 11px;border-radius:999px;background:rgba(186,252,112,.09);border:1px solid rgba(186,252,112,.16);color:var(--lime);font-size:11px;font-weight:950}
-#liveMap{height:430px;border-radius:20px;overflow:hidden;background:#08131f}
-.mapControls{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-.trackBtn{flex:1;min-width:180px;min-height:48px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.05);color:#fff;font-weight:900;cursor:pointer}
-.trackBtn.active{background:linear-gradient(135deg,var(--cyan),#83a2ff);color:#06111b;border:0}
-.mapMeta{margin-top:10px;color:#7d94a7;font-size:11px;text-align:center}
-.source{margin-top:16px;text-align:center;color:#6f879a;font-size:11px;line-height:1.5}
-.source a{color:#90efff;text-decoration:none;font-weight:850}
-
-footer{padding:22px 0 46px;text-align:center;color:#71889a;font-size:12px}
-.versionBtn{border:0;background:transparent;color:#90efff;font-weight:900;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
-
-.modalBackdrop{display:none;position:fixed;inset:0;z-index:9999;background:rgba(3,10,17,.72);backdrop-filter:blur(9px);padding:18px;align-items:center;justify-content:center}
-.modalBackdrop.show{display:flex}
-.releaseModal{width:min(560px,100%);max-height:82vh;overflow:auto;background:#0d1d2c;border:1px solid var(--line);border-radius:26px;padding:22px;box-shadow:var(--shadow)}
-.releaseTop{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-.releaseTop h2{margin:0;font-size:28px;letter-spacing:-.04em}
-.releaseClose{width:38px;height:38px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.05);color:#fff;font-size:20px;cursor:pointer}
-.releaseDate{margin-top:5px;color:#7f95a7;font-size:12px}
-.releaseBlock{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
-.releaseBlock h3{margin:0 0 8px;font-size:16px}
-.releaseBlock p,.releaseBlock li{color:#a0b2c1;line-height:1.55;font-size:13px}
-.releaseBlock ul{padding-left:20px;margin:8px 0}
-.leaflet-container{font-family:Inter,ui-sans-serif,system-ui,sans-serif}
-.planeMarker{font-size:30px;transform-origin:50% 50%;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35))}
-@media(max-width:720px){.hero{padding-top:38px}.card,.card.wide{grid-column:1/-1}#liveMap{height:370px}}
-@media(max-width:450px){.wrap{width:min(100% - 16px,1120px)}h1{font-size:clamp(50px,16vw,72px)}.live{display:none}.globe{width:min(310px,86vw)}.plane{font-size:68px}.globe strong{font-size:26px}#liveMap{height:330px}}
-
-/* v1.2.0 — HANGAR UPDATE */
-.menuBtn{
-  width:42px;height:42px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.05);
-  color:#fff;font-size:20px;font-weight:900;cursor:pointer;display:grid;place-items:center
-}
-.navRight{display:flex;align-items:center;gap:9px}
-.menuBackdrop{
-  display:none;position:fixed;inset:0;z-index:9000;background:rgba(3,10,17,.58);backdrop-filter:blur(8px)
-}
-.menuBackdrop.show{display:block}
-.sideMenu{
-  position:absolute;right:0;top:0;width:min(340px,88vw);height:100%;padding:20px;
-  background:#0b1b2a;border-left:1px solid var(--line);box-shadow:-18px 0 60px rgba(0,0,0,.28)
-}
-.menuTop{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.menuTop strong{font-size:20px;letter-spacing:-.03em}
-.menuClose{
-  width:38px;height:38px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.05);
-  color:#fff;font-size:20px;cursor:pointer
-}
-.menuLinks{display:grid;gap:10px;margin-top:22px}
-.menuLink{
-  width:100%;text-align:left;min-height:54px;border:1px solid var(--line);border-radius:16px;
-  background:rgba(255,255,255,.04);color:#fff;padding:0 15px;font-weight:900;cursor:pointer
-}
-.menuLink span{float:right;color:#7890a4;font-weight:800}
-.saveCardBtn{
-  margin-top:14px;width:100%;min-height:54px;border:0;border-radius:17px;color:#06111b;
-  background:linear-gradient(135deg,#ffd56a,#ff9ccf 55%,#83a2ff);font-weight:950;cursor:pointer
-}
-.saveCardBtn.saved{background:rgba(186,252,112,.12);color:var(--lime);border:1px solid rgba(186,252,112,.22)}
-.collectorToast{
-  position:fixed;left:50%;bottom:24px;z-index:9500;transform:translate(-50%,20px);opacity:0;pointer-events:none;
-  padding:12px 15px;border-radius:15px;background:#101f2f;border:1px solid var(--line);box-shadow:var(--shadow);
-  color:#fff;font-size:13px;font-weight:900;transition:.25s ease
-}
-.collectorToast.show{opacity:1;transform:translate(-50%,0)}
-.hangarBackdrop{
-  display:none;position:fixed;inset:0;z-index:9200;background:rgba(3,10,17,.74);backdrop-filter:blur(10px);
-  padding:18px;align-items:center;justify-content:center
-}
-.hangarBackdrop.show{display:flex}
-.hangarModal{
-  width:min(980px,100%);max-height:88vh;overflow:auto;background:#0b1b2a;border:1px solid var(--line);
-  border-radius:28px;padding:22px;box-shadow:var(--shadow)
-}
-.hangarTop{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
-.hangarTop h2{margin:0;font-size:32px;letter-spacing:-.045em}
-.hangarClose{
-  width:40px;height:40px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.05);
-  color:#fff;font-size:20px;cursor:pointer
-}
-.hangarStats{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px
-}
-.hangarStat{
-  padding:14px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid var(--line)
-}
-.hangarStat b{display:block;font-size:24px;letter-spacing:-.04em}
-.hangarStat span{display:block;margin-top:4px;color:#8197a9;font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:900}
-.progressWrap{margin-top:14px;padding:14px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
-.progressTop{display:flex;justify-content:space-between;gap:10px;color:#a4b4c1;font-size:12px;font-weight:850}
-.progressBar{height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:9px}
-.progressFill{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),#83a2ff,var(--pink));border-radius:999px}
-.hangarGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
-.collectCard{
-  position:relative;overflow:hidden;min-height:260px;padding:17px;border-radius:22px;
-  background:linear-gradient(145deg,#10273c,#0d1d2c);border:1px solid var(--line)
-}
-.collectCard:after{content:"✈";position:absolute;right:-12px;top:-25px;font-size:130px;opacity:.04;transform:rotate(-12deg)}
-.rarity{
-  display:inline-flex;padding:6px 9px;border-radius:999px;font-size:10px;font-weight:950;
-  text-transform:uppercase;letter-spacing:.08em;border:1px solid var(--line)
-}
-.rarity.common{color:#d3dde6;background:rgba(255,255,255,.05)}
-.rarity.uncommon{color:#9dffb6;background:rgba(93,255,137,.08)}
-.rarity.rare{color:#8fd8ff;background:rgba(90,182,255,.08)}
-.rarity.ultra{color:#ffd56a;background:rgba(255,213,106,.08)}
-.cardCallsign{margin-top:18px;font-size:30px;font-weight:950;letter-spacing:-.05em}
-.cardType{margin-top:4px;color:#94a8b9;font-weight:800}
-.cardMeta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:18px}
-.cardMeta div{padding:10px;border-radius:13px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
-.cardMeta b{display:block;font-size:15px}.cardMeta span{display:block;margin-top:3px;color:#7f95a7;font-size:10px}
-.cardFoot{margin-top:14px;color:#72899b;font-size:10px;line-height:1.4}
-.duplicateBadge{
-  position:absolute;right:13px;bottom:13px;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,.06);
-  border:1px solid var(--line);color:#c8d5df;font-size:10px;font-weight:900
-}
-.emptyHangar{
-  margin-top:18px;padding:32px 18px;text-align:center;border:1px dashed rgba(255,255,255,.14);border-radius:20px;color:#8ca1b2
-}
-.emptyHangar strong{display:block;color:#fff;font-size:20px;margin-bottom:6px}
-.hangarActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
-.hangarAction{
-  flex:1;min-width:180px;min-height:48px;border-radius:15px;border:1px solid var(--line);
-  background:rgba(255,255,255,.04);color:#fff;font-weight:900;cursor:pointer
-}
-.danger{color:#ffabc9}
-@media(max-width:760px){
-  .hangarStats{grid-template-columns:1fr 1fr}.hangarGrid{grid-template-columns:1fr 1fr}
-}
-@media(max-width:500px){
-  .hangarGrid{grid-template-columns:1fr}.navRight .live{display:none}
-}
-
-
-/* v1.3.0 — WHAT'S ABOVE ME */
-.aboveBackdrop{
-  display:none;position:fixed;inset:0;z-index:9250;background:rgba(3,10,17,.76);
-  backdrop-filter:blur(10px);padding:18px;align-items:center;justify-content:center
-}
-.aboveBackdrop.show{display:flex}
-.aboveModal{
-  width:min(900px,100%);max-height:88vh;overflow:auto;background:#0b1b2a;border:1px solid var(--line);
-  border-radius:28px;padding:22px;box-shadow:var(--shadow)
-}
-.aboveTop{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
-.aboveTop h2{margin:0;font-size:32px;letter-spacing:-.045em}
-.aboveClose{width:40px;height:40px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.05);color:#fff;font-size:20px;cursor:pointer}
-.locateHero{
-  margin-top:18px;padding:22px;border-radius:22px;text-align:center;
-  background:linear-gradient(135deg,rgba(99,236,255,.10),rgba(95,141,255,.10),rgba(255,120,200,.08));
-  border:1px solid var(--line)
-}
-.locateHero .pin{font-size:46px}
-.locateHero h3{margin:9px 0 7px;font-size:24px;letter-spacing:-.035em}
-.locateHero p{max-width:570px;margin:0 auto;color:#91a7b8;line-height:1.5;font-size:13px}
-.locateBtn{
-  margin-top:16px;min-height:52px;padding:0 20px;border:0;border-radius:16px;
-  background:linear-gradient(135deg,var(--cyan),#83a2ff);color:#06111b;font-weight:950;cursor:pointer
-}
-.aboveStatus{margin-top:12px;min-height:20px;text-align:center;color:#8ca2b4;font-size:12px;font-weight:850}
-.aboveList{display:grid;gap:10px;margin-top:16px}
-.nearPlane{
-  display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:15px;
-  border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.035)
-}
-.nearPlane h4{margin:0;font-size:20px;letter-spacing:-.03em}
-.nearMeta{margin-top:5px;color:#849aab;font-size:11px;line-height:1.45}
-.nearActions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
-.nearBtn{
-  min-height:38px;padding:0 11px;border-radius:12px;border:1px solid var(--line);
-  background:rgba(255,255,255,.05);color:#fff;font-size:11px;font-weight:900;cursor:pointer
-}
-.nearBtn.capture{border:0;background:linear-gradient(135deg,#ffd56a,#ff9ccf);color:#07111b}
-.aboveEmpty{padding:25px;text-align:center;color:#849aab;border:1px dashed rgba(255,255,255,.14);border-radius:18px}
-.privacyNote{margin-top:14px;color:#71889a;font-size:10px;line-height:1.5;text-align:center}
-@media(max-width:600px){.nearPlane{grid-template-columns:1fr}.nearActions{justify-content:flex-start}}
-
+:root{--bg:#050b12;--panel:#0a1723;--panel2:#0d2030;--text:#f6fbff;--muted:#7890a4;--cyan:#62edff;--blue:#728cff;--pink:#ff75c8;--lime:#b9ff73;--line:rgba(255,255,255,.09)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#050b12;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:90px}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 50% -10%,rgba(79,154,255,.18),transparent 35rem),radial-gradient(circle at 100% 40%,rgba(255,117,200,.08),transparent 30rem)}
+.shell{width:min(1120px,calc(100% - 22px));margin:auto;position:relative;z-index:1}.topbar{height:72px;display:flex;align-items:center;justify-content:space-between}.brand{font-weight:950;letter-spacing:-.05em;display:flex;align-items:center;gap:10px}.brandMark{width:38px;height:38px;border-radius:13px;background:linear-gradient(135deg,var(--cyan),var(--blue));color:#05101a;display:grid;place-items:center;box-shadow:0 10px 35px rgba(98,237,255,.18)}.v2pill{font-size:9px;padding:4px 7px;border-radius:999px;background:rgba(255,255,255,.06);color:#91a6b7;letter-spacing:.08em}.topActions{display:flex;gap:8px}.iconBtn{width:40px;height:40px;border:1px solid var(--line);background:rgba(255,255,255,.04);border-radius:13px;color:#fff;font-size:17px}
+.view{display:none}.activeView{display:block;animation:fade .35s ease}@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.heroV2{padding:62px 0 34px;text-align:center}.eyebrow{display:inline-flex;padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:#9fb1bf;background:rgba(255,255,255,.035);font-size:10px;font-weight:900;letter-spacing:.09em}.heroV2 h1{font-size:clamp(58px,11vw,118px);line-height:.83;letter-spacing:-.08em;margin:22px auto 18px;max-width:980px}.gradient{background:linear-gradient(90deg,var(--cyan),#92a3ff 50%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}.heroV2 p{max-width:620px;margin:auto;color:#8298aa;font-size:18px;line-height:1.55}
+.modeGrid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:12px;margin:28px 0 50px}.mode{position:relative;overflow:hidden;min-height:170px;border:1px solid var(--line);border-radius:25px;background:linear-gradient(145deg,#0b1d2c,#09151f);color:#fff;text-align:left;padding:20px;cursor:pointer}.mode.primary{background:radial-gradient(circle at 80% 10%,rgba(98,237,255,.24),transparent 16rem),linear-gradient(145deg,#102a3f,#0a1723)}.modeIcon{font-size:34px}.mode h3{font-size:25px;margin:22px 0 5px;letter-spacing:-.045em}.mode p{font-size:12px;color:#7f96a8;margin:0;line-height:1.4}.mode .go{position:absolute;right:17px;bottom:17px;width:37px;height:37px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08)}
+.spinzone{text-align:center;padding:25px 0 48px}.globe{width:min(330px,82vw);aspect-ratio:1;border:0;border-radius:50%;position:relative;overflow:hidden;background:radial-gradient(circle at 30% 23%,#fff 0,transparent 7%),radial-gradient(circle,#64e8ff,#5d8dff 55%,#9c79ff 75%,#ff76c8);box-shadow:0 30px 110px rgba(82,135,255,.28),inset 0 0 0 10px rgba(255,255,255,.12);font-weight:950;color:#06111b}.globe .plane{font-size:72px;display:block}.globe strong{font-size:26px;display:block}.globe small{font-size:10px;opacity:.65}.globe.loading .plane{animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.scan{margin-top:16px;color:#7d94a7;font-size:12px;font-weight:850}#error{display:none;max-width:700px;margin:14px auto;padding:13px;border-radius:15px;border:1px solid rgba(255,117,200,.2);background:rgba(255,117,200,.07);color:#ffd3e9}
+#result{display:none;padding:0 0 30px}.heroCard,.card,.mapSection{border:1px solid var(--line);background:#0a1926;border-radius:24px}.heroCard{padding:22px}.top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.callsign{font-size:clamp(44px,8vw,76px);font-weight:950;letter-spacing:-.06em}.ident,.whereSub,.small{color:#7f96a8;font-size:12px}.badge{padding:8px 10px;border-radius:999px;color:var(--lime);background:rgba(185,255,115,.08);height:max-content;font-size:10px;font-weight:900}.mainline{display:flex;gap:10px;align-items:center;margin-top:20px}.flag{font-size:35px}.where{font-size:30px;font-weight:950;letter-spacing:-.04em}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:10px;margin-top:10px}.card{grid-column:span 4;padding:16px}.card.wide{grid-column:span 6}.label{font-size:9px;color:#6f8798;letter-spacing:.1em;font-weight:900}.value{font-size:22px;font-weight:950;margin-top:7px}.actions{display:flex;gap:9px;margin-top:10px}.action,.saveCardBtn,.trackBtn{min-height:49px;border-radius:15px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#fff;font-weight:900;flex:1}.action.primary,.saveCardBtn{border:0;background:linear-gradient(135deg,var(--cyan),#83a2ff);color:#06111b}.saveCardBtn{width:100%;margin-top:9px}.mapSection{display:none;margin-top:10px;padding:15px}.mapHead{display:flex;justify-content:space-between}.mapTitle{font-size:23px;font-weight:950}.trackStatus{color:var(--lime);font-size:10px;font-weight:900}#liveMap{height:390px;border-radius:18px;margin-top:12px}.mapControls{display:flex;gap:8px;margin-top:8px}.mapMeta{text-align:center;color:#71889a;font-size:10px;margin-top:8px}.source{text-align:center;color:#637b8e;font-size:10px;margin:14px}.source a{color:#83eaff}
+.sectionHead{display:flex;justify-content:space-between;align-items:end;padding:30px 0 16px}.sectionHead h2{font-size:clamp(38px,7vw,66px);letter-spacing:-.065em;margin:0}.sectionHead p{color:#7d94a7;margin:6px 0 0}.worldWrap{height:calc(100vh - 190px);min-height:560px;border-radius:28px;overflow:hidden;border:1px solid var(--line);position:relative;background:#07111a}.worldWrap #worldMap{height:100%;width:100%}.worldHUD{position:absolute;z-index:500;left:14px;right:14px;top:14px;display:flex;justify-content:space-between;gap:10px;pointer-events:none}.hudCard{pointer-events:auto;background:rgba(5,14,22,.84);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:17px;padding:12px 14px}.hudCard b{font-size:21px}.hudCard small{display:block;color:#7f96a8;margin-top:3px}.scanWorld{border:0;border-radius:14px;padding:0 15px;background:linear-gradient(135deg,var(--cyan),#83a2ff);color:#06111b;font-weight:950}.radarPlane{font-size:19px;color:#76f0ff;text-shadow:0 0 9px #62edff}.leaflet-container{background:#07111a;filter:saturate(.72) brightness(.82)}
+.hangarSummary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.summaryBox{padding:16px;border:1px solid var(--line);border-radius:20px;background:#0a1926}.summaryBox b{font-size:30px}.summaryBox span{display:block;color:#758da0;font-size:10px;font-weight:900;margin-top:4px}.v2HangarGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}.v2CollectCard{min-height:330px;border-radius:25px;padding:17px;position:relative;overflow:hidden;background:linear-gradient(145deg,#11283b,#091722);border:1px solid var(--line);box-shadow:0 22px 50px rgba(0,0,0,.22)}.v2CollectCard.rare{background:linear-gradient(145deg,#122b45,#161a3b)}.v2CollectCard.ultra{background:radial-gradient(circle at 70% 20%,rgba(255,213,106,.23),transparent 13rem),linear-gradient(145deg,#27213a,#0b1a27)}.foil{position:absolute;inset:-50%;background:linear-gradient(120deg,transparent 40%,rgba(255,255,255,.08),transparent 60%);transform:rotate(18deg)}.v2Rarity{position:relative;font-size:9px;letter-spacing:.1em;font-weight:950;color:#9eb2c1}.cardPlane{position:relative;font-size:75px;text-align:center;margin:40px 0 25px;transform:rotate(-15deg)}.v2Call{position:relative;font-size:29px;font-weight:950;letter-spacing:-.05em}.v2Type{position:relative;color:#8399aa;font-size:11px}.v2Stats{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:15px}.v2Stats span{padding:9px;background:rgba(255,255,255,.04);border-radius:11px;font-weight:900}.v2Stats small{display:block;color:#657d90;font-size:8px;margin-top:3px}.v2Reg{position:relative;color:#6e8698;font-size:9px;margin-top:12px}.v2Dup{position:absolute;right:12px;top:12px;border-radius:999px;padding:5px 7px;background:rgba(255,255,255,.08);font-size:9px}.emptyV2{text-align:center;padding:50px;border:1px dashed rgba(255,255,255,.12);border-radius:24px;color:#748b9d;margin-top:18px}
+.passport{max-width:680px;margin:25px auto;padding:25px;border-radius:30px;background:radial-gradient(circle at 100% 0,rgba(98,237,255,.16),transparent 25rem),#0b1b29;border:1px solid var(--line)}.passportLogo{font-size:48px}.passport h2{font-size:42px;letter-spacing:-.055em;margin:12px 0 0}.passportLevel{color:var(--cyan);font-size:11px;font-weight:950;letter-spacing:.1em;margin-top:5px}.passportStats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:25px}.passportStats div{padding:14px;background:rgba(255,255,255,.04);border-radius:16px}.passportStats b{font-size:27px}.passportStats span{display:block;color:#748b9d;font-size:9px;margin-top:4px}.passportBar{height:9px;background:rgba(255,255,255,.07);border-radius:99px;margin-top:22px;overflow:hidden}.passportFill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--pink));width:0}.passportNext{color:#7b92a4;font-size:10px;margin-top:7px}
+.bottomNav{position:fixed;z-index:8000;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(560px,calc(100% - 18px));height:68px;border:1px solid var(--line);border-radius:22px;background:rgba(8,19,29,.88);backdrop-filter:blur(18px);display:grid;grid-template-columns:repeat(4,1fr);padding:6px;box-shadow:0 18px 60px rgba(0,0,0,.35)}.bottomNav button{border:0;background:transparent;color:#71899b;border-radius:16px;font-size:10px;font-weight:850}.bottomNav button i{display:block;font-style:normal;font-size:20px;margin-bottom:2px}.bottomNav button.active{background:rgba(255,255,255,.06);color:#fff}
+footer{text-align:center;color:#60798b;font-size:10px;padding:35px}.versionBtn{border:0;background:transparent;color:#7beaff;text-decoration:underline}
+.menuBackdrop,.hangarBackdrop,.aboveBackdrop,.modalBackdrop{display:none;position:fixed;inset:0;z-index:9000;background:rgba(2,8,13,.75);backdrop-filter:blur(10px);padding:18px;align-items:center;justify-content:center}.menuBackdrop.show,.hangarBackdrop.show,.aboveBackdrop.show,.modalBackdrop.show{display:flex}.sideMenu,.hangarModal,.aboveModal,.releaseModal{width:min(760px,100%);max-height:88vh;overflow:auto;background:#0a1926;border:1px solid var(--line);border-radius:26px;padding:20px}.sideMenu{width:min(340px,90vw);height:100%;position:absolute;right:0;top:0;border-radius:0}.menuTop,.hangarTop,.aboveTop,.releaseTop{display:flex;justify-content:space-between;gap:12px}.menuClose,.hangarClose,.aboveClose,.releaseClose{width:38px;height:38px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.04);color:#fff;font-size:19px}.menuLinks{display:grid;gap:8px;margin-top:20px}.menuLink{min-height:50px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.04);color:#fff;text-align:left;padding:0 13px;font-weight:900}.menuLink span{float:right;color:#6f8798}.locateHero{text-align:center;padding:20px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:20px;margin-top:15px}.pin{font-size:40px}.locateBtn{min-height:50px;border:0;border-radius:14px;background:linear-gradient(135deg,var(--cyan),#83a2ff);font-weight:950;padding:0 16px}.aboveStatus,.privacyNote,.releaseDate{color:#7b92a4;font-size:11px;margin-top:10px}.aboveList{display:grid;gap:8px;margin-top:12px}.nearPlane{padding:13px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.03);display:flex;justify-content:space-between;gap:8px}.nearPlane h4{margin:0}.nearMeta{color:#7890a3;font-size:10px}.nearBtn{min-height:35px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.04);color:#fff;font-size:9px;font-weight:900}.nearBtn.capture{background:linear-gradient(135deg,#ffd56a,#ff9ccf);color:#06111b;border:0}.collectorToast{position:fixed;z-index:9999;bottom:90px;left:50%;transform:translateX(-50%);padding:11px 14px;border-radius:13px;background:#102334;border:1px solid var(--line);opacity:0;pointer-events:none}.collectorToast.show{opacity:1}.hangarStats,.progressWrap,.hangarGrid,.hangarActions{display:none}.releaseBlock{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}.releaseBlock li,.releaseBlock p{color:#8da1b1;font-size:12px;line-height:1.5}
+@media(max-width:760px){.modeGrid{grid-template-columns:1fr 1fr}.mode.primary{grid-column:1/-1}.grid .card,.grid .card.wide{grid-column:1/-1}.v2HangarGrid{grid-template-columns:1fr 1fr}.worldWrap{height:68vh}.live{display:none}}
+@media(max-width:500px){.shell{width:calc(100% - 16px)}.heroV2{padding-top:40px}.modeGrid{grid-template-columns:1fr}.mode.primary{grid-column:auto}.mode{min-height:140px}.v2HangarGrid{grid-template-columns:1fr}.hangarSummary{grid-template-columns:repeat(3,1fr)}.passportStats{grid-template-columns:repeat(3,1fr)}.actions,.mapControls{flex-direction:column}}
 </style>
 </head>
 <body>
-<div class="wrap">
-<nav>
-  <div class="brand"><div class="logo">✈</div> FLIGHT ROULETTE</div>
-  <div class="navRight"><div class="live"><span class="dot"></span> LIVE ADS-B</div><button class="menuBtn" id="menuBtn" aria-label="Open menu">☰</button></div>
-</nav>
 
-<main class="hero">
-  <div class="kicker">🌍 Real aircraft. No API key.</div>
-  <h1>Spin the <span class="grad">skies.</span></h1>
-  <p class="sub">Tap the globe, find an aircraft that’s actually flying right now, then follow it live across the map.</p>
-</main>
+<div class="shell">
+<header class="topbar">
+  <div class="brand"><div class="brandMark">✈</div> FLIGHT ROULETTE <span class="v2pill">2.0</span></div>
+  <div class="topActions"><button class="iconBtn" id="menuBtn">☰</button></div>
+</header>
 
-<section class="spinzone">
-  <button class="globe" id="spinBtn">
-    <span class="plane">✈️</span>
-    <strong>SPIN THE SKIES</strong>
-    <small>LIVE DATA • REAL AIRCRAFT</small>
-  </button>
-  <div class="scan" id="scan">Ready to scan.</div>
-  <div id="error"></div>
+<section class="view activeView" id="homeView">
+  <div class="heroV2">
+    <div class="eyebrow">● LIVE AIRCRAFT DISCOVERY</div>
+    <h1>The whole sky.<br><span class="gradient">One spin away.</span></h1>
+    <p>Discover real aircraft flying right now. Track them, capture them and build your own aviation collection.</p>
+  </div>
+
+  <div class="modeGrid">
+    <button class="mode primary" onclick="document.querySelector('#spinBtn').scrollIntoView({behavior:'smooth'})"><div class="modeIcon">🎰</div><h3>Spin the world</h3><p>Let Flight Roulette choose a real aircraft somewhere on Earth.</p><span class="go">→</span></button>
+    <button class="mode" id="heroWorldBtn"><div class="modeIcon">🌎</div><h3>Live World</h3><p>Explore aircraft on the radar and choose your own find.</p><span class="go">→</span></button>
+    <button class="mode" id="heroNearbyBtn"><div class="modeIcon">📍</div><h3>Above Me</h3><p>Scan the real sky around your current location.</p><span class="go">→</span></button>
+  </div>
+
+  <section class="spinzone">
+    <button class="globe" id="spinBtn"><span class="plane">✈️</span><strong>SPIN THE WORLD</strong><small>LIVE DATA • REAL AIRCRAFT</small></button>
+    <div class="scan" id="scan">Radar standing by.</div><div id="error"></div>
+  </section>
+
+  <section id="result">
+    <div class="heroCard"><div class="top"><div><div class="callsign" id="callsign">—</div><div class="ident" id="ident">Aircraft identity</div></div><div class="badge" id="airState">LIVE</div></div>
+      <div class="mainline"><div class="flag">🌐</div><div><div class="where" id="where">Somewhere on Earth</div><div class="whereSub" id="whereSub">Live position</div></div></div>
+    </div>
+    <div class="grid">
+      <article class="card"><div class="label">ALTITUDE</div><div class="value" id="altitude">—</div><div class="small">Barometric altitude</div></article>
+      <article class="card"><div class="label">GROUND SPEED</div><div class="value" id="speed">—</div><div class="small">Reported in knots</div></article>
+      <article class="card"><div class="label">HEADING</div><div class="value" id="heading">—</div><div class="small">Track angle</div></article>
+      <article class="card wide"><div class="label">AIRCRAFT TYPE</div><div class="value" id="type">—</div><div class="small" id="typeMore">Type code</div></article>
+      <article class="card wide"><div class="label">REGISTRATION / ICAO</div><div class="value" id="registration">—</div><div class="small" id="icao">ICAO identity</div></article>
+    </div>
+    <div class="actions"><button class="action primary" id="spinAgain">🎰 SPIN AGAIN</button><button class="action" id="showMapBtn">📡 FOLLOW LIVE</button></div>
+    <button class="saveCardBtn" id="saveCardBtn">🃏 CAPTURE TO HANGAR</button>
+    <div class="mapSection" id="mapSection"><div class="mapHead"><div><div class="mapTitle">Live flight tracker</div><div class="small" id="mapSub">Following this aircraft live.</div></div><div class="trackStatus" id="trackStatus">● TRACKING</div></div><div id="liveMap"></div><div class="mapControls"><button class="trackBtn active" id="autoFollowBtn">◎ AUTO-FOLLOW ON</button><button class="trackBtn" id="centreBtn">⌖ CENTRE AIRCRAFT</button></div><div class="mapMeta" id="mapMeta">Waiting for next position…</div></div>
+    <div class="source">Live aircraft data: <a href="https://adsb.lol/" target="_blank">adsb.lol</a> + <a href="https://airplanes.live/" target="_blank">Airplanes.live</a></div>
+  </section>
 </section>
 
-<section id="result">
-  <div class="heroCard">
-    <div class="top">
-      <div>
-        <div class="callsign" id="callsign">—</div>
-        <div class="ident" id="ident">Aircraft identity</div>
-      </div>
-      <div class="badge" id="airState">LIVE</div>
-    </div>
-
-    <div class="mainline">
-      <div class="flag">🌐</div>
-      <div>
-        <div class="where" id="where">Somewhere on Earth</div>
-        <div class="whereSub" id="whereSub">Live position</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="grid">
-    <article class="card"><div class="label">Altitude</div><div class="value" id="altitude">—</div><div class="small">Barometric altitude where available</div></article>
-    <article class="card"><div class="label">Ground speed</div><div class="value" id="speed">—</div><div class="small">Reported in knots</div></article>
-    <article class="card"><div class="label">Heading</div><div class="value" id="heading">—</div><div class="small">Track angle</div></article>
-    <article class="card wide"><div class="label">Aircraft type</div><div class="value" id="type">—</div><div class="small" id="typeMore">Type code where available</div></article>
-    <article class="card wide"><div class="label">Registration / ICAO</div><div class="value" id="registration">—</div><div class="small" id="icao">ICAO identity</div></article>
-  </div>
-
-  <div class="actions">
-    <button class="action primary" id="spinAgain">🎰 SPIN AGAIN</button>
-    <button class="action" id="showMapBtn">📡 FOLLOW LIVE</button>
-  </div>
-  <button class="saveCardBtn" id="saveCardBtn">🃏 SAVE COLLECTOR CARD TO HANGAR</button>
-
-  <div class="mapSection" id="mapSection">
-    <div class="mapHead">
-      <div>
-        <div class="mapTitle">Live flight tracker</div>
-        <div class="mapSub" id="mapSub">Following this aircraft using its ICAO transponder address.</div>
-      </div>
-      <div class="trackStatus" id="trackStatus">● TRACKING</div>
-    </div>
-
-    <div id="liveMap"></div>
-
-    <div class="mapControls">
-      <button class="trackBtn active" id="autoFollowBtn">◎ AUTO-FOLLOW ON</button>
-      <button class="trackBtn" id="centreBtn">⌖ CENTRE AIRCRAFT</button>
-    </div>
-    <div class="mapMeta" id="mapMeta">Waiting for next live position…</div>
-  </div>
-
-  <div class="source">Live aircraft data from <a href="https://adsb.lol/" target="_blank" rel="noopener">adsb.lol ↗</a>, with Airplanes.live used as a discovery fallback.</div>
+<section class="view" id="worldView">
+  <div class="sectionHead"><div><h2>Live World</h2><p>Hunt the live sky yourself.</p></div></div>
+  <div class="worldWrap"><div id="worldMap"></div><div class="worldHUD"><div class="hudCard"><b><span id="worldCount">0</span> aircraft</b><small id="worldStatus">READY FOR RADAR SWEEP</small></div><button class="scanWorld" id="worldScanBtn">SCAN WORLD</button></div></div>
 </section>
 
-<footer>
-  Flight Roulette • <button class="versionBtn" id="versionBtn">v1.3.1</button>
-</footer>
+<section class="view" id="hangarViewV2">
+  <div class="sectionHead"><div><h2>My Hangar</h2><p>Your captured aircraft collection.</p></div></div>
+  <div class="hangarSummary"><div class="summaryBox"><b id="v2CardCount">0</b><span>CAPTURES</span></div><div class="summaryBox"><b id="v2TypeCount">0</b><span>TYPES</span></div><div class="summaryBox"><b id="v2RareCount">0</b><span>RARE+</span></div></div>
+  <div class="emptyV2" id="v2HangarEmpty">Your Hangar is empty. Spin the world and capture your first live aircraft.</div>
+  <div class="v2HangarGrid" id="v2HangarGrid"></div>
+  <button class="saveCardBtn" id="v2ClearHangar" style="background:rgba(255,255,255,.04);color:#ff9bc5;border:1px solid var(--line);margin-top:18px">CLEAR HANGAR</button>
+</section>
+
+<section class="view" id="passportView">
+  <div class="sectionHead"><div><h2>Pilot Passport</h2><p>Your Flight Roulette identity.</p></div></div>
+  <article class="passport"><div class="passportLogo">🛂</div><div class="passportLevel" id="passportLevel">LEVEL 1</div><h2 id="passportTitle">Passenger</h2><div class="passportStats"><div><b id="passportCaptures">0</b><span>CAPTURES</span></div><div><b id="passportTypes">0</b><span>TYPES</span></div><div><b id="passportRare">0</b><span>RARE+</span></div></div><div class="passportBar"><div class="passportFill" id="passportProgress"></div></div><div class="passportNext" id="passportNext">5 captures to next level</div></article>
+</section>
+
+<footer>Flight Roulette • <button class="versionBtn" id="versionBtn">v2.0.0</button></footer>
 </div>
 
+<nav class="bottomNav"><button class="active" data-view="spin"><i>🎰</i>Spin</button><button data-view="world"><i>🌎</i>World</button><button data-view="hangar"><i>🛩️</i>Hangar</button><button data-view="passport"><i>🛂</i>Passport</button></nav>
 
+<!-- Legacy-compatible menu / feature overlays -->
+<div class="menuBackdrop" id="menuBackdrop"><aside class="sideMenu"><div class="menuTop"><strong>Flight Roulette 2.0</strong><button class="menuClose" id="menuClose">×</button></div><div class="menuLinks"><button class="menuLink" id="menuSpin">🎰 Spin <span>→</span></button><button class="menuLink" id="menuHangar">🛩️ My Hangar <span id="menuHangarCount">0</span></button><button class="menuLink" id="menuAbove">📍 What’s Above Me? <span>LIVE</span></button><button class="menuLink" id="menuReleases">🏷️ Release notes <span>v2.0.0</span></button></div></aside></div>
 
-<div class="menuBackdrop" id="menuBackdrop" aria-hidden="true">
-  <aside class="sideMenu">
-    <div class="menuTop">
-      <strong>Flight Roulette</strong>
-      <button class="menuClose" id="menuClose" aria-label="Close menu">×</button>
-    </div>
-    <div class="menuLinks">
-      <button class="menuLink" id="menuSpin">🎰 Spin the skies <span>→</span></button>
-      <button class="menuLink" id="menuHangar">🛩️ My Hangar <span id="menuHangarCount">0</span></button>
-      <button class="menuLink" id="menuAbove">📍 What’s Above Me? <span>LIVE</span></button>
-      <button class="menuLink" id="menuReleases">🏷️ Release notes <span>v1.3.1</span></button>
-    </div>
-  </aside>
-</div>
+<div class="aboveBackdrop" id="aboveBackdrop"><div class="aboveModal"><div class="aboveTop"><div><h2>📍 What’s Above Me?</h2><div class="releaseDate">Discover real aircraft around your current location.</div></div><button class="aboveClose" id="aboveClose">×</button></div><div class="locateHero"><div class="pin">📡</div><h3>Scan your local sky</h3><p>Your browser will ask for location permission.</p><button class="locateBtn" id="locateBtn">USE MY LOCATION & SCAN</button><div class="aboveStatus" id="aboveStatus">Waiting for you to start a scan.</div></div><div class="aboveList" id="aboveList"></div><div class="privacyNote">Your location is used for the nearby-aircraft request and is not stored in your Hangar.</div></div></div>
 
+<div class="hangarBackdrop" id="hangarBackdrop"><div class="hangarModal"><div class="hangarTop"><h2>My Hangar</h2><button class="hangarClose" id="hangarClose">×</button></div><div class="hangarStats"><b id="totalCards">0</b><b id="uniqueTypes">0</b><b id="rareCards">0</b><b id="uniqueAircraft">0</b></div><div class="progressWrap"><span id="progressText"></span><div id="progressFill"></div></div><div id="hangarGrid" class="hangarGrid"></div><div class="hangarActions"><button id="clearHangar">Clear</button></div></div></div>
+<div class="collectorToast" id="collectorToast">Captured ✓</div>
 
-<div class="aboveBackdrop" id="aboveBackdrop" aria-hidden="true">
-  <div class="aboveModal" role="dialog" aria-modal="true" aria-labelledby="aboveTitle">
-    <div class="aboveTop">
-      <div>
-        <h2 id="aboveTitle">📍 What’s Above Me?</h2>
-        <div class="releaseDate">Discover real aircraft flying around your current location.</div>
-      </div>
-      <button class="aboveClose" id="aboveClose" aria-label="Close">×</button>
-    </div>
+<div class="modalBackdrop" id="releaseBackdrop"><div class="releaseModal"><div class="releaseTop"><div><h2>Flight Roulette releases</h2><div class="releaseDate">Current version: v2.0.0</div></div><button class="releaseClose" id="releaseClose">×</button></div>
+<div class="releaseBlock"><h3>v2.0.0 — LIVE WORLD</h3><div class="releaseDate">11 August 2026</div><ul><li>Complete mobile-first visual redesign.</li><li>New Live World radar for hunting aircraft yourself.</li><li>New persistent bottom navigation.</li><li>Premium redesigned Hangar collector cards.</li><li>New Pilot Passport with levels and collection stats.</li><li>Spin, World, Hangar and Passport are now first-class app views.</li><li>Retains live tracking, What’s Above Me and v1 Hangar data.</li></ul></div>
+<div class="releaseBlock"><h3>v1.3.1 — Local Radar Fix</h3><p>Dual-feed local radar with staged radius fallback.</p></div>
+<div class="releaseBlock"><h3>v1.3.0 — What’s Above Me?</h3><p>Location-based nearby aircraft discovery.</p></div>
+<div class="releaseBlock"><h3>v1.2.0 — The Hangar Update</h3><p>Persistent collector cards and rarity.</p></div>
+<div class="releaseBlock"><h3>v1.1.0 — Live Tracker</h3><p>Follow the selected aircraft live on a map.</p></div>
+<div class="releaseBlock"><h3>v1.0.0 — First Flight</h3><p>Spin the Skies launched.</p></div></div></div>
 
-    <div class="locateHero">
-      <div class="pin">📡</div>
-      <h3>Scan your local sky</h3>
-      <p>Your browser will ask for location permission. Your coordinates are used to request nearby live aircraft and are not saved to your Hangar.</p>
-      <button class="locateBtn" id="locateBtn">USE MY LOCATION & SCAN</button>
-      <div class="aboveStatus" id="aboveStatus">Waiting for you to start a scan.</div>
-    </div>
-
-    <div class="aboveList" id="aboveList"></div>
-    <div class="privacyNote">Location access is controlled by your browser. Flight Roulette does not require an account.</div>
-  </div>
-</div>
-
-<div class="hangarBackdrop" id="hangarBackdrop" aria-hidden="true">
-  <div class="hangarModal" role="dialog" aria-modal="true" aria-labelledby="hangarTitle">
-    <div class="hangarTop">
-      <div>
-        <h2 id="hangarTitle">🛩️ My Hangar</h2>
-        <div class="releaseDate">Your aircraft collection is stored on this device.</div>
-      </div>
-      <button class="hangarClose" id="hangarClose" aria-label="Close Hangar">×</button>
-    </div>
-
-    <div class="hangarStats">
-      <div class="hangarStat"><b id="totalCards">0</b><span>Cards</span></div>
-      <div class="hangarStat"><b id="uniqueTypes">0</b><span>Aircraft types</span></div>
-      <div class="hangarStat"><b id="rareCards">0</b><span>Rare+</span></div>
-      <div class="hangarStat"><b id="uniqueAircraft">0</b><span>Unique aircraft</span></div>
-    </div>
-
-    <div class="progressWrap">
-      <div class="progressTop"><span>Aircraft type collection</span><strong id="progressText">0 / 30</strong></div>
-      <div class="progressBar"><div class="progressFill" id="progressFill"></div></div>
-    </div>
-
-    <div id="hangarGrid" class="hangarGrid"></div>
-
-    <div class="hangarActions">
-      <button class="hangarAction danger" id="clearHangar">Clear Hangar</button>
-    </div>
-  </div>
-</div>
-
-<div class="collectorToast" id="collectorToast">Saved to My Hangar ✓</div>
-
-<div class="modalBackdrop" id="releaseBackdrop" aria-hidden="true">
-  <div class="releaseModal" role="dialog" aria-modal="true" aria-labelledby="releaseTitle">
-    <div class="releaseTop">
-      <div>
-        <h2 id="releaseTitle">Flight Roulette release notes</h2>
-        <div class="releaseDate">Current version: v1.3.1</div>
-      </div>
-      <button class="releaseClose" id="releaseClose" aria-label="Close">×</button>
-    </div>
-
-    <div class="releaseBlock">
-      <h3>v1.3.1 — Local Radar Fix</h3>
-      <div class="releaseDate">11 August 2026</div>
-      <ul>
-        <li>Rebuilt What’s Above Me? with two independent live-aircraft feeds.</li>
-        <li>Local scans now try adsb.lol first and automatically fall back to Airplanes.live.</li>
-        <li>Search radius expands from 25 NM → 50 NM → 100 NM if necessary.</li>
-        <li>Improved Safari/iPhone error handling and network timeout reporting.</li>
-        <li>Local radar now reports which feed returned the aircraft.</li>
-        <li>A feed failure no longer immediately kills the whole local scan.</li>
-        <li>Clearer permission, network, rate-limit and zero-aircraft status messages.</li>
-      </ul>
-    </div>
-
-    <div class="releaseBlock">
-      <h3>v1.3.0 — What’s Above Me?</h3>
-      <div class="releaseDate">11 August 2026</div>
-      <ul>
-        <li>New location-based What’s Above Me? mode.</li>
-        <li>Ask the browser for location permission and scan the live ADS-B feed around you.</li>
-        <li>Nearby aircraft are sorted by approximate distance from your position.</li>
-        <li>See callsign, aircraft type, altitude, speed and distance at a glance.</li>
-        <li>Capture a nearby aircraft directly into My Hangar.</li>
-        <li>Open any nearby aircraft on the existing live tracker.</li>
-        <li>Added What’s Above Me? to the burger menu.</li>
-      </ul>
-    </div>
-
-    <div class="releaseBlock">
-      <h3>v1.2.0 — The Hangar Update</h3>
-      <div class="releaseDate">11 August 2026</div>
-      <ul>
-        <li>Save the aircraft you discover as persistent collector cards.</li>
-        <li>New My Hangar collection library stored in the browser.</li>
-        <li>Aircraft cards include callsign, type, registration, ICAO, altitude, speed, discovery location and time.</li>
-        <li>Rarity system: Common, Uncommon, Rare and Ultra Rare.</li>
-        <li>Duplicate aircraft are counted rather than silently replacing the first discovery.</li>
-        <li>Collection statistics and aircraft-type progress.</li>
-        <li>New burger menu with My Hangar and Release Notes shortcuts.</li>
-        <li>Current version remains clickable in the footer.</li>
-      </ul>
-    </div>
-
-    <div class="releaseBlock">
-      <h3>v1.1.0 — Live Tracker</h3>
-      <div class="releaseDate">11 August 2026</div>
-      <ul>
-        <li>Added embedded OpenStreetMap live aircraft tracking.</li>
-        <li>Follow the selected ICAO transponder address using adsb.lol.</li>
-        <li>Moving aircraft marker, reported heading rotation and session flight trail.</li>
-        <li>Auto-follow and manual centre controls.</li>
-        <li>Altitude, speed, heading and coordinates refresh while tracking.</li>
-        <li>Added clickable version number and in-site release notes.</li>
-      </ul>
-    </div>
-
-    <div class="releaseBlock">
-      <h3>v1.0.0 — First Flight</h3>
-      <div class="releaseDate">11 August 2026</div>
-      <ul>
-        <li>Introduced Spin the Skies.</li>
-        <li>Random discovery of real aircraft from open ADS-B feeds.</li>
-        <li>Displayed callsign, aircraft type, registration, altitude, speed, heading and live coordinates when available.</li>
-        <li>No API key required.</li>
-      </ul>
-    </div>
-
-    <div class="releaseBlock">
-      <h3>Storage notice</h3>
-      <p>Hangar cards are stored with localStorage on this device and browser. Clearing website data or using a different device will not carry the collection across.</p>
-    </div>
-  </div>
-</div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
 <script>
@@ -1135,7 +739,7 @@ saveCardBtn.addEventListener("click",saveCurrentCard);
 menuBtn.addEventListener("click",openMenu);
 menuClose.addEventListener("click",closeMenu);
 menuBackdrop.addEventListener("click",e=>{if(e.target===menuBackdrop)closeMenu()});
-menuSpin.addEventListener("click",()=>{closeMenu();window.scrollTo({top:0,behavior:"smooth"});});
+menuSpin.addEventListener("click",()=>{closeMenu();showV2View("spin");});
 menuHangar.addEventListener("click",()=>{closeMenu();openHangar()});
 menuReleases.addEventListener("click",()=>{
   closeMenu();
@@ -1179,6 +783,116 @@ function closeRelease(){
 releaseClose.addEventListener("click",closeRelease);
 releaseBackdrop.addEventListener("click",e=>{if(e.target===releaseBackdrop)closeRelease()});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeRelease();closeMenu();closeHangar();closeAbove();}});
+
+
+// ===== v2.0.0 LIVE WORLD =====
+const worldView=$("#worldView"), homeView=$("#homeView"), hangarView=$("#hangarViewV2"), passportView=$("#passportView");
+const bottomBtns=[...document.querySelectorAll(".bottomNav button")];
+const worldStatus=$("#worldStatus"), worldMapEl=$("#worldMap"), worldCount=$("#worldCount");
+let worldMap=null, worldLayer=null, worldPlanes=[], worldBusy=false;
+
+function showV2View(name){
+  [homeView,worldView,hangarView,passportView].forEach(v=>v&&v.classList.remove("activeView"));
+  const target={spin:homeView,world:worldView,hangar:hangarView,passport:passportView}[name]||homeView;
+  target.classList.add("activeView");
+  bottomBtns.forEach(b=>b.classList.toggle("active",b.dataset.view===name));
+  if(name==="world"){ setTimeout(()=>{initWorldMap();worldMap.invalidateSize()},80); }
+  if(name==="hangar"){renderHangarV2()}
+  if(name==="passport"){renderPassport()}
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+bottomBtns.forEach(b=>b.addEventListener("click",()=>showV2View(b.dataset.view)));
+
+function initWorldMap(){
+  if(worldMap) return;
+  worldMap=L.map("worldMap",{zoomControl:false,worldCopyJump:true,minZoom:2}).setView([25,5],2);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:"&copy; OpenStreetMap"}).addTo(worldMap);
+  L.control.zoom({position:"bottomright"}).addTo(worldMap);
+  worldLayer=L.layerGroup().addTo(worldMap);
+}
+function radarPlaneIcon(a){
+  const h=Number.isFinite(Number(a.track))?Number(a.track):0;
+  return L.divIcon({className:"",html:`<div class="radarPlane" style="transform:rotate(${h-45}deg)">✈</div>`,iconSize:[26,26],iconAnchor:[13,13]});
+}
+async function scanWorldRadar(){
+  if(worldBusy)return;
+  worldBusy=true; initWorldMap(); worldLayer.clearLayers(); worldPlanes=[];
+  worldStatus.textContent="RADAR SWEEP IN PROGRESS…";
+  const sample=[...zones].sort(()=>Math.random()-.5).slice(0,10);
+  let errors=0;
+  for(let i=0;i<sample.length;i++){
+    const [name,lat,lon]=sample[i];
+    worldStatus.textContent=`SCANNING ${name.toUpperCase()} • ${i+1}/${sample.length}`;
+    try{
+      const j=await fetchJson(`https://api.adsb.lol/v2/point/${lat}/${lon}/100`,8000);
+      const ac=(j.ac||[]).filter(validAircraft).slice(0,45);
+      ac.forEach(a=>worldPlanes.push({...a,_zone:name}));
+    }catch(e){errors++}
+    await sleep(250);
+  }
+  // de-dupe
+  const seen=new Set();
+  worldPlanes=worldPlanes.filter(a=>{const k=(a.hex||`${a.lat}-${a.lon}`);if(seen.has(k))return false;seen.add(k);return true}).slice(0,300);
+  worldPlanes.forEach((a,i)=>{
+    const marker=L.marker([Number(a.lat),Number(a.lon)],{icon:radarPlaneIcon(a)}).addTo(worldLayer);
+    const flight=(a.flight||"").trim()||a.r||a.hex||"Aircraft";
+    marker.bindTooltip(`${flight} • ${a.t||"Unknown type"}`,{direction:"top"});
+    marker.on("click",()=>{
+      renderAircraft(a,a._zone||"Live World","adsb.lol");
+      showV2View("spin");
+      setTimeout(()=>result.scrollIntoView({behavior:"smooth"}),150);
+    });
+  });
+  worldCount.textContent=worldPlanes.length;
+  worldStatus.textContent=worldPlanes.length?`${worldPlanes.length} LIVE AIRCRAFT IN THIS RADAR SAMPLE`:(errors?"LIVE FEEDS TEMPORARILY UNAVAILABLE":"NO AIRCRAFT RETURNED");
+  worldBusy=false;
+}
+$("#worldScanBtn").addEventListener("click",scanWorldRadar);
+$("#heroWorldBtn").addEventListener("click",()=>{showV2View("world");setTimeout(scanWorldRadar,200)});
+$("#heroNearbyBtn").addEventListener("click",()=>{openAbove()});
+
+function renderHangarV2(){
+  const items=getHangar();
+  const grid=$("#v2HangarGrid"), empty=$("#v2HangarEmpty");
+  $("#v2CardCount").textContent=items.reduce((s,x)=>s+(x.discoveries||1),0);
+  $("#v2TypeCount").textContent=new Set(items.map(x=>x.type)).size;
+  $("#v2RareCount").textContent=items.filter(x=>x.rarity==="Rare"||x.rarity==="Ultra Rare").length;
+  if(!items.length){grid.innerHTML="";empty.style.display="block";return}
+  empty.style.display="none";
+  grid.innerHTML=items.map(card=>`
+    <article class="v2CollectCard ${safeText(card.rarityClass||"common")}">
+      <div class="foil"></div>
+      <div class="v2Rarity">${safeText(card.rarity||"Common")}</div>
+      <div class="cardPlane">✈</div>
+      <div class="v2Call">${safeText(card.callsign)}</div>
+      <div class="v2Type">${safeText(card.type)} ${card.description?"• "+safeText(card.description):""}</div>
+      <div class="v2Stats"><span>${safeText(card.altitude)}<small>CAPTURE ALT</small></span><span>${safeText(card.speed)}<small>SPEED</small></span></div>
+      <div class="v2Reg">${safeText(card.registration)} · ${safeText(card.hex)}</div>
+      ${(card.discoveries||1)>1?`<div class="v2Dup">×${card.discoveries}</div>`:""}
+    </article>`).join("");
+}
+function renderPassport(){
+  const items=getHangar();
+  const types=new Set(items.map(x=>x.type).filter(Boolean));
+  const total=items.reduce((s,x)=>s+(x.discoveries||1),0);
+  const rare=items.filter(x=>x.rarity==="Rare"||x.rarity==="Ultra Rare").length;
+  const level=Math.max(1,Math.floor(total/5)+1);
+  const titles=["Passenger","Plane Spotter","Cadet","First Officer","Captain","Air Traffic Controller","Aviation Legend"];
+  const title=titles[Math.min(titles.length-1,Math.floor((level-1)/2))];
+  $("#passportLevel").textContent=`LEVEL ${level}`;
+  $("#passportTitle").textContent=title;
+  $("#passportCaptures").textContent=total;
+  $("#passportTypes").textContent=types.size;
+  $("#passportRare").textContent=rare;
+  $("#passportProgress").style.width=`${Math.min(100,(total%5)/5*100)}%`;
+  $("#passportNext").textContent=`${5-(total%5||0)} captures to next level`;
+}
+$("#v2ClearHangar").addEventListener("click",()=>{
+ if(confirm("Clear every aircraft from your Hangar on this device?")){localStorage.removeItem(HANGAR_KEY);renderHangarV2();renderPassport();renderHangar()}
+});
+
+// Upgrade old navigation targets into v2 views
+menuHangar.addEventListener("click",()=>showV2View("hangar"));
 
 window.addEventListener("beforeunload",stopTracking);
 </script>
