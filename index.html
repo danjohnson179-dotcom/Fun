@@ -81,6 +81,80 @@ h1{font-size:clamp(49px,9vw,96px);line-height:.92;letter-spacing:-.072em;margin:
 footer{text-align:center;padding:28px 0 48px;color:#887b91;font-size:12px;font-weight:650}
 @media(max-width:780px){.hero{padding-top:34px}.row{grid-template-columns:1fr}.go{min-height:62px}.card,.card.wide{grid-column:1/-1}.statgrid,.moviegrid{grid-template-columns:1fr 1fr}}
 @media(max-width:470px){.wrap{width:min(100% - 18px,1120px)}h1{font-size:clamp(47px,15vw,70px)}.finder{padding:10px}.statgrid,.moviegrid{grid-template-columns:1fr}.event{grid-template-columns:1fr}.badge{display:none}.share{width:100%}}
+
+/* PANDA POPCORN MINI-GAME */
+.panda-overlay{
+ position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;
+ padding:18px;background:rgba(43,22,58,.42);backdrop-filter:blur(12px)
+}
+.panda-overlay.show{display:flex;animation:pandaFade .25s ease both}
+@keyframes pandaFade{from{opacity:0}to{opacity:1}}
+.panda-modal{
+ width:min(430px,100%);background:linear-gradient(180deg,#fff,#fff4fb);
+ border:1px solid rgba(255,255,255,.95);border-radius:30px;padding:22px;
+ box-shadow:0 30px 90px rgba(58,29,79,.28);text-align:center;position:relative;overflow:hidden
+}
+.panda-close{
+ position:absolute;right:13px;top:13px;width:36px;height:36px;border:0;border-radius:12px;
+ background:#f7edf9;color:#6d5378;font-size:20px;font-weight:900;cursor:pointer
+}
+.panda-tag{
+ display:inline-flex;align-items:center;gap:6px;padding:8px 11px;border-radius:999px;
+ background:#f3eaff;color:#7343d8;font-size:11px;font-weight:950;letter-spacing:.08em;text-transform:uppercase
+}
+.panda-title{font-size:31px;line-height:1;letter-spacing:-.05em;margin:14px 0 8px;font-weight:950}
+.panda-copy{color:#776782;line-height:1.45;margin:0 auto 14px;max-width:330px}
+.panda-stage{
+ min-height:215px;display:grid;place-items:center;position:relative;margin:4px 0 8px
+}
+.panda{
+ font-size:104px;line-height:1;transform-origin:center bottom;
+ filter:drop-shadow(0 14px 18px rgba(91,56,110,.15));
+ transition:transform .18s ease
+}
+.panda.pop{animation:pandaPop .6s ease forwards}
+@keyframes pandaPop{
+ 0%{transform:scale(1)}
+ 35%{transform:scale(1.28) rotate(-3deg)}
+ 60%{transform:scale(.75) rotate(7deg)}
+ 100%{transform:scale(0)}
+}
+.popcorn{
+ position:absolute;font-size:22px;pointer-events:none;animation:kernelFly .75s ease-out forwards
+}
+@keyframes kernelFly{
+ from{transform:translate(0,0) scale(.8);opacity:1}
+ to{transform:translate(var(--x),var(--y)) rotate(260deg) scale(1.3);opacity:0}
+}
+.panda-meter{
+ height:12px;background:#f0e8f4;border-radius:999px;overflow:hidden;margin:8px 0 14px
+}
+.panda-meter > div{
+ height:100%;width:0;background:linear-gradient(90deg,#ffd166,#ff8fab,#845ef7);
+ transition:width .2s ease;border-radius:999px
+}
+.feed-btn{
+ width:100%;min-height:56px;border:0;border-radius:18px;color:#fff;font-size:16px;font-weight:950;
+ background:linear-gradient(135deg,#ff9f43,#ff5da2 55%,#845ef7);
+ box-shadow:0 14px 28px rgba(255,93,162,.22);cursor:pointer
+}
+.feed-btn:active{transform:translateY(1px)}
+.medal{
+ display:none;padding:18px 14px 4px
+}
+.medal.show{display:block;animation:medalIn .45s cubic-bezier(.2,.8,.2,1.15) both}
+@keyframes medalIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+.medal-icon{
+ width:100px;height:100px;margin:0 auto 12px;border-radius:50%;display:grid;place-items:center;
+ font-size:55px;background:linear-gradient(135deg,#ffe28a,#ffb347);border:7px solid #fff2b8;
+ box-shadow:0 14px 30px rgba(211,145,30,.24)
+}
+.medal h3{font-size:27px;letter-spacing:-.04em;margin:8px 0 6px}
+.medal p{color:#75677f;line-height:1.45}
+.medal-done{
+ width:100%;min-height:52px;border:0;border-radius:17px;background:#24162f;color:#fff;font-weight:900;cursor:pointer
+}
+
 </style>
 </head>
 <body>
@@ -217,5 +291,114 @@ function core(date){const now=new Date(),birth=new Date(date.getFullYear(),date.
 $("#finder").addEventListener("submit",async e=>{e.preventDefault();$("#error").style.display="none";const value=$("#dob").value,place=$("#place").value.trim();if(!value||!place)return;const [y,m,d]=value.split("-").map(Number),date=new Date(y,m-1,d);if(date>new Date()){$("#error").textContent="Your date of birth can't be in the future.";$("#error").style.display="block";return}core(date);$("#results").style.display="block";setTimeout(()=>$("#results").scrollIntoView({behavior:"smooth",block:"start"}),50);await Promise.all([population(y),weather(value,place),history(m,d,y),music(y),movies(value)])});
 $("#share").addEventListener("click",async()=>{const text=`I went back to ${$("#titleDate").textContent} with BORN.`;try{if(navigator.share)await navigator.share({title:"The Day I Was Born",text,url:location.href});else{await navigator.clipboard.writeText(`${text} ${location.href}`);$("#share").textContent="Copied ✓";setTimeout(()=>$("#share").textContent="Share my day ↗",1400)}}catch(e){}});
 </script>
+
+<div class="panda-overlay" id="pandaOverlay" aria-hidden="true">
+  <div class="panda-modal">
+    <button class="panda-close" id="pandaClose" aria-label="Close">×</button>
+
+    <div id="pandaGame">
+      <div class="panda-tag">🐼 Secret challenge</div>
+      <div class="panda-title">Feed the panda.</div>
+      <p class="panda-copy">This panda has made a terrible decision. Keep feeding it popcorn and see what happens.</p>
+
+      <div class="panda-stage" id="pandaStage">
+        <div class="panda" id="panda">🐼</div>
+      </div>
+
+      <div class="panda-meter"><div id="pandaFill"></div></div>
+      <button class="feed-btn" id="feedPanda">🍿 FEED POPCORN</button>
+    </div>
+
+    <div class="medal" id="pandaMedal">
+      <div class="medal-icon">🐼</div>
+      <h3>Congratulations!</h3>
+      <p>You unlocked the <strong>Panda Medal</strong> for feeding a panda far beyond any reasonable limit.</p>
+      <button class="medal-done" id="pandaDone">CLAIM MEDAL ✦</button>
+    </div>
+  </div>
+</div>
+
 </body>
+
+<script>
+(function(){
+  const overlay=document.getElementById("pandaOverlay");
+  const game=document.getElementById("pandaGame");
+  const panda=document.getElementById("panda");
+  const stage=document.getElementById("pandaStage");
+  const fill=document.getElementById("pandaFill");
+  const feed=document.getElementById("feedPanda");
+  const medal=document.getElementById("pandaMedal");
+  const close=document.getElementById("pandaClose");
+  const done=document.getElementById("pandaDone");
+
+  let feeds=0;
+  const maxFeeds=8;
+
+  function vibrate(pattern){
+    try{
+      if("vibrate" in navigator) navigator.vibrate(pattern);
+    }catch(e){}
+  }
+
+  function openPanda(){
+    overlay.classList.add("show");
+    overlay.setAttribute("aria-hidden","false");
+  }
+  function closePanda(){
+    overlay.classList.remove("show");
+    overlay.setAttribute("aria-hidden","true");
+  }
+  function popcornBurst(count=7){
+    for(let i=0;i<count;i++){
+      const k=document.createElement("span");
+      k.className="popcorn";
+      k.textContent="🍿";
+      k.style.left="50%";
+      k.style.top="50%";
+      k.style.setProperty("--x",`${(Math.random()-.5)*260}px`);
+      k.style.setProperty("--y",`${-40-Math.random()*210}px`);
+      stage.appendChild(k);
+      setTimeout(()=>k.remove(),800);
+    }
+  }
+
+  feed.addEventListener("click",()=>{
+    feeds++;
+
+    // Short haptic tap on supported devices. It gets stronger as the panda fills up.
+    const feedBuzz = feeds < 3 ? 18 : feeds < 5 ? 28 : feeds < 7 ? 42 : 60;
+    vibrate(feedBuzz);
+
+    const pct=Math.min(100,(feeds/maxFeeds)*100);
+    fill.style.width=pct+"%";
+    panda.style.transform=`scale(${1+feeds*.045})`;
+    popcornBurst(feeds>=maxFeeds?18:4);
+
+    if(feeds>=maxFeeds){
+      feed.disabled=true;
+      feed.textContent="UH OH…";
+      setTimeout(()=>{
+        vibrate([90,45,120,45,180]);
+        panda.classList.add("pop");
+        popcornBurst(30);
+      },250);
+      setTimeout(()=>{
+        game.style.display="none";
+        medal.classList.add("show");
+        localStorage.setItem("bornPandaMedal","unlocked");
+      },900);
+    }
+  });
+
+  close.addEventListener("click",closePanda);
+  done.addEventListener("click",closePanda);
+  overlay.addEventListener("click",e=>{ if(e.target===overlay) closePanda(); });
+
+  if(!localStorage.getItem("bornPandaMedal")){
+    setTimeout(openPanda,30000);
+  }
+})();
+</script>
+
 </html>
