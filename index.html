@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#08111b">
-<title>Flight Roulette — Spin the Skies</title>
-<meta name="description" content="Spin the skies and discover a random live aircraft.">
+<title>Flight Roulette — Real Aircraft</title>
+<meta name="description" content="Spin the skies and discover a real aircraft being tracked right now.">
 <style>
 :root{
-  --bg:#07111b;--panel:#0c1d2c;--panel2:#10263a;--text:#f7fbff;--muted:#91a7b8;
-  --cyan:#63ecff;--blue:#5f8dff;--pink:#ff78c8;--lime:#bafc70;--yellow:#ffd56a;
+  --bg:#07111b;--panel:#0c1d2c;--text:#f7fbff;--muted:#91a7b8;
+  --cyan:#63ecff;--blue:#5f8dff;--pink:#ff78c8;--lime:#bafc70;
   --line:rgba(255,255,255,.09);--shadow:0 28px 90px rgba(0,0,0,.36)
 }
 *{box-sizing:border-box}
@@ -31,15 +31,11 @@ body:before{
 .wrap{width:min(1120px,calc(100% - 22px));margin:auto;position:relative;z-index:1}
 nav{display:flex;justify-content:space-between;align-items:center;padding:20px 0}
 .brand{display:flex;gap:10px;align-items:center;font-weight:950;letter-spacing:-.045em}
-.logo{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;color:#07111b;
- background:linear-gradient(135deg,var(--cyan),var(--blue));font-size:20px;
- box-shadow:0 12px 30px rgba(95,141,255,.28);transform:rotate(-5deg)}
-.live{display:flex;align-items:center;gap:7px;padding:8px 11px;border-radius:999px;border:1px solid var(--line);
- background:rgba(255,255,255,.04);font-size:12px;font-weight:850;color:#c7d6e2}
+.logo{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;color:#07111b;background:linear-gradient(135deg,var(--cyan),var(--blue));font-size:20px;box-shadow:0 12px 30px rgba(95,141,255,.28);transform:rotate(-5deg)}
+.live{display:flex;align-items:center;gap:7px;padding:8px 11px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:12px;font-weight:850;color:#c7d6e2}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 6px rgba(186,252,112,.09)}
 .hero{text-align:center;padding:58px 0 18px}
-.kicker{display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border:1px solid var(--line);
- border-radius:999px;background:rgba(255,255,255,.04);color:#c5d3df;font-size:12px;font-weight:850}
+.kicker{display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.04);color:#c5d3df;font-size:12px;font-weight:850}
 h1{max-width:930px;margin:22px auto 15px;font-size:clamp(53px,10vw,106px);line-height:.89;letter-spacing:-.075em;font-weight:950}
 .grad{background:linear-gradient(90deg,var(--cyan),#8ca7ff 52%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
 .sub{max-width:670px;margin:auto;color:var(--muted);font-size:clamp(17px,2.2vw,21px);line-height:1.55}
@@ -64,20 +60,15 @@ h1{max-width:930px;margin:22px auto 15px;font-size:clamp(53px,10vw,106px);line-h
 .globe strong{position:relative;z-index:2;display:block;font-size:29px;letter-spacing:-.04em}
 .globe small{position:relative;z-index:2;display:block;margin-top:7px;font-size:12px;font-weight:900;opacity:.62}
 .scan{min-height:24px;margin-top:18px;color:#8da3b4;font-size:13px;font-weight:800}
-#error{display:none;max-width:720px;margin:18px auto 0;padding:13px 15px;border-radius:16px;color:#ffd3e7;
- background:rgba(255,120,200,.08);border:1px solid rgba(255,120,200,.20);text-align:left}
+#error{display:none;max-width:720px;margin:18px auto 0;padding:13px 15px;border-radius:16px;color:#ffd3e7;background:rgba(255,120,200,.08);border:1px solid rgba(255,120,200,.20);text-align:left}
 #result{display:none;padding:0 0 76px;animation:rise .42s ease both}
 @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-.heroCard{
- position:relative;overflow:hidden;padding:24px;border-radius:30px;
- background:linear-gradient(135deg,rgba(15,41,63,.96),rgba(9,25,39,.98));border:1px solid var(--line);box-shadow:var(--shadow)
-}
+.heroCard{position:relative;overflow:hidden;padding:24px;border-radius:30px;background:linear-gradient(135deg,rgba(15,41,63,.96),rgba(9,25,39,.98));border:1px solid var(--line);box-shadow:var(--shadow)}
 .heroCard:after{content:"✈";position:absolute;right:-20px;top:-55px;font-size:230px;opacity:.035;transform:rotate(-15deg)}
 .top{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;flex-wrap:wrap}
 .callsign{font-size:clamp(48px,9vw,82px);line-height:.92;letter-spacing:-.065em;font-weight:950}
 .ident{margin-top:7px;color:#98acbc;font-size:13px;font-weight:800}
-.badge{padding:9px 12px;border-radius:999px;border:1px solid rgba(186,252,112,.18);background:rgba(186,252,112,.09);
- color:var(--lime);font-size:11px;font-weight:950;letter-spacing:.06em;text-transform:uppercase}
+.badge{padding:9px 12px;border-radius:999px;border:1px solid rgba(186,252,112,.18);background:rgba(186,252,112,.09);color:var(--lime);font-size:11px;font-weight:950;letter-spacing:.06em;text-transform:uppercase}
 .mainline{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:26px}
 .flag{font-size:42px}
 .where{font-size:clamp(26px,5vw,42px);letter-spacing:-.045em;font-weight:950}
@@ -89,8 +80,7 @@ h1{max-width:930px;margin:22px auto 15px;font-size:clamp(53px,10vw,106px);line-h
 .value{margin-top:9px;font-size:25px;letter-spacing:-.035em;font-weight:950}
 .small{margin-top:5px;color:#8ea2b3;font-size:12px;line-height:1.4}
 .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-.action{flex:1;min-width:180px;min-height:52px;border-radius:17px;border:1px solid var(--line);
- background:rgba(255,255,255,.05);color:#fff;font-weight:900;cursor:pointer}
+.action{flex:1;min-width:180px;min-height:52px;border-radius:17px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:#fff;font-weight:900;cursor:pointer}
 .action.primary{border:0;color:#06111b;background:linear-gradient(135deg,var(--cyan),#83a2ff)}
 .source{margin-top:16px;text-align:center;color:#6f879a;font-size:11px;line-height:1.5}
 .source a{color:#90efff;text-decoration:none;font-weight:850}
@@ -106,16 +96,16 @@ h1{max-width:930px;margin:22px auto 15px;font-size:clamp(53px,10vw,106px);line-h
 </nav>
 
 <main class="hero">
-  <div class="kicker">🌍 No account. No API key. Just live aircraft.</div>
+  <div class="kicker">🌍 Real aircraft. No API key.</div>
   <h1>Spin the <span class="grad">skies.</span></h1>
-  <p class="sub">Tap the globe. We’ll jump to a random part of the world, scan the sky, and pull out one aircraft that’s actually being tracked right now.</p>
+  <p class="sub">Tap the globe and we’ll scan a busy airspace region for an aircraft that is actually being tracked right now.</p>
 </main>
 
 <section class="spinzone">
   <button class="globe" id="spinBtn">
     <span class="plane">✈️</span>
     <strong>SPIN THE SKIES</strong>
-    <small>LIVE DATA • RANDOM AIRCRAFT</small>
+    <small>LIVE DATA • REAL AIRCRAFT</small>
   </button>
   <div class="scan" id="scan">Ready to scan.</div>
   <div id="error"></div>
@@ -135,41 +125,17 @@ h1{max-width:930px;margin:22px auto 15px;font-size:clamp(53px,10vw,106px);line-h
       <div class="flag">🌐</div>
       <div>
         <div class="where" id="where">Somewhere on Earth</div>
-        <div class="whereSub" id="whereSub">Live position from ADS-B / MLAT</div>
+        <div class="whereSub" id="whereSub">Live position</div>
       </div>
     </div>
   </div>
 
   <div class="grid">
-    <article class="card">
-      <div class="label">Altitude</div>
-      <div class="value" id="altitude">—</div>
-      <div class="small">Reported barometric altitude where available</div>
-    </article>
-
-    <article class="card">
-      <div class="label">Ground speed</div>
-      <div class="value" id="speed">—</div>
-      <div class="small">Reported in knots</div>
-    </article>
-
-    <article class="card">
-      <div class="label">Heading</div>
-      <div class="value" id="heading">—</div>
-      <div class="small">Track angle from the live aircraft feed</div>
-    </article>
-
-    <article class="card wide">
-      <div class="label">Aircraft type</div>
-      <div class="value" id="type">—</div>
-      <div class="small" id="typeMore">Type code shown when included in the feed</div>
-    </article>
-
-    <article class="card wide">
-      <div class="label">Registration / ICAO</div>
-      <div class="value" id="registration">—</div>
-      <div class="small" id="icao">ICAO identity</div>
-    </article>
+    <article class="card"><div class="label">Altitude</div><div class="value" id="altitude">—</div><div class="small">Barometric altitude where available</div></article>
+    <article class="card"><div class="label">Ground speed</div><div class="value" id="speed">—</div><div class="small">Reported in knots</div></article>
+    <article class="card"><div class="label">Heading</div><div class="value" id="heading">—</div><div class="small">Track angle</div></article>
+    <article class="card wide"><div class="label">Aircraft type</div><div class="value" id="type">—</div><div class="small" id="typeMore">Type code where available</div></article>
+    <article class="card wide"><div class="label">Registration / ICAO</div><div class="value" id="registration">—</div><div class="small" id="icao">ICAO identity</div></article>
   </div>
 
   <div class="actions">
@@ -177,152 +143,147 @@ h1{max-width:930px;margin:22px auto 15px;font-size:clamp(53px,10vw,106px);line-h
     <button class="action" id="mapBtn">🗺️ VIEW ON MAP</button>
   </div>
 
-  <div class="source">Live aircraft data from <a href="https://airplanes.live/" target="_blank" rel="noopener">Airplanes.live ↗</a>. Coverage depends on connected ADS‑B/MLAT receivers and fields may be absent.</div>
+  <div class="source">Primary live data: <a href="https://adsb.lol/" target="_blank" rel="noopener">adsb.lol ↗</a>. Fallback: <a href="https://airplanes.live/" target="_blank" rel="noopener">Airplanes.live ↗</a>.</div>
 </section>
 </div>
 
 <script>
-const $ = s => document.querySelector(s);
-const spinBtn = $("#spinBtn");
-const spinAgain = $("#spinAgain");
-const scan = $("#scan");
-const errorBox = $("#error");
-const result = $("#result");
-const mapBtn = $("#mapBtn");
+const $=s=>document.querySelector(s);
+const spinBtn=$("#spinBtn"),spinAgain=$("#spinAgain"),scan=$("#scan"),errorBox=$("#error"),result=$("#result"),mapBtn=$("#mapBtn");
+let lastLat=null,lastLon=null;
 
-let lastLat = null;
-let lastLon = null;
-
-// High-traffic global areas. Roulette chooses one, then searches a 250 NM radius.
-const zones = [
-  ["London",51.47,-0.45],["Paris",49.01,2.55],["Amsterdam",52.31,4.76],["Frankfurt",50.04,8.56],
-  ["Madrid",40.49,-3.57],["Rome",41.80,12.24],["Istanbul",41.28,28.75],["Dubai",25.25,55.36],
-  ["Doha",25.27,51.61],["New York",40.64,-73.78],["Chicago",41.97,-87.91],["Atlanta",33.64,-84.43],
-  ["Los Angeles",33.94,-118.40],["San Francisco",37.62,-122.38],["Toronto",43.68,-79.63],
-  ["Mexico City",19.44,-99.07],["São Paulo",-23.43,-46.47],["Singapore",1.36,103.99],
-  ["Bangkok",13.69,100.75],["Tokyo",35.55,139.78],["Seoul",37.46,126.44],["Hong Kong",22.31,113.92],
-  ["Delhi",28.56,77.10],["Mumbai",19.09,72.87],["Sydney",-33.94,151.18],["Melbourne",-37.67,144.84],
-  ["Johannesburg",-26.14,28.25],["Cairo",30.12,31.41],["Nairobi",-1.32,36.93]
+const zones=[
+ ["London",51.4700,-0.4543],["Paris",49.0097,2.5479],["Amsterdam",52.3105,4.7683],["Frankfurt",50.0379,8.5622],
+ ["Madrid",40.4983,-3.5676],["Rome",41.8003,12.2389],["Istanbul",41.2753,28.7519],["Dubai",25.2532,55.3657],
+ ["Doha",25.2731,51.6081],["New York",40.6413,-73.7781],["Chicago",41.9742,-87.9073],["Atlanta",33.6407,-84.4277],
+ ["Los Angeles",33.9416,-118.4085],["Toronto",43.6777,-79.6248],["São Paulo",-23.4356,-46.4731],
+ ["Singapore",1.3644,103.9915],["Bangkok",13.6900,100.7501],["Tokyo",35.5494,139.7798],
+ ["Seoul",37.4602,126.4407],["Hong Kong",22.3080,113.9185],["Delhi",28.5562,77.1000],
+ ["Mumbai",19.0896,72.8656],["Sydney",-33.9399,151.1753],["Melbourne",-37.6690,144.8410],
+ ["Johannesburg",-26.1337,28.2420],["Cairo",30.1219,31.4056]
 ];
 
-const sleep = ms => new Promise(r=>setTimeout(r,ms));
-const val = (v,f="Not available") => (v!==undefined && v!==null && String(v).trim()!=="") ? v : f;
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const choose=a=>a[Math.floor(Math.random()*a.length)];
+const validAircraft=a=>Number.isFinite(Number(a?.lat))&&Number.isFinite(Number(a?.lon))&&(a?.flight||a?.r||a?.hex);
 
-function showError(msg){
-  errorBox.textContent = msg;
-  errorBox.style.display = "block";
-}
-function clearError(){
-  errorBox.style.display = "none";
-  errorBox.textContent = "";
-}
-function choose(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function showError(msg){errorBox.textContent=msg;errorBox.style.display="block"}
+function clearError(){errorBox.style.display="none";errorBox.textContent=""}
 
-function aircraftPool(list){
-  const filtered=(list||[]).filter(a =>
-    Number.isFinite(Number(a.lat)) &&
-    Number.isFinite(Number(a.lon)) &&
-    (a.flight || a.r || a.hex)
-  );
-  return filtered.length ? filtered : (list||[]);
+async function fetchJson(url,timeout=9000){
+ const ctl=new AbortController();
+ const t=setTimeout(()=>ctl.abort(),timeout);
+ try{
+  const r=await fetch(url,{signal:ctl.signal,cache:"no-store",headers:{Accept:"application/json"}});
+  const text=await r.text();
+  let data;
+  try{data=JSON.parse(text)}catch{throw new Error(`Invalid JSON from ${new URL(url).hostname}`)}
+  if(!r.ok) throw new Error(`${new URL(url).hostname} returned HTTP ${r.status}`);
+  return data;
+ }finally{clearTimeout(t)}
 }
 
-async function getAircraft(){
-  clearError();
-  spinBtn.classList.add("loading");
-  spinBtn.disabled=true;
-  spinAgain.disabled=true;
-  result.style.display="none";
-
-  try{
-    let pickedZone=null, aircraft=null;
-
-    // Try several busy areas. Respect Airplanes.live's 1 request/sec limit.
-    const shuffled=[...zones].sort(()=>Math.random()-.5).slice(0,6);
-
-    for(let i=0;i<shuffled.length;i++){
-      const [name,lat,lon]=shuffled[i];
-      pickedZone=name;
-      scan.textContent=`Scanning around ${name}…`;
-
-      const url=`https://api.airplanes.live/v2/point/${lat}/${lon}/250`;
-      const r=await fetch(url);
-      if(!r.ok) throw new Error(`Airplanes.live returned HTTP ${r.status}.`);
-
-      const j=await r.json();
-      const pool=aircraftPool(j.aircraft);
-
-      if(pool.length){
-        aircraft=choose(pool);
-        break;
-      }
-
-      if(i<shuffled.length-1) await sleep(1100);
-    }
-
-    if(!aircraft) throw new Error("No aircraft were found in the areas scanned. Try again.");
-
-    renderAircraft(aircraft,pickedZone);
-    result.style.display="block";
-    scan.textContent="Aircraft found ✈️";
-    setTimeout(()=>result.scrollIntoView({behavior:"smooth",block:"start"}),90);
-
-  }catch(err){
-    showError(`Couldn’t scan the skies: ${err.message}`);
-    scan.textContent="Radar quiet. Try another spin.";
-  }finally{
-    spinBtn.classList.remove("loading");
-    spinBtn.disabled=false;
-    spinAgain.disabled=false;
-  }
+async function scanAdsbLol(name,lat,lon){
+ scan.textContent=`Scanning live aircraft near ${name} via adsb.lol…`;
+ const j=await fetchJson(`https://api.adsb.lol/v2/point/${lat}/${lon}/250`);
+ const list=(j.ac||[]).filter(validAircraft);
+ return list;
 }
 
-function renderAircraft(a,zone){
-  const flight=(a.flight||"").trim();
-  $("#callsign").textContent = flight || val(a.r,val(a.hex,"UNKNOWN"));
-  $("#ident").textContent = flight
-    ? `Callsign ${flight}`
-    : a.r ? `Registration ${a.r}` : `ICAO ${val(a.hex)}`;
-
-  const onGround = String(a.alt_baro).toLowerCase()==="ground";
-  $("#airState").textContent = onGround ? "ON GROUND" : "AIRBORNE";
-
-  lastLat = Number(a.lat);
-  lastLon = Number(a.lon);
-  $("#where").textContent = `Near ${zone}`;
-  $("#whereSub").textContent = Number.isFinite(lastLat) && Number.isFinite(lastLon)
-    ? `${lastLat.toFixed(3)}, ${lastLon.toFixed(3)}`
-    : "Position unavailable";
-
-  let alt="Not available";
-  if(onGround) alt="Ground";
-  else if(a.alt_baro!==undefined && a.alt_baro!==null && !isNaN(Number(a.alt_baro)))
-    alt=`${Math.round(Number(a.alt_baro)).toLocaleString("en-GB")} ft`;
-  $("#altitude").textContent=alt;
-
-  $("#speed").textContent = (a.gs!==undefined && a.gs!==null && !isNaN(Number(a.gs)))
-    ? `${Math.round(Number(a.gs))} kt`
-    : "Not available";
-
-  $("#heading").textContent = (a.track!==undefined && a.track!==null && !isNaN(Number(a.track)))
-    ? `${Math.round(Number(a.track))}°`
-    : "Not available";
-
-  $("#type").textContent = val(a.t,"Not available");
-  $("#typeMore").textContent = a.desc ? val(a.desc) : "ICAO aircraft type code where available";
-
-  $("#registration").textContent = val(a.r,"Not available");
-  $("#icao").textContent = `ICAO hex: ${val(a.hex,"Not available")}`;
-
-  mapBtn.disabled = !(Number.isFinite(lastLat) && Number.isFinite(lastLon));
+async function scanAirplanesLive(name,lat,lon){
+ scan.textContent=`Trying backup radar near ${name}…`;
+ const j=await fetchJson(`https://api.airplanes.live/v2/point/${lat}/${lon}/250`);
+ const raw=j.aircraft||j.ac||[];
+ return raw.filter(validAircraft);
 }
 
-spinBtn.addEventListener("click",getAircraft);
-spinAgain.addEventListener("click",getAircraft);
+async function findRealAircraft(){
+ clearError();
+ result.style.display="none";
+ spinBtn.disabled=true;spinAgain.disabled=true;spinBtn.classList.add("loading");
 
+ let technicalErrors=[];
+ try{
+   const shuffled=[...zones].sort(()=>Math.random()-.5).slice(0,8);
+
+   for(let i=0;i<shuffled.length;i++){
+     const [name,lat,lon]=shuffled[i];
+
+     try{
+       const list=await scanAdsbLol(name,lat,lon);
+       if(list.length){
+         const plane=choose(list);
+         renderAircraft(plane,name,"adsb.lol");
+         return;
+       }
+     }catch(e){
+       technicalErrors.push(`adsb.lol: ${e.message}`);
+     }
+
+     await sleep(1050);
+
+     try{
+       const list2=await scanAirplanesLive(name,lat,lon);
+       if(list2.length){
+         const plane=choose(list2);
+         renderAircraft(plane,name,"Airplanes.live");
+         return;
+       }
+     }catch(e){
+       technicalErrors.push(`Airplanes.live: ${e.message}`);
+     }
+
+     if(i<shuffled.length-1) await sleep(1050);
+   }
+
+   if(technicalErrors.length>=4){
+     throw new Error("The live feeds are being blocked or rate-limited by the browser/network. " + technicalErrors.slice(-2).join(" | "));
+   }
+
+   throw new Error("The live APIs returned zero usable aircraft in all scanned regions. Try again in a moment.");
+ }catch(e){
+   showError("Couldn’t find a live aircraft: "+e.message);
+   scan.textContent="Live feed unavailable right now.";
+ }finally{
+   spinBtn.disabled=false;spinAgain.disabled=false;spinBtn.classList.remove("loading");
+ }
+}
+
+function renderAircraft(a,zone,source){
+ const flight=(a.flight||"").trim();
+ $("#callsign").textContent=flight||a.r||a.hex||"UNKNOWN";
+ $("#ident").textContent=flight?`Callsign ${flight} • ${source}`:a.r?`Registration ${a.r} • ${source}`:`ICAO ${a.hex||"unknown"} • ${source}`;
+
+ const onGround=String(a.alt_baro).toLowerCase()==="ground";
+ $("#airState").textContent=onGround?"ON GROUND":"AIRBORNE";
+
+ lastLat=Number(a.lat);lastLon=Number(a.lon);
+ $("#where").textContent=`Near ${zone}`;
+ $("#whereSub").textContent=`${lastLat.toFixed(3)}, ${lastLon.toFixed(3)} • ${source}`;
+
+ let alt="Not available";
+ if(onGround) alt="Ground";
+ else if(a.alt_baro!==undefined&&a.alt_baro!==null&&!isNaN(Number(a.alt_baro))) alt=`${Math.round(Number(a.alt_baro)).toLocaleString("en-GB")} ft`;
+ $("#altitude").textContent=alt;
+
+ $("#speed").textContent=(a.gs!==undefined&&a.gs!==null&&!isNaN(Number(a.gs)))?`${Math.round(Number(a.gs))} kt`:"Not available";
+ $("#heading").textContent=(a.track!==undefined&&a.track!==null&&!isNaN(Number(a.track)))?`${Math.round(Number(a.track))}°`:"Not available";
+ $("#type").textContent=a.t||"Not available";
+ $("#typeMore").textContent=a.desc||"ICAO aircraft type code where available";
+ $("#registration").textContent=a.r||"Not available";
+ $("#icao").textContent=`ICAO hex: ${a.hex||"Not available"}`;
+
+ mapBtn.disabled=!(Number.isFinite(lastLat)&&Number.isFinite(lastLon));
+ result.style.display="block";
+ scan.textContent=`Real aircraft found via ${source} ✈️`;
+ setTimeout(()=>result.scrollIntoView({behavior:"smooth",block:"start"}),80);
+}
+
+spinBtn.addEventListener("click",findRealAircraft);
+spinAgain.addEventListener("click",findRealAircraft);
 mapBtn.addEventListener("click",()=>{
-  if(!Number.isFinite(lastLat)||!Number.isFinite(lastLon)) return;
-  window.open(`https://www.google.com/maps?q=${lastLat},${lastLon}`,"_blank","noopener");
+ if(!Number.isFinite(lastLat)||!Number.isFinite(lastLon))return;
+ window.open(`https://www.google.com/maps?q=${lastLat},${lastLon}`,"_blank","noopener");
 });
 </script>
 </body>
