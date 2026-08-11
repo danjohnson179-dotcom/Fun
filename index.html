@@ -346,7 +346,7 @@ footer{padding:22px 0 46px;text-align:center;color:#71889a;font-size:12px}
 </section>
 
 <footer>
-  Flight Roulette • <button class="versionBtn" id="versionBtn">v1.3.0</button>
+  Flight Roulette • <button class="versionBtn" id="versionBtn">v1.3.1</button>
 </footer>
 </div>
 
@@ -362,7 +362,7 @@ footer{padding:22px 0 46px;text-align:center;color:#71889a;font-size:12px}
       <button class="menuLink" id="menuSpin">🎰 Spin the skies <span>→</span></button>
       <button class="menuLink" id="menuHangar">🛩️ My Hangar <span id="menuHangarCount">0</span></button>
       <button class="menuLink" id="menuAbove">📍 What’s Above Me? <span>LIVE</span></button>
-      <button class="menuLink" id="menuReleases">🏷️ Release notes <span>v1.3.0</span></button>
+      <button class="menuLink" id="menuReleases">🏷️ Release notes <span>v1.3.1</span></button>
     </div>
   </aside>
 </div>
@@ -428,9 +428,23 @@ footer{padding:22px 0 46px;text-align:center;color:#71889a;font-size:12px}
     <div class="releaseTop">
       <div>
         <h2 id="releaseTitle">Flight Roulette release notes</h2>
-        <div class="releaseDate">Current version: v1.3.0</div>
+        <div class="releaseDate">Current version: v1.3.1</div>
       </div>
       <button class="releaseClose" id="releaseClose" aria-label="Close">×</button>
+    </div>
+
+    <div class="releaseBlock">
+      <h3>v1.3.1 — Local Radar Fix</h3>
+      <div class="releaseDate">11 August 2026</div>
+      <ul>
+        <li>Rebuilt What’s Above Me? with two independent live-aircraft feeds.</li>
+        <li>Local scans now try adsb.lol first and automatically fall back to Airplanes.live.</li>
+        <li>Search radius expands from 25 NM → 50 NM → 100 NM if necessary.</li>
+        <li>Improved Safari/iPhone error handling and network timeout reporting.</li>
+        <li>Local radar now reports which feed returned the aircraft.</li>
+        <li>A feed failure no longer immediately kills the whole local scan.</li>
+        <li>Clearer permission, network, rate-limit and zero-aircraft status messages.</li>
+      </ul>
     </div>
 
     <div class="releaseBlock">
@@ -804,37 +818,117 @@ function getBrowserLocation(){
     );
   });
 }
+async function localFeedRequest(feed,pos,radius){
+  const lat=Number(pos.lat).toFixed(5);
+  const lon=Number(pos.lon).toFixed(5);
+
+  if(feed==="adsb.lol"){
+    const url=`https://api.adsb.lol/v2/point/${lat}/${lon}/${radius}`;
+    const j=await fetchJson(url,10000);
+    return {source:"adsb.lol",aircraft:(j.ac||j.aircraft||[]).filter(validAircraft)};
+  }
+
+  if(feed==="Airplanes.live"){
+    const url=`https://api.airplanes.live/v2/point/${lat}/${lon}/${radius}`;
+    const j=await fetchJson(url,10000);
+    return {source:"Airplanes.live",aircraft:(j.aircraft||j.ac||[]).filter(validAircraft)};
+  }
+
+  throw new Error("Unknown feed");
+}
+
+function friendlyLocalError(err){
+  const msg=String(err?.message||err||"Unknown error");
+
+  if(/aborted|abort/i.test(msg)) return "The live aircraft feed took too long to respond.";
+  if(/failed to fetch|load failed|networkerror|network request failed/i.test(msg))
+    return "The browser could not connect to that live aircraft feed.";
+  if(/HTTP 429/.test(msg)) return "The live aircraft feed is temporarily rate-limiting requests.";
+  if(/HTTP 403/.test(msg)) return "The live aircraft feed rejected this browser request.";
+  if(/HTTP 5\d\d/.test(msg)) return "The live aircraft service is temporarily unavailable.";
+
+  return msg;
+}
+
 async function scanAboveMe(){
   locateBtn.disabled=true;
   aboveList.innerHTML="";
+  nearbyAircraft=[];
   aboveStatus.textContent="Getting your location…";
+
   try{
     const pos=await getBrowserLocation();
-    aboveStatus.textContent="Scanning the live sky around you…";
+    const radii=[25,50,100];
+    const feeds=["adsb.lol","Airplanes.live"];
+    const failures=[];
 
-    // 50 NM gives a useful local-sky view without claiming aircraft are literally overhead.
-    const j=await fetchJson(`https://api.adsb.lol/v2/point/${pos.lat}/${pos.lon}/50`,10000);
-    nearbyAircraft=(j.ac||[])
-      .filter(validAircraft)
-      .map(a=>({...a,_distance:distanceNm(pos.lat,pos.lon,Number(a.lat),Number(a.lon))}))
-      .sort((a,b)=>a._distance-b._distance)
-      .slice(0,20);
+    for(const radius of radii){
+      for(const feed of feeds){
+        aboveStatus.textContent=`Scanning ${radius} NM around you via ${feed}…`;
 
-    if(!nearbyAircraft.length){
-      aboveStatus.textContent="No tracked aircraft found within 50 nautical miles.";
-      aboveList.innerHTML='<div class="aboveEmpty">The live feed can’t currently see a usable aircraft near you. Try again in a few minutes.</div>';
-      return;
+        try{
+          const result=await localFeedRequest(feed,pos,radius);
+
+          if(result.aircraft.length){
+            nearbyAircraft=result.aircraft
+              .map(a=>({
+                ...a,
+                _distance:distanceNm(pos.lat,pos.lon,Number(a.lat),Number(a.lon)),
+                _localSource:result.source
+              }))
+              .sort((a,b)=>a._distance-b._distance)
+              .slice(0,25);
+
+            aboveStatus.textContent=
+              `Found ${nearbyAircraft.length} tracked aircraft within ${radius} NM • ${result.source} • location accuracy ±${Math.round(pos.accuracy)} m`;
+
+            renderNearby();
+            return;
+          }
+
+          failures.push(`${feed} returned 0 aircraft at ${radius} NM`);
+        }catch(err){
+          failures.push(`${feed}: ${friendlyLocalError(err)}`);
+        }
+
+        // Avoid immediately hammering public endpoints.
+        await sleep(1100);
+      }
     }
 
-    aboveStatus.textContent=`Found ${nearbyAircraft.length} tracked aircraft nearby • location accuracy ±${Math.round(pos.accuracy)} m`;
-    renderNearby();
+    const technicalFailures=failures.filter(x=>!/returned 0 aircraft/.test(x));
+
+    if(technicalFailures.length>=4){
+      aboveStatus.textContent="Both live feeds are currently unreachable from this browser.";
+      aboveList.innerHTML=
+        `<div class="aboveEmpty">
+          <strong style="display:block;color:#fff;margin-bottom:6px">Local radar couldn’t connect.</strong>
+          Both aircraft feeds were tried automatically. This can be caused by a temporary API outage, browser/network filtering or rate limiting.
+          <br><br>
+          <span style="font-size:11px">${safeText(technicalFailures.slice(-2).join(" • "))}</span>
+        </div>`;
+    }else{
+      aboveStatus.textContent="No tracked aircraft found within 100 nautical miles.";
+      aboveList.innerHTML=
+        `<div class="aboveEmpty">
+          Both live feeds were checked at 25, 50 and 100 NM. No usable aircraft positions were returned right now.
+          Try another scan in a few minutes.
+        </div>`;
+    }
+
   }catch(e){
-    aboveStatus.textContent=e.message;
-    aboveList.innerHTML='<div class="aboveEmpty">Unable to complete the local sky scan.</div>';
+    const message=friendlyLocalError(e);
+    aboveStatus.textContent=message;
+    aboveList.innerHTML=
+      `<div class="aboveEmpty">
+        <strong style="display:block;color:#fff;margin-bottom:6px">Unable to start local radar.</strong>
+        ${safeText(message)}
+      </div>`;
   }finally{
     locateBtn.disabled=false;
   }
 }
+
 function nearbyAltitude(a){
   if(String(a.alt_baro).toLowerCase()==="ground") return "Ground";
   if(a.alt_baro!==undefined&&a.alt_baro!==null&&!isNaN(Number(a.alt_baro))) return `${Math.round(Number(a.alt_baro)).toLocaleString("en-GB")} ft`;
@@ -849,7 +943,7 @@ function renderNearby(){
     return `<article class="nearPlane">
       <div>
         <h4>✈️ ${safeText(title)}</h4>
-        <div class="nearMeta">${safeText(type)} • ${safeText(nearbyAltitude(a))} • ${safeText(speed)} • ${a._distance.toFixed(1)} NM away</div>
+        <div class="nearMeta">${safeText(type)} • ${safeText(nearbyAltitude(a))} • ${safeText(speed)} • ${a._distance.toFixed(1)} NM away • ${safeText(a._localSource||"Live ADS-B")}</div>
       </div>
       <div class="nearActions">
         <button class="nearBtn" data-track="${i}">FOLLOW LIVE</button>
@@ -862,7 +956,7 @@ function renderNearby(){
     btn.addEventListener("click",()=>{
       const a=nearbyAircraft[Number(btn.dataset.track)];
       closeAbove();
-      renderAircraft(a,"your location","adsb.lol");
+      renderAircraft(a,"your location",a._localSource||"adsb.lol");
       setTimeout(startTracking,180);
     });
   });
@@ -870,10 +964,10 @@ function renderNearby(){
   aboveList.querySelectorAll("[data-capture]").forEach(btn=>{
     btn.addEventListener("click",()=>{
       const a=nearbyAircraft[Number(btn.dataset.capture)];
-      currentAircraft={...a,_zone:"your location",_source:"adsb.lol"};
+      currentAircraft={...a,_zone:"your location",_source:(a._localSource||"Live ADS-B")};
       currentHex=(a.hex||"").trim().toLowerCase();
       currentZone="your location";
-      currentSource="adsb.lol";
+      currentSource=a._localSource||"Live ADS-B";
       lastLat=Number(a.lat);lastLon=Number(a.lon);
       saveCurrentCard();
       btn.textContent="SAVED ✓";
