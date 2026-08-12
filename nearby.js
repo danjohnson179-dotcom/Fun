@@ -1,5 +1,4 @@
-
-/* SKYHUNT v5.2.3 — nearby.js
+/* SKYHUNT v5.2.5 — nearby.js
    Full-page Nearby experience. No modal architecture. */
 
 let nearbyAircraft=[];
