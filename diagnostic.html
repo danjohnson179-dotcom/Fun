@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050609">
+<title>SKYHUNT Diagnostics</title>
+<meta name="description" content="SKYHUNT live-system diagnostics.">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<link rel="stylesheet" href="diagnostics.css?v=1.0">
+</head>
+<body>
+<main class="diagShell">
+  <header class="diagTop">
+    <a class="back" href="index.html">← SKYHUNT</a>
+    <div class="brand">
+      <span class="brandMark">✦</span>
+      <div><strong>System Diagnostics</strong><small>SKYHUNT · LIVE SERVICE HEALTH</small></div>
+    </div>
+    <span class="build">DIAG v1.0</span>
+  </header>
+
+  <section class="diagHero">
+    <div>
+      <span class="eyebrow">DEEP SYSTEM CHECK</span>
+      <h1>Find exactly<br>what failed.</h1>
+      <p>This page tests SKYHUNT independently from the normal interface and explains whether a failure is coming from an API, Safari/network transport, permissions, maps, storage, news services or SKYHUNT's own deployed files.</p>
+    </div>
+    <div class="heroStatus">
+      <span>OVERALL STATUS</span>
+      <strong id="overallStatus">NOT TESTED</strong>
+      <small id="overallDetail">Run the suite to begin.</small>
+    </div>
+  </section>
+
+  <section class="controls">
+    <button id="runAll" class="primary">RUN FULL DIAGNOSTIC</button>
+    <button id="copyReport">COPY FULL REPORT</button>
+    <button id="clearResults">CLEAR</button>
+  </section>
+
+  <section class="summaryGrid">
+    <article><span>PASS</span><b id="passCount">0</b></article>
+    <article><span>WARNING</span><b id="warnCount">0</b></article>
+    <article><span>FAIL</span><b id="failCount">0</b></article>
+    <article><span>TESTS</span><b id="testCount">0</b></article>
+  </section>
+
+  <section class="notice">
+    <b>How to use this</b>
+    <span>Tap Run Full Diagnostic once. It may ask for location, camera and motion permissions because those are real SKYHUNT dependencies. Camera access is immediately stopped after the test. Airplanes.live requests are deliberately spaced to respect its public rate limit.</span>
+  </section>
+
+  <div class="sectionTitle"><span>01</span><div><h2>Browser & deployment</h2><p>Checks whether the website itself and its deployed feature files are healthy.</p></div></div>
+  <section class="testGrid" id="browserTests"></section>
+
+  <div class="sectionTitle"><span>02</span><div><h2>Aircraft API</h2><p>Direct Airplanes.live tests with transport, HTTP, JSON, point search, repeat request and hex lookup diagnostics.</p></div></div>
+  <section class="testGrid" id="aircraftTests"></section>
+
+  <div class="sectionTitle"><span>03</span><div><h2>Device features</h2><p>Location, camera and device-orientation capabilities used by Nearby and Sky Lens.</p></div></div>
+  <section class="testGrid" id="deviceTests"></section>
+
+  <div class="sectionTitle"><span>04</span><div><h2>Maps & storage</h2><p>Leaflet, OpenStreetMap tile delivery and local Collection persistence.</p></div></div>
+  <section class="testGrid" id="platformTests"></section>
+
+  <div class="sectionTitle"><span>05</span><div><h2>Skywire news stack</h2><p>Tests the services used by the current News implementation independently.</p></div></div>
+  <section class="testGrid" id="newsTests"></section>
+
+  <div class="sectionTitle"><span>06</span><div><h2>Raw report</h2><p>Share this report when debugging a failure.</p></div></div>
+  <section class="reportBox">
+    <pre id="rawReport">No diagnostic run yet.</pre>
+  </section>
+
+  <footer>SKYHUNT Diagnostics · not for navigation</footer>
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="diagnostics.js?v=1.0"></script>
+</body>
+</html>
