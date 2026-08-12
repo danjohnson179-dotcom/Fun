@@ -4,11 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050609">
-<title>SKYHUNT v3 — Live Aircraft Discovery</title>
+<title>SKYHUNT v1.2 — Live Aircraft Discovery</title>
 <meta name="description" content="Discover, track and collect real aircraft flying now with SKYHUNT.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="v3.css?v=3.1">
 </head>
 <body>
 <div class="shell">
@@ -18,107 +17,54 @@
   <div class="brand">
     <div class="brandMark">✦</div>
     <div class="brandText"><strong>SKYHUNT</strong><small>LIVE AIRCRAFT DISCOVERY</small></div>
-    <span class="v2pill">v3</span>
+    <span class="v2pill">v1.2</span>
   </div>
 
 </header>
 
 <section class="view activeView" id="homeView">
-  <div class="apexHero">
-    <div class="apexHeroTop">
-      <div class="apexIntro">
-        <div class="apexKicker"><span class="livePulse"></span> LIVE AIRSPACE NETWORK</div>
-        <h1>See what’s moving<br>above you.</h1>
-        <p>SKYHUNT turns live ADS-B traffic into a beautiful discovery experience — hunt aircraft, explore radar, scan your local sky and build your collection.</p>
-        <div class="apexHeroActions">
-          <button class="apexPrimary" id="heroSpinMode">START A HUNT <span>↗</span></button>
-          <button class="apexGhost" id="heroWorldBtn">OPEN GLOBAL RADAR</button>
+  <div class="heroV2">
+    <div class="heroGrid">
+      <div>
+        <div class="eyebrow"><span class="livePulse"></span> REAL AIRCRAFT · LIVE NOW</div>
+        <h1>Your live sky.<br><span class="gradient">Start here.</span></h1>
+        <p>Start from Home, then explore live radar, nearby aircraft, your collection and SKYHUNT Labs.</p>
+        <div class="heroMeta">
+          <span class="metaChip">NO ACCOUNT REQUIRED</span>
+          <span class="metaChip">NO API KEY</span>
+          <span class="metaChip">LIVE ADS-B</span>
+          <span class="releaseReadyBadge">LIVE AIRCRAFT DISCOVERY</span>
         </div>
-      </div>
-
-      <div class="apexStatusPanel">
-        <div class="apexStatusTop">
-          <span class="apexStatusLabel">NETWORK STATUS</span>
-          <span class="apexOnline"><i></i> LIVE</span>
-        </div>
-        <div class="apexStatusRows">
-          <div><span>Aircraft data</span><b>ADS-B LIVE</b></div>
-          <div><span>Nearby scanning</span><b>READY</b></div>
-          <div><span>Account required</span><b>NO</b></div>
-        </div>
-        <div class="apexStatusFoot">Built for discovery, not navigation.</div>
-      </div>
-    </div>
-
-    <div class="apexRadarDeck">
-      <div class="apexRadarCopy">
-        <span class="apexOverline">LIVE SKY PULSE</span>
-        <h2>Traffic, visualised.</h2>
-        <p>Explore live aircraft from connected public aviation feeds.</p>
       </div>
 
       <div class="heroRadar">
         <span class="centreDot"></span>
-        <span class="blip a">✈</span>
-        <span class="blip b">✈</span>
-        <span class="blip c">✈</span>
-        <span class="blip d">✈</span>
+        <span class="blip a">✈</span><span class="blip b">✈</span><span class="blip c">✈</span><span class="blip d">✈</span>
         <div class="heroRadarLabel">SKYHUNT RADAR · ACTIVE</div>
       </div>
-
-      <button class="apexNearby" id="heroNearbyBtn">
-        <span class="apexNearbyIcon">⌖</span>
-        <span><b>SCAN NEARBY</b><small>Use your location to find aircraft around you</small></span>
-        <i>→</i>
-      </button>
     </div>
   </div>
 
-  <div class="apexSectionHead">
-    <div>
-      <span class="apexOverline">DISCOVERY TOOLS</span>
-      <h2>Your command deck.</h2>
-    </div>
-    <span class="apexSectionMeta">LIVE · MOBILE FIRST</span>
-  </div>
-
-  <div class="modeGrid apexModeGrid">
-    <button class="mode primary" id="apexDiscoverProxy">
-      <div class="modeTop"><span>01</span><i>✦</i></div>
-      <h3>Discover</h3>
-      <p>Jump to a random real aircraft somewhere on Earth.</p>
-      <span class="go">START →</span>
+  <div class="modeGrid">
+    <button class="mode primary" id="heroSpinMode">
+      <div class="modeIcon">✦</div><h3>Discover</h3><p>Start with a random real aircraft somewhere on Earth.</p><span class="go">→</span>
     </button>
-
-    <button class="mode" id="apexRadarProxy">
-      <div class="modeTop"><span>02</span><i>◎</i></div>
-      <h3>Global Radar</h3>
-      <p>Explore sampled live traffic across major aviation hotspots.</p>
-      <span class="go">EXPLORE →</span>
+    <button class="mode" id="heroWorldBtn">
+      <div class="modeIcon">◎</div><h3>Global Radar</h3><p>Explore live aircraft across sampled aviation hotspots.</p><span class="go">→</span>
     </button>
-
-    <button class="mode" id="apexNearbyProxy">
-      <div class="modeTop"><span>03</span><i>⌖</i></div>
-      <h3>Nearby</h3>
-      <p>See aircraft currently moving through your local sky.</p>
-      <span class="go">SCAN →</span>
+    <button class="mode" id="heroNearbyBtn">
+      <div class="modeIcon">⌖</div><h3>Nearby</h3><p>See real aircraft flying around your current location.</p><span class="go">→</span>
     </button>
   </div>
 
-  <section class="apexHuntModule">
-    <div class="apexHuntCopy">
-      <span class="apexOverline">RANDOM HUNT</span>
-      <h2>Let the sky choose.</h2>
-      <p>One tap. One live aircraft. Somewhere in the world.</p>
-      <div class="scan" id="scan">RADAR STANDING BY</div>
-      <div id="error"></div>
-    </div>
-
+  <section class="spinzone">
     <button class="globe" id="spinBtn">
       <span class="plane">✈️</span>
       <strong>START HUNT</strong>
       <small>REAL AIRCRAFT · LIVE DATA</small>
     </button>
+    <div class="scan" id="scan">RADAR STANDING BY</div>
+    <div id="error"></div>
   </section>
 
   <section id="result">
@@ -363,7 +309,7 @@
 </section>
 
 <footer>
-  SKYHUNT • <button class="versionBtn" id="versionBtn">v3</button>
+  SKYHUNT • <button class="versionBtn" id="versionBtn">v1.2</button>
   <div class="footerLinks">
     <button id="termsLink">Terms</button>
     <button id="privacyLink">Privacy</button>
@@ -379,7 +325,7 @@
 <div class="firstRunGate" id="firstRunGate" aria-hidden="true">
   <div class="firstRunCard">
     <div class="firstRunMark">✦</div>
-    <div class="releaseReadyBadge">SKYHUNT v3 · LIVE AIRCRAFT DISCOVERY</div>
+    <div class="releaseReadyBadge">SKYHUNT v1.2 · LIVE AIRCRAFT DISCOVERY</div>
     <h2>Welcome to SKYHUNT.</h2>
     <p>Explore live aircraft using public and third-party aviation data. A few important things before you continue.</p>
 
@@ -485,22 +431,7 @@
 
 <div class="modalBackdrop" id="releaseBackdrop">
   <div class="releaseModal">
-    <div class="releaseTop"><div><h2>SKYHUNT releases</h2><div class="releaseDate">Current version: v3</div></div><button class="releaseClose" id="releaseClose">×</button></div>
-
-    <div class="releaseBlock">
-      <h3>v3 — Apex</h3>
-      <div class="releaseDate">12 August 2026</div>
-      <p>A complete product identity rebuild with a new interface architecture across SKYHUNT.</p>
-      <ul>
-        <li>Entirely redesigned Home experience and command deck.</li>
-        <li>New SKYHUNT Apex visual system with premium aviation-inspired surfaces and typography.</li>
-        <li>New live airspace masthead, status panel and radar deck.</li>
-        <li>Redesigned Global Radar, Nearby, Skywire, Collection, Flight ID and Labs presentation.</li>
-        <li>New floating navigation treatment and mobile spacing system.</li>
-        <li>New motion, touch feedback, hover states and card hierarchy.</li>
-        <li>All existing aircraft-discovery functionality retained.</li>
-      </ul>
-    </div>
+    <div class="releaseTop"><div><h2>SKYHUNT releases</h2><div class="releaseDate">Current version: v1.2</div></div><button class="releaseClose" id="releaseClose">×</button></div>
 
     <div class="releaseBlock">
       <h3>v1.2 — Skywire Aviation News</h3>
@@ -566,7 +497,6 @@
 
 <script src="core.js?v=5.3.0"></script>
 <script src="nearby.js?v=5.3.0"></script>
-<script src="aircraft-providers.js?v=1.0"></script>
 <script src="skylens.js?v=5.3.3"></script>
 <script src="ai-finder.js?v=5.3.3"></script>
 <script src="collection.js?v=5.3.1"></script>
@@ -574,21 +504,5 @@
 <script src="radar.js?v=1.2"></script>
 <script src="legal.js"></script>
 <script src="app.js?v=5.3.0"></script>
-
-<script>
-document.addEventListener("click",function(e){
-  const map={
-    apexDiscoverProxy:"heroSpinMode",
-    apexRadarProxy:"heroWorldBtn",
-    apexNearbyProxy:"heroNearbyBtn"
-  };
-  const id=e.target.closest("button")?.id;
-  if(map[id]){
-    e.preventDefault();
-    document.getElementById(map[id])?.click();
-  }
-});
-</script>
-
 </body>
 </html>
