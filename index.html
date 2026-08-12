@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050609">
-<title>SKYHUNT STAGING — v4.1.0-beta</title>
+<title>SKYHUNT v5.0.1 — Live Aircraft Discovery</title>
 <meta name="description" content="Discover, track and collect real aircraft flying now with SKYHUNT.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <style>
@@ -287,7 +287,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
   .nearPlane{flex-direction:column}
 }
 
-/* v3.0.1 — RADAR MAP UPGRADE */
+/* v5.0.1.1 — RADAR MAP UPGRADE */
 .worldWrap{
   height:min(64vh,620px)!important;
   min-height:460px!important;
@@ -476,7 +476,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
 }
 
 
-/* v3.1.0-beta — SKY LENS */
+/* v5.0.1.1 — SKY LENS */
 .labsBadge{
   display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border-radius:999px;
   background:rgba(200,255,82,.08);border:1px solid rgba(200,255,82,.15);
@@ -582,7 +582,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
 }
 
 
-/* v3.2.0-beta — SKYHUNT AI FINDER */
+/* v5.0.1.1 — SKYHUNT AI FINDER */
 .aiFinderBackdrop{display:none;position:fixed;inset:0;z-index:9750;background:rgba(3,6,9,.92);backdrop-filter:blur(18px);padding:10px}
 .aiFinderBackdrop.show{display:flex;align-items:center;justify-content:center}
 .aiFinderApp{width:min(760px,100%);height:min(880px,calc(100vh - 20px));display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg,#0b1119,#070b10);box-shadow:0 35px 110px rgba(0,0,0,.55)}
@@ -609,7 +609,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
 
 
 /* ======================================================
-   SKYHUNT v4.0.0-demo — RELEASE READY DEMO
+   SKYHUNT v5.0.1.1 — LIVE AIRCRAFT DISCOVERY
    ====================================================== */
 :root{
   --launch-lime:#d6ff63;
@@ -717,28 +717,236 @@ body{
 }
 
 
-.stagingBar{position:fixed;top:0;left:0;right:0;z-index:20000;height:26px;display:flex;align-items:center;justify-content:center;background:linear-gradient(90deg,#ffb347,#ff6f91);color:#160b0d;font-size:8px;font-weight:950;letter-spacing:.13em}
-body{padding-top:26px!important}.topbar{top:26px!important}
-.airportBackdrop{display:none;position:fixed;inset:26px 0 0;z-index:9700;background:#05070a;padding:12px;overflow:auto}.airportBackdrop.show{display:block}
-.airportApp{width:min(980px,100%);margin:auto}.airportHead{display:flex;justify-content:space-between;gap:12px;padding:10px 2px 14px}.airportHead h2{font-size:36px;letter-spacing:-.055em;margin:0}.airportHead p{margin:5px 0 0;color:#7e8b9c;font-size:10px}
-.airportClose{width:40px;height:40px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.035);color:#fff;font-size:18px}
-.airportChooser{display:grid;grid-template-columns:1fr auto;gap:9px;padding:11px;border:1px solid var(--line);border-radius:18px;background:#0a1017}
-.airportSelect{min-height:48px;border:1px solid var(--line);border-radius:14px;background:#0f1721;color:#fff;padding:0 12px;font-weight:850}
-.airportScanBtn{min-height:48px;border:0;border-radius:14px;padding:0 16px;background:linear-gradient(135deg,var(--launch-lime),var(--launch-cyan));color:#071006;font-weight:950}
-.airportSummary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}.airportStat{padding:12px;border:1px solid var(--line);border-radius:16px;background:#0a1017}.airportStat b{display:block;font-size:23px}.airportStat span{display:block;margin-top:3px;color:#697789;font-size:8px;font-weight:950}
-.airportRadarWrap{height:430px;margin-top:10px;border:1px solid var(--line);border-radius:22px;overflow:hidden;position:relative;background:#071018}#airportMap{height:100%}
-.airportLegend{position:absolute;z-index:500;left:9px;bottom:9px;padding:8px 10px;border-radius:999px;background:rgba(6,11,16,.8);border:1px solid var(--line);font-size:8px;color:#8997a7}
-.airportList{display:grid;gap:8px;margin-top:10px}.airportPlane{display:grid;grid-template-columns:1fr auto;gap:9px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:16px;background:#0a1017}.airportPlane h4{margin:0;font-size:17px}.airportPlaneMeta{margin-top:4px;color:#788698;font-size:9px;line-height:1.4}
-.phaseBadge{display:inline-flex;padding:5px 7px;border-radius:999px;font-size:7px;font-weight:950;letter-spacing:.08em}.phaseBadge.approach{color:#ffd36f;background:rgba(255,211,111,.08)}.phaseBadge.depart{color:#8dffbb;background:rgba(141,255,187,.08)}.phaseBadge.overfly{color:#8fd8ff;background:rgba(143,216,255,.08)}
-.airportPlane button{min-height:38px;padding:0 10px;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.035);color:#fff;font-size:8px;font-weight:900}
-.lensSteps{display:grid;gap:7px;margin-top:14px;text-align:left}.lensStep{display:flex;gap:9px;padding:9px;border-radius:13px;background:rgba(255,255,255,.025);border:1px solid var(--line)}.lensStep i{font-style:normal;width:24px;height:24px;border-radius:8px;display:grid;place-items:center;background:rgba(99,234,255,.08);color:var(--launch-cyan);font-size:9px;font-weight:950}.lensStep div{color:#8d9aab;font-size:9px;line-height:1.4}.lensStep b{color:#fff}
-.skyLensCompass{position:absolute;z-index:4;top:74px;left:50%;transform:translateX(-50%);width:min(430px,80vw);height:42px;overflow:hidden;border-radius:14px;background:rgba(5,10,15,.65);border:1px solid rgba(255,255,255,.09);backdrop-filter:blur(12px)}
-.compassTape{position:absolute;left:50%;top:0;height:100%;width:900px;transition:transform .08s linear}.compassMark{position:absolute;top:9px;color:#9ca8b5;font-size:8px;font-weight:900;transform:translateX(-50%)}.compassMark.major{color:#fff;font-size:10px}.compassCentre{position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--launch-lime)}
-@media(max-width:520px){.airportChooser{grid-template-columns:1fr}.airportSummary{grid-template-columns:1fr 1fr}.airportRadarWrap{height:360px}}
+/* SKYHUNT v5.0.1 — NEW PRODUCT SYSTEM */
+:root{--v5-bg:#f4f8fb;--v5-surface:#fff;--v5-ink:#10202e;--v5-muted:#6e8090;--v5-line:rgba(16,32,46,.09);--v5-blue:#54c7ff;--v5-cyan:#6de5ff;--v5-mint:#b9ffcb;--v5-lime:#d9ff75;--v5-violet:#a99cff;--v5-pink:#ff9bcf;--v5-shadow:0 24px 70px rgba(58,85,105,.13)}
+html{background:var(--v5-bg)}body{color:var(--v5-ink)!important;background:radial-gradient(circle at 8% -4%,rgba(84,199,255,.28),transparent 30rem),radial-gradient(circle at 96% 18%,rgba(169,156,255,.20),transparent 30rem),radial-gradient(circle at 45% 100%,rgba(185,255,203,.24),transparent 28rem),linear-gradient(180deg,#f8fbfd,#f3f8fb 55%,#f7fafc)!important}
+body::before{opacity:.25!important;background-image:radial-gradient(rgba(70,113,143,.16) .7px,transparent .7px)!important;background-size:26px 26px!important}.shell{width:min(1180px,calc(100% - 22px))!important}
+.topbar{top:0!important;height:74px!important;border-bottom:1px solid rgba(16,32,46,.055)!important;background:rgba(248,251,253,.72)!important;backdrop-filter:blur(22px)!important}.brandMark{color:#0c2230!important;background:linear-gradient(135deg,var(--v5-lime),var(--v5-cyan))!important;box-shadow:0 12px 30px rgba(84,199,255,.20)!important}.brandText strong{color:var(--v5-ink)!important}.brandText small,.v2pill{color:#748697!important}.v2pill{background:rgba(16,32,46,.05)!important}.iconBtn{color:var(--v5-ink)!important;background:rgba(255,255,255,.72)!important;border-color:var(--v5-line)!important;box-shadow:0 7px 20px rgba(60,86,104,.07)}
+.heroV2{padding:52px 0 22px!important}.heroV2 h1{color:var(--v5-ink)!important;font-size:clamp(58px,9vw,108px)!important;line-height:.88!important}.gradient{background:linear-gradient(90deg,#37aee9,#716cff 52%,#ff75ba)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important}.heroV2 p{color:var(--v5-muted)!important}.eyebrow,.metaChip{color:#5d7181!important;background:rgba(255,255,255,.66)!important;border-color:var(--v5-line)!important}.livePulse{background:#5bd98b!important;box-shadow:0 0 0 5px rgba(91,217,139,.12)!important}
+.heroRadar{min-height:330px!important;border-color:rgba(16,32,46,.07)!important;background:radial-gradient(circle at 50% 50%,rgba(84,199,255,.14),transparent 18%),radial-gradient(circle at 50% 50%,transparent 0 26%,rgba(84,199,255,.14) 26.4% 26.8%,transparent 27.2% 40%,rgba(84,199,255,.09) 40.4% 40.8%,transparent 41.2%),linear-gradient(145deg,#fff,#eaf7fd)!important;box-shadow:var(--v5-shadow)!important}.heroRadar::before{background:conic-gradient(from 0deg at 50% 50%,transparent 0 320deg,rgba(67,182,235,.16) 355deg,transparent 360deg)!important}.heroRadarLabel{color:#5f7e91!important}.blip{color:#3fbbea!important;filter:drop-shadow(0 0 6px rgba(63,187,234,.32))!important}.centreDot{background:#80eaa7!important;box-shadow:0 0 0 8px rgba(128,234,167,.14)!important}
+.modeGrid{grid-template-columns:repeat(3,1fr)!important;gap:12px!important;margin-bottom:36px!important}.mode{min-height:156px!important;color:var(--v5-ink)!important;border-color:var(--v5-line)!important;background:rgba(255,255,255,.72)!important;box-shadow:0 12px 34px rgba(59,84,101,.08)!important;backdrop-filter:blur(12px);transition:.18s ease}.mode.primary{background:radial-gradient(circle at 92% 0%,rgba(109,229,255,.34),transparent 13rem),linear-gradient(145deg,#fff,#edfaff)!important}.mode h3{color:var(--v5-ink)!important}.mode p{color:#718391!important}.mode .go{background:rgba(16,32,46,.045)!important;border-color:var(--v5-line)!important}.mode:hover{transform:translateY(-3px)!important;box-shadow:0 18px 42px rgba(59,84,101,.13)!important}
+.globe{background:radial-gradient(circle at 33% 26%,rgba(255,255,255,.95) 0,transparent 7%),radial-gradient(circle at 50% 55%,#b5f8ff 0%,#75d6ff 36%,#938cff 67%,#ff9dcc 100%)!important;color:#132631!important;border-color:rgba(16,32,46,.08)!important;box-shadow:0 30px 90px rgba(91,157,200,.24),inset 0 0 0 9px rgba(255,255,255,.18)!important}.scan{color:#758796!important}#error{color:#a33f67!important;background:rgba(255,155,207,.13)!important;border-color:rgba(255,155,207,.28)!important}
+.heroCard,.card,.mapSection,.summaryBox,.passport,.worldIntro,.worldStatusBar,.worldTip{background:rgba(255,255,255,.78)!important;border-color:var(--v5-line)!important;box-shadow:0 12px 34px rgba(59,84,101,.07)!important}.callsign,.where,.value,.sectionHead h2,.passport h2{color:var(--v5-ink)!important}.ident,.whereSub,.small,.sectionHead p,.worldTip,.passportNext{color:var(--v5-muted)!important}.badge{background:rgba(91,217,139,.12)!important;color:#268958!important;border-color:rgba(91,217,139,.20)!important}.label{color:#708292!important}.action,.trackBtn{background:rgba(255,255,255,.76)!important;color:var(--v5-ink)!important;border-color:var(--v5-line)!important}.action.primary,.saveCardBtn,.locateBtn,.worldScanPrimary,.aiSend,.lensStartBtn,.lensBtn.primary,.sheetBtn.primary{background:linear-gradient(135deg,var(--v5-lime),var(--v5-cyan))!important;color:#12303e!important}.source{color:#7a8b99!important}.source a{color:#1f9fd6!important}
+.worldWrap{background:#dceef7!important;border-color:var(--v5-line)!important;box-shadow:var(--v5-shadow)!important}.worldWrap .leaflet-tile-pane{filter:saturate(.72) brightness(1.03) contrast(.93)!important}.worldWrap::before{opacity:.35}.worldWrap::after{opacity:.25}.radarChip,.radarAction,.worldLegend,.mapHint,.aircraftSheet{background:rgba(255,255,255,.82)!important;color:var(--v5-ink)!important;border-color:var(--v5-line)!important;backdrop-filter:blur(14px)!important}.radarChip.live{color:#278958!important}.radarPlane{background:linear-gradient(135deg,var(--v5-lime),var(--v5-cyan))!important;color:#15303e!important;box-shadow:0 0 0 4px rgba(84,199,255,.12),0 5px 18px rgba(44,145,192,.22)!important}.leaflet-control-zoom a{background:rgba(255,255,255,.88)!important;color:#173140!important;border-color:var(--v5-line)!important}.leaflet-control-attribution{background:rgba(255,255,255,.75)!important;color:#778997!important}.leaflet-control-attribution a{color:#279fd5!important}.sheetType,.sheetStat span{color:#718493!important}.sheetStat{background:rgba(16,32,46,.035)!important;border-color:var(--v5-line)!important}.sheetBtn{background:rgba(16,32,46,.035)!important;color:var(--v5-ink)!important;border-color:var(--v5-line)!important}
+.v2CollectCard{color:var(--v5-ink)!important;background:radial-gradient(circle at 85% 10%,rgba(109,229,255,.18),transparent 12rem),linear-gradient(145deg,#fff,#eef7fb)!important;border-color:var(--v5-line)!important;box-shadow:0 16px 40px rgba(59,84,101,.10)!important}.v2CollectCard.rare{background:linear-gradient(145deg,#f8fbff,#ecebff)!important}.v2CollectCard.ultra{background:radial-gradient(circle at 80% 12%,rgba(255,214,102,.24),transparent 12rem),linear-gradient(145deg,#fffdf4,#f8f1ff)!important}.v2Call{color:var(--v5-ink)!important}.v2Type,.v2Reg,.v2Rarity{color:#708292!important}.v2Stats span{background:rgba(16,32,46,.035)!important}.v2Stats small{color:#718391!important}.emptyV2{color:#718391!important;border-color:rgba(16,32,46,.12)!important}
+.bottomNav{background:rgba(255,255,255,.86)!important;border-color:rgba(16,32,46,.08)!important;box-shadow:0 16px 46px rgba(46,74,94,.16)!important}.bottomNav button{color:#7d8d9a!important}.bottomNav button.active{background:linear-gradient(135deg,rgba(217,255,117,.75),rgba(109,229,255,.55))!important;color:#17313f!important}
+.menuBackdrop,.hangarBackdrop,.aboveBackdrop,.modalBackdrop,.legalBackdrop{background:rgba(62,83,98,.28)!important;backdrop-filter:blur(16px)!important}.sideMenu,.hangarModal,.aboveModal,.releaseModal,.legalModal,.lensStartCard,.aiFinderApp{background:rgba(255,255,255,.94)!important;color:var(--v5-ink)!important;border-color:var(--v5-line)!important;box-shadow:var(--v5-shadow)!important}.menuLink,.menuClose,.hangarClose,.aboveClose,.releaseClose,.legalClose,.aiClose{background:rgba(16,32,46,.035)!important;color:var(--v5-ink)!important;border-color:var(--v5-line)!important}.menuLink span,.releaseDate,.privacyNote,.aboveStatus{color:#748695!important}.locateHero{background:#f5fafc!important;border-color:var(--v5-line)!important}
+.firstRunGate{background:radial-gradient(circle at 50% 10%,rgba(109,229,255,.30),transparent 28rem),linear-gradient(180deg,#f7fbfd,#edf6fa)!important}.firstRunCard{color:var(--v5-ink)!important;background:rgba(255,255,255,.95)!important;border-color:var(--v5-line)!important;box-shadow:var(--v5-shadow)!important}.firstRunCard>p,.consentRow div{color:#728492!important}.consentRow b{color:var(--v5-ink)!important}.consentRow{background:rgba(16,32,46,.025)!important;border-color:var(--v5-line)!important}.readTermsBtn{background:rgba(16,32,46,.035)!important;color:var(--v5-ink)!important;border-color:var(--v5-line)!important}
+.aiFinderBackdrop{background:rgba(62,83,98,.28)!important}.aiHead,.aiComposer{background:rgba(255,255,255,.92)!important;border-color:var(--v5-line)!important}.aiTitle{color:var(--v5-ink)!important}.aiSub,.aiNotice{color:#748695!important}.aiMessages{background:linear-gradient(180deg,#f7fbfd,#f3f8fb)!important}.aiBubble.bot{background:#fff!important;color:#243947!important;border-color:var(--v5-line)!important}.aiBubble.user{background:linear-gradient(135deg,var(--v5-lime),var(--v5-cyan))!important;color:#12303e!important}.aiExample{background:#fff!important;color:#647786!important;border-color:var(--v5-line)!important}.aiInput{background:#fff!important;color:var(--v5-ink)!important;border-color:var(--v5-line)!important}.aiResult{background:#fff!important;border-color:rgba(84,199,255,.18)!important}.aiResultCall{color:var(--v5-ink)!important}.aiResultType{color:#718391!important}.aiResultStats div{background:rgba(16,32,46,.035)!important}
+.skyLensStart{background:radial-gradient(circle at 50% 25%,rgba(109,229,255,.24),transparent 25rem),#f5fafc!important}.lensStartCard h2{color:var(--v5-ink)!important}.lensStartCard p,.lensWarning{color:#748695!important}.labsBadge{color:#33885b!important;background:rgba(91,217,139,.10)!important;border-color:rgba(91,217,139,.18)!important}footer{color:#718391!important}.versionBtn{color:#249ed3!important}.footerLinks button{color:#718391!important}
+.v5HubGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.v5HubCard{min-height:180px;padding:18px;border-radius:24px;border:1px solid var(--v5-line);background:rgba(255,255,255,.78);box-shadow:0 12px 34px rgba(59,84,101,.08);color:var(--v5-ink);text-align:left;position:relative;overflow:hidden}.v5HubCard .hubIcon{font-size:31px}.v5HubCard h3{font-size:23px;margin:24px 0 5px;letter-spacing:-.04em}.v5HubCard p{color:#718391;font-size:10px;line-height:1.45;margin:0;max-width:360px}.v5HubCard .hubTag{position:absolute;right:14px;top:14px;padding:5px 7px;border-radius:999px;background:rgba(84,199,255,.10);color:#228cb9;font-size:7px;font-weight:950}
+@media(max-width:850px){.modeGrid{grid-template-columns:1fr 1fr!important}.mode.primary{grid-column:1/-1!important}}@media(max-width:520px){.modeGrid{grid-template-columns:1fr!important}.mode.primary{grid-column:auto!important}.heroRadar{min-height:235px!important}.v5HubGrid{grid-template-columns:1fr}}
+
+
+/* SKYHUNT v5.0.1 — CALM UI PATCH */
+:root{
+  --calm-bg:#eef3f7;
+  --calm-surface:#ffffff;
+  --calm-surface-soft:#f7f9fb;
+  --calm-ink:#162431;
+  --calm-muted:#6e7f8e;
+  --calm-line:rgba(22,36,49,.08);
+  --calm-blue:#4d9fc8;
+  --calm-sky:#78bfdc;
+  --calm-accent:#89c6a0;
+  --calm-violet:#8f91c7;
+}
+body{
+  background:
+    radial-gradient(circle at 8% -8%,rgba(120,191,220,.17),transparent 32rem),
+    radial-gradient(circle at 100% 18%,rgba(143,145,199,.10),transparent 28rem),
+    linear-gradient(180deg,#f2f6f9,#edf2f6)!important;
+  color:var(--calm-ink)!important;
+}
+body::before{
+  opacity:.12!important;
+  background-image:radial-gradient(rgba(74,98,116,.13) .65px,transparent .65px)!important;
+  background-size:30px 30px!important;
+}
+.topbar{
+  background:rgba(242,246,249,.88)!important;
+  border-bottom:1px solid var(--calm-line)!important;
+}
+.brandMark{
+  background:linear-gradient(135deg,#b8d7c2,#a9d7e9)!important;
+  color:#17303d!important;
+  box-shadow:none!important;
+}
+.brandText strong{color:var(--calm-ink)!important}
+.brandText small,.v2pill{color:#748594!important}
+.v2pill{background:rgba(22,36,49,.045)!important}
+.iconBtn{
+  background:rgba(255,255,255,.86)!important;
+  color:var(--calm-ink)!important;
+  border-color:var(--calm-line)!important;
+  box-shadow:none!important;
+}
+.heroV2{padding-top:46px!important}
+.heroV2 h1{
+  color:var(--calm-ink)!important;
+  font-size:clamp(56px,8.7vw,102px)!important;
+  line-height:.9!important;
+}
+.gradient{
+  background:linear-gradient(90deg,#3e8fb8,#6b78b8 58%,#a76f9a)!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  color:transparent!important;
+}
+.heroV2 p{color:var(--calm-muted)!important;font-size:16px!important}
+.eyebrow,.metaChip{
+  background:rgba(255,255,255,.76)!important;
+  color:#667887!important;
+  border-color:var(--calm-line)!important;
+}
+.livePulse{background:#72b987!important;box-shadow:none!important}
+.heroRadar{
+  min-height:300px!important;
+  background:
+    radial-gradient(circle at 50% 50%,rgba(120,191,220,.12),transparent 18%),
+    radial-gradient(circle at 50% 50%,transparent 0 28%,rgba(120,191,220,.12) 28.4% 28.8%,transparent 29.2% 42%,rgba(120,191,220,.07) 42.4% 42.8%,transparent 43.2%),
+    linear-gradient(145deg,#ffffff,#f0f5f8)!important;
+  border-color:var(--calm-line)!important;
+  box-shadow:0 18px 48px rgba(54,76,91,.09)!important;
+}
+.heroRadar::before{
+  background:conic-gradient(from 0deg at 50% 50%,transparent 0 325deg,rgba(77,159,200,.10) 355deg,transparent 360deg)!important;
+}
+.blip{color:#4d9fc8!important;filter:none!important}
+.centreDot{background:#72b987!important;box-shadow:0 0 0 7px rgba(114,185,135,.10)!important}
+.heroRadarLabel{color:#728493!important}
+
+.modeGrid{gap:10px!important;margin:16px 0 30px!important}
+.mode{
+  min-height:142px!important;
+  padding:17px!important;
+  background:#ffffff!important;
+  color:var(--calm-ink)!important;
+  border-color:var(--calm-line)!important;
+  box-shadow:0 8px 24px rgba(54,76,91,.06)!important;
+}
+.mode.primary{
+  background:linear-gradient(145deg,#ffffff,#f4f8fa)!important;
+}
+.mode h3{font-size:21px!important;color:var(--calm-ink)!important;margin:18px 0 4px!important}
+.mode p{color:#748594!important}
+.mode .go{
+  background:#f1f4f6!important;
+  border-color:var(--calm-line)!important;
+  color:#536775!important;
+}
+.mode:hover{transform:none!important;box-shadow:0 8px 24px rgba(54,76,91,.06)!important}
+
+.globe{
+  background:
+    radial-gradient(circle at 33% 26%,rgba(255,255,255,.96) 0,transparent 7%),
+    radial-gradient(circle at 50% 55%,#cdebf5 0%,#8ec9df 38%,#9b9fcf 68%,#d49dbb 100%)!important;
+  box-shadow:0 22px 65px rgba(83,120,145,.18),inset 0 0 0 8px rgba(255,255,255,.18)!important;
+  color:#17303d!important;
+  border-color:var(--calm-line)!important;
+}
+.heroCard,.card,.mapSection,.summaryBox,.passport,.worldIntro,.worldStatusBar,.worldTip,
+.v2CollectCard,.sideMenu,.hangarModal,.aboveModal,.releaseModal,.legalModal,.lensStartCard,.aiFinderApp{
+  background:#ffffff!important;
+  border-color:var(--calm-line)!important;
+  box-shadow:0 8px 26px rgba(54,76,91,.06)!important;
+}
+.callsign,.where,.value,.sectionHead h2,.passport h2,.v2Call,.aiTitle,.aiResultCall{
+  color:var(--calm-ink)!important;
+}
+.ident,.whereSub,.small,.sectionHead p,.passportNext,.v2Type,.v2Reg,.v2Rarity{
+  color:var(--calm-muted)!important;
+}
+.badge{
+  background:rgba(114,185,135,.10)!important;
+  color:#4c8f65!important;
+  border-color:rgba(114,185,135,.16)!important;
+}
+.action,.trackBtn,.menuLink,.menuClose,.hangarClose,.aboveClose,.releaseClose,.legalClose,.aiClose{
+  background:#f7f9fa!important;
+  color:var(--calm-ink)!important;
+  border-color:var(--calm-line)!important;
+}
+.action.primary,.saveCardBtn,.locateBtn,.worldScanPrimary,.aiSend,.lensStartBtn,.lensBtn.primary,.sheetBtn.primary{
+  background:linear-gradient(135deg,#b7d6c1,#a9d7e9)!important;
+  color:#17303d!important;
+}
+.bottomNav{
+  background:rgba(255,255,255,.94)!important;
+  border-color:var(--calm-line)!important;
+  box-shadow:0 10px 30px rgba(50,74,91,.10)!important;
+}
+.bottomNav button{color:#758695!important}
+.bottomNav button.active{
+  background:#eef4f6!important;
+  color:#2d4a5b!important;
+}
+.worldWrap{
+  background:#e4edf2!important;
+  border-color:var(--calm-line)!important;
+  box-shadow:0 12px 34px rgba(54,76,91,.08)!important;
+}
+.worldWrap .leaflet-tile-pane{
+  filter:saturate(.72) brightness(1.04) contrast(.92)!important;
+}
+.radarChip,.radarAction,.worldLegend,.mapHint,.aircraftSheet{
+  background:rgba(255,255,255,.92)!important;
+  color:var(--calm-ink)!important;
+  border-color:var(--calm-line)!important;
+}
+.radarPlane{
+  background:#7bb7cf!important;
+  color:#fff!important;
+  box-shadow:0 0 0 3px rgba(123,183,207,.12),0 5px 14px rgba(66,120,145,.18)!important;
+}
+.firstRunGate{
+  background:
+    radial-gradient(circle at 50% 10%,rgba(120,191,220,.18),transparent 28rem),
+    #eef3f7!important;
+}
+.firstRunCard{
+  background:#fff!important;
+  border-color:var(--calm-line)!important;
+  color:var(--calm-ink)!important;
+  box-shadow:0 18px 60px rgba(54,76,91,.12)!important;
+}
+.firstRunMark{
+  background:linear-gradient(135deg,#b7d6c1,#a9d7e9)!important;
+  color:#17303d!important;
+}
+.releaseReadyBadge{
+  background:#f1f5f7!important;
+  border-color:var(--calm-line)!important;
+  color:#667887!important;
+}
+.v5HubCard{
+  background:#fff!important;
+  color:var(--calm-ink)!important;
+  border-color:var(--calm-line)!important;
+  box-shadow:0 8px 24px rgba(54,76,91,.06)!important;
+}
+.v5HubCard p{color:#758695!important}
+.v5HubCard .hubTag{
+  background:#eef4f6!important;
+  color:#4f7387!important;
+}
+.aiMessages{background:#f3f6f8!important}
+.aiBubble.bot{background:#fff!important;color:#29404f!important}
+.aiBubble.user{background:#d9edf3!important;color:#17303d!important}
+.aiInput{background:#fff!important;color:var(--calm-ink)!important}
+.skyLensStart{background:#eef3f7!important}
+footer,.footerLinks button{color:#748594!important}
+.versionBtn{color:#4d9fc8!important}
+
+@media(max-width:520px){
+  .heroV2{padding-top:28px!important}
+  .heroRadar{min-height:210px!important}
+  .modeGrid{margin-bottom:24px!important}
+}
 
 </style>
 </head>
-<body><div class="stagingBar">STAGING · v4.1.0-beta · NOT PRODUCTION</div>
+<body>
 <div class="shell">
 
 <div class="shell">
@@ -746,7 +954,7 @@ body{padding-top:26px!important}.topbar{top:26px!important}
   <div class="brand">
     <div class="brandMark">✦</div>
     <div class="brandText"><strong>SKYHUNT</strong><small>LIVE AIRCRAFT DISCOVERY</small></div>
-    <span class="v2pill">3.0</span>
+    <span class="v2pill">v5.0.1</span>
   </div>
   <div class="topActions"><button class="iconBtn" id="menuBtn">☰</button></div>
 </header>
@@ -756,13 +964,13 @@ body{padding-top:26px!important}.topbar{top:26px!important}
     <div class="heroGrid">
       <div>
         <div class="eyebrow"><span class="livePulse"></span> REAL AIRCRAFT · LIVE NOW</div>
-        <h1>Find something<br><span class="gradient">in the sky.</span></h1>
-        <p>Discover real aircraft flying now. Hunt globally, scan your local sky, follow live targets and build a collection from real ADS-B data.</p>
+        <h1>The sky is live.<br><span class="gradient">Go explore it.</span></h1>
+        <p>Discover real aircraft flying now. Explore the world, scan your local sky, follow live targets and build a collection from real ADS-B data.</p>
         <div class="heroMeta">
           <span class="metaChip">NO ACCOUNT REQUIRED</span>
           <span class="metaChip">NO API KEY</span>
           <span class="metaChip">LIVE ADS-B</span>
-          <span class="releaseReadyBadge">RELEASE-READY DEMO</span>
+          <span class="releaseReadyBadge">LIVE AIRCRAFT DISCOVERY</span>
         </div>
       </div>
 
@@ -776,13 +984,13 @@ body{padding-top:26px!important}.topbar{top:26px!important}
 
   <div class="modeGrid">
     <button class="mode primary" id="heroSpinMode">
-      <div class="modeIcon">✦</div><h3>Random Hunt</h3><p>Let SKYHUNT pick a real aircraft somewhere on Earth.</p><span class="go">→</span>
+      <div class="modeIcon">✦</div><h3>Discover</h3><p>Start with a random real aircraft somewhere on Earth.</p><span class="go">→</span>
     </button>
     <button class="mode" id="heroWorldBtn">
-      <div class="modeIcon">◎</div><h3>World Radar</h3><p>Scan global aviation hotspots and choose your own target.</p><span class="go">→</span>
+      <div class="modeIcon">◎</div><h3>Global Radar</h3><p>Explore live aircraft across sampled aviation hotspots.</p><span class="go">→</span>
     </button>
     <button class="mode" id="heroNearbyBtn">
-      <div class="modeIcon">⌖</div><h3>Above Me</h3><p>See what is flying around your current location.</p><span class="go">→</span>
+      <div class="modeIcon">⌖</div><h3>Nearby</h3><p>See real aircraft flying around your current location.</p><span class="go">→</span>
     </button>
   </div>
 
@@ -833,7 +1041,7 @@ body{padding-top:26px!important}.topbar{top:26px!important}
 <section class="view" id="worldView">
   <div class="sectionHead">
     <div>
-      <h2>World Radar</h2>
+      <h2>Global Radar</h2>
       <p>Scan live aviation hotspots and hunt your own target.</p>
     </div>
   </div>
@@ -894,13 +1102,14 @@ body{padding-top:26px!important}.topbar{top:26px!important}
   </div>
 
   <div class="worldTip">
-    World Radar is a live sample, not a complete global traffic picture. Coverage and update timing vary by connected receiver networks and feeds.
+    Global Radar is a live sample, not a complete global traffic picture. Coverage and update timing vary by connected receiver networks and feeds.
   </div>
 </section>
 
 <section class="view" id="hangarViewV2">
-  <div class="sectionHead"><div><h2>Hangar</h2><p>Your live aircraft collection.</p></div></div>
-  <div class="hangarSummary"><div class="summaryBox"><b id="v2CardCount">0</b><span>CAPTURES</span></div><div class="summaryBox"><b id="v2TypeCount">0</b><span>TYPES</span></div><div class="summaryBox"><b id="v2RareCount">0</b><span>RARE+</span></div></div>
+  <div class="sectionHead"><div><h2>Collection</h2><p>Your captured aircraft and Flight ID.</p></div></div>
+  <div class="v5HubGrid" style="margin-bottom:12px"><button class="v5HubCard" id="collectionHangarCard"><div class="hubIcon">▱</div><h3>Hangar</h3><p>Browse every aircraft you have captured.</p></button><button class="v5HubCard" id="collectionFlightIdCard"><div class="hubIcon">◈</div><h3>Flight ID</h3><p>View your collection level, stats and progression.</p></button></div>
+<div class="hangarSummary"><div class="summaryBox"><b id="v2CardCount">0</b><span>CAPTURES</span></div><div class="summaryBox"><b id="v2TypeCount">0</b><span>TYPES</span></div><div class="summaryBox"><b id="v2RareCount">0</b><span>RARE+</span></div></div>
   <div class="emptyV2" id="v2HangarEmpty">Nothing captured yet. Start a hunt and save your first live aircraft.</div>
   <div class="v2HangarGrid" id="v2HangarGrid"></div>
   <button class="saveCardBtn" id="v2ClearHangar" style="background:rgba(255,255,255,.03);color:#ff84ba;border:1px solid var(--line);margin-top:15px">CLEAR HANGAR</button>
@@ -919,7 +1128,7 @@ body{padding-top:26px!important}.topbar{top:26px!important}
 </section>
 
 <footer>
-  SKYHUNT • <button class="versionBtn" id="versionBtn">v4.1.0-beta</button>
+  SKYHUNT • <button class="versionBtn" id="versionBtn">v5.0.1</button>
   <div class="footerLinks">
     <button id="termsLink">Terms</button>
     <button id="privacyLink">Privacy</button>
@@ -929,40 +1138,36 @@ body{padding-top:26px!important}.topbar{top:26px!important}
 </footer>
 </div>
 
-<nav class="bottomNav">
-  <button class="active" data-view="spin"><i>✦</i>Hunt</button>
-  <button data-view="world"><i>◎</i>Radar</button>
-  <button data-view="hangar"><i>▱</i>Hangar</button>
-  <button data-view="passport"><i>◈</i>Flight ID</button>
-</nav>
+<nav class="bottomNav" style="grid-template-columns:repeat(5,1fr)"><button class="active" data-view="spin"><i>✦</i>Discover</button><button data-view="world"><i>◎</i>Radar</button><button id="nearbyNavBtn"><i>⌖</i>Nearby</button><button data-view="hangar"><i>▱</i>Collection</button><button id="labsNavBtn"><i>◈</i>Labs</button></nav>
 
 
 <div class="firstRunGate" id="firstRunGate" aria-hidden="true">
   <div class="firstRunCard">
     <div class="firstRunMark">✦</div>
-    <div class="releaseReadyBadge">SKYHUNT v4.0 · RELEASE-READY DEMO</div>
-    <h2>Before you enter the sky.</h2>
-    <p>SKYHUNT is an entertainment and aircraft-discovery product using third-party live aviation data. Review the essentials before continuing.</p>
+    <div class="releaseReadyBadge">SKYHUNT v5.0.1 · LIVE AIRCRAFT DISCOVERY</div>
+    <h2>Welcome to SKYHUNT.</h2>
+    <p>Explore live aircraft using public and third-party aviation data. A few important things before you continue.</p>
 
     <div class="consentList">
       <div class="consentRow"><span>✈</span><div><b>Not for navigation.</b><br>Aircraft position, altitude, speed and identity can be delayed, incomplete or inaccurate.</div></div>
-      <div class="consentRow"><span>⌖</span><div><b>Location and camera are optional.</b><br>Above Me and Sky Lens only request these permissions when you choose to use them.</div></div>
+      <div class="consentRow"><span>⌖</span><div><b>Location and camera are optional.</b><br>Nearby and Sky Lens only request these permissions when you choose to use them.</div></div>
       <div class="consentRow"><span>▱</span><div><b>Your Hangar is local.</b><br>Collections are stored in this browser and can be lost if website data is cleared.</div></div>
       <div class="consentRow"><span>◎</span><div><b>Third-party services apply.</b><br>Live aircraft feeds, maps and connected services may have outages, limits or separate terms.</div></div>
     </div>
 
     <div class="firstRunActions">
-      <button class="acceptBtn" id="acceptTermsBtn">ACCEPT & ENTER SKYHUNT</button>
+      <button class="acceptBtn" id="acceptTermsBtn">CONTINUE TO SKYHUNT</button>
       <button class="readTermsBtn" id="readTermsBtn">READ FULL TERMS</button>
     </div>
     <p class="firstRunTiny">By continuing, you agree to the SKYHUNT Terms of Use and acknowledge the Privacy & Data Notice. Acceptance is stored only in this browser.</p>
   </div>
 </div>
 
+<div class="legalBackdrop" id="labsBackdrop" aria-hidden="true"><div class="legalModal"><div class="legalTop"><div><h2>SKYHUNT Labs</h2><p>Experimental tools, kept out of the core navigation.</p></div><button class="legalClose" id="labsClose">×</button></div><div class="v5HubGrid" style="margin-top:16px"><button class="v5HubCard" id="labsSkyLens"><span class="hubTag">EXPERIMENTAL</span><div class="hubIcon">◉</div><h3>Sky Lens</h3><p>Use your camera, location and phone orientation to estimate where nearby live aircraft are in the sky.</p></button><button class="v5HubCard" id="labsAiFinder"><span class="hubTag">BETA</span><div class="hubIcon">✦</div><h3>AI Finder</h3><p>Describe the aircraft you want and search sampled live traffic using natural-language filters.</p></button></div></div></div>
 <div class="legalBackdrop" id="legalBackdrop" aria-hidden="true">
   <div class="legalModal">
     <div class="legalTop">
-      <div><h2 id="legalTitle">SKYHUNT Terms</h2><p>Release-ready demo · 11 August 2026</p></div>
+      <div><h2 id="legalTitle">SKYHUNT Terms</h2><p>SKYHUNT · 11 August 2026</p></div>
       <button class="legalClose" id="legalClose">×</button>
     </div>
     <div id="legalContent"></div>
@@ -972,21 +1177,12 @@ body{padding-top:26px!important}.topbar{top:26px!important}
 <div class="menuBackdrop" id="menuBackdrop">
   <aside class="sideMenu">
     <div class="menuTop"><strong>SKYHUNT</strong><button class="menuClose" id="menuClose">×</button></div>
-    <div class="menuLinks">
-      <button class="menuLink" id="menuSpin">✦ Random Hunt <span>→</span></button>
-      <button class="menuLink" id="menuHangar">▱ Hangar <span id="menuHangarCount">0</span></button>
-      <button class="menuLink" id="menuAbove">⌖ Above Me <span>LIVE</span></button>
-      <button class="menuLink" id="menuSkyLens">◉ Sky Lens <span>BETA</span></button>
-      <button class="menuLink" id="menuAiFinder">✦ AI Finder <span>BETA</span></button>
-      <button class="menuLink" id="menuAirportLive">▰ Airport Live <span>NEW</span></button>
-      <button class="menuLink" id="menuReleases">◈ Release notes <span>v4.1 BETA</span></button>
-    </div>
-  </aside>
+    <div class="menuLinks"><button class="menuLink" id="menuSpin">✦ Discover <span>→</span></button><button class="menuLink" id="menuHangar">▱ Collection <span id="menuHangarCount">0</span></button><button class="menuLink" id="menuAbove">⌖ Nearby <span>LIVE</span></button><button class="menuLink" id="menuSkyLens">◉ Sky Lens <span>LABS</span></button><button class="menuLink" id="menuAiFinder">✦ AI Finder <span>LABS</span></button><button class="menuLink" id="menuReleases">◈ Release notes <span>v5.0.1.1</span></button></div></aside>
 </div>
 
 <div class="aboveBackdrop" id="aboveBackdrop">
   <div class="aboveModal">
-    <div class="aboveTop"><div><h2>⌖ Above Me</h2><div class="releaseDate">Scan the live sky around you.</div></div><button class="aboveClose" id="aboveClose">×</button></div>
+    <div class="aboveTop"><div><h2>⌖ Nearby</h2><div class="releaseDate">Scan the live sky around you.</div></div><button class="aboveClose" id="aboveClose">×</button></div>
     <div class="locateHero"><div class="pin">◎</div><h3>Local radar</h3><p>Your browser will ask for location permission.</p><button class="locateBtn" id="locateBtn">USE MY LOCATION</button><div class="aboveStatus" id="aboveStatus">Waiting for you to start a scan.</div></div>
     <div class="aboveList" id="aboveList"></div>
     <div class="privacyNote">Your location is only used for the local aircraft request.</div>
@@ -1012,13 +1208,6 @@ body{padding-top:26px!important}.topbar{top:26px!important}
   </div>
 
   <div class="skyLensHeading" id="skyLensHeading">HEADING —</div>
-<div class="skyLensCompass"><div class="compassTape" id="compassTape">
-  <span class="compassMark major" style="left:50px">N</span><span class="compassMark" style="left:150px">45°</span>
-  <span class="compassMark major" style="left:250px">E</span><span class="compassMark" style="left:350px">135°</span>
-  <span class="compassMark major" style="left:450px">S</span><span class="compassMark" style="left:550px">225°</span>
-  <span class="compassMark major" style="left:650px">W</span><span class="compassMark" style="left:750px">315°</span>
-  <span class="compassMark major" style="left:850px">N</span>
-</div><div class="compassCentre"></div></div>
   <div class="skyLensTargets" id="skyLensTargets"></div>
 
   <div class="skyLensBottom">
@@ -1038,11 +1227,6 @@ body{padding-top:26px!important}.topbar{top:26px!important}
       <div class="labsBadge">SKYHUNT LABS · BETA</div>
       <h2>Sky Lens</h2>
       <p>Turn your phone into an experimental aircraft finder. SKYHUNT uses your camera, location and device heading to place nearby live aircraft in roughly the right direction.</p>
-<div class="lensSteps">
-  <div class="lensStep"><i>1</i><div><b>Camera</b><br>Shows the live sky view.</div></div>
-  <div class="lensStep"><i>2</i><div><b>Location</b><br>Finds aircraft around you.</div></div>
-  <div class="lensStep"><i>3</i><div><b>Compass</b><br>Estimates where each target should appear.</div></div>
-</div>
       <button class="lensStartBtn" id="lensStartBtn">START SKY LENS</button>
       <div class="lensWarning">This is approximate AR, not a precision navigation tool. Compass drift, receiver coverage and aircraft data latency can move targets away from their true visual position.</div>
       <div class="lensUnsupported" id="lensUnsupported"></div>
@@ -1050,35 +1234,6 @@ body{padding-top:26px!important}.topbar{top:26px!important}
   </div>
 </div>
 
-
-
-<div class="airportBackdrop" id="airportBackdrop">
-  <div class="airportApp">
-    <div class="airportHead">
-      <div><h2>Airport Live</h2><p>Inspect real aircraft around a selected airport.</p></div>
-      <button class="airportClose" id="airportClose">×</button>
-    </div>
-    <div class="airportChooser">
-      <select class="airportSelect" id="airportSelect">
-        <option value="MAN">Manchester · MAN / EGCC</option><option value="LHR">London Heathrow · LHR / EGLL</option>
-        <option value="LGW">London Gatwick · LGW / EGKK</option><option value="BHX">Birmingham · BHX / EGBB</option>
-        <option value="AMS">Amsterdam · AMS / EHAM</option><option value="CDG">Paris CDG · CDG / LFPG</option>
-        <option value="FRA">Frankfurt · FRA / EDDF</option><option value="DXB">Dubai · DXB / OMDB</option>
-        <option value="JFK">New York JFK · JFK / KJFK</option><option value="LAX">Los Angeles · LAX / KLAX</option>
-        <option value="SIN">Singapore · SIN / WSSS</option><option value="SYD">Sydney · SYD / YSSY</option>
-      </select>
-      <button class="airportScanBtn" id="airportScanBtn">SCAN AIRPORT</button>
-    </div>
-    <div class="airportSummary">
-      <div class="airportStat"><b id="airportCount">0</b><span>LIVE TARGETS</span></div>
-      <div class="airportStat"><b id="airportApproach">0</b><span>APPROACHING</span></div>
-      <div class="airportStat"><b id="airportDepart">0</b><span>DEPARTING</span></div>
-      <div class="airportStat"><b id="airportOverfly">0</b><span>OVERFLYING</span></div>
-    </div>
-    <div class="airportRadarWrap"><div id="airportMap"></div><div class="airportLegend">Operational phase is an estimate from position, altitude, speed and track.</div></div>
-    <div class="airportList" id="airportList"></div>
-  </div>
-</div>
 
 <div class="aiFinderBackdrop" id="aiFinderBackdrop">
   <section class="aiFinderApp">
@@ -1111,18 +1266,18 @@ body{padding-top:26px!important}.topbar{top:26px!important}
 
 <div class="modalBackdrop" id="releaseBackdrop">
   <div class="releaseModal">
-    <div class="releaseTop"><div><h2>SKYHUNT releases</h2><div class="releaseDate">Current version: v4.1.0-beta</div></div><button class="releaseClose" id="releaseClose">×</button></div>
+    <div class="releaseTop"><div><h2>SKYHUNT releases</h2><div class="releaseDate">Current version: v5.0.1.1</div></div><button class="releaseClose" id="releaseClose">×</button></div>
 
-    <div class="releaseBlock"><h3>v4.1.0-beta — Staging Experiment</h3><div class="releaseDate">11 August 2026</div><ul><li>STAGING ONLY build with isolated Hangar and Terms storage.</li><li>New Airport Live beta feature.</li><li>Airport Live scans real aircraft around selected airports and estimates approaching, departing and overflying traffic.</li><li>Sky Lens onboarding redesigned with clearer permission steps.</li><li>Sky Lens gains a live compass-tape UI.</li><li>Production v4.0 browser data remains untouched.</li></ul></div>
-<div class="releaseBlock"><h3>v4.0.0-demo — Release-Ready Demo</h3><div class="releaseDate">11 August 2026</div><ul><li>Final major UX and copy overhaul before release testing.</li><li>New first-run Terms acceptance flow.</li><li>New Terms, Privacy, Data & Sources and Safety notices.</li><li>Dual live-data architecture retained: adsb.lol primary with Airplanes.live fallback where already implemented.</li><li>Clearer accuracy, permission and local-storage language.</li><li>Existing Hangar storage preserved.</li><li>Random Hunt, World Radar, Above Me, Live Tracking, Hangar, Flight ID, Sky Lens and AI Finder retained.</li></ul></div>
-<div class="releaseBlock"><h3>v3.2.0-beta — AI Finder</h3><div class="releaseDate">11 August 2026</div><ul><li>New natural-language live aircraft finder.</li><li>Understands common airline names, aircraft families, altitude and speed constraints, and superlatives such as highest, lowest and fastest.</li><li>Searches sampled live ADS-B data rather than inventing aircraft.</li><li>No AI API key required: query interpretation runs locally in the browser.</li><li>Open, follow or capture matched live aircraft.</li><li>Clearly reports when the current live sample contains no match.</li></ul></div>
-<div class="releaseBlock"><h3>v3.1.0-beta — Sky Lens</h3><div class="releaseDate">11 August 2026</div><ul><li>Introduced SKYHUNT LABS.</li><li>New experimental camera-based Sky Lens mode.</li><li>Uses camera, location and device orientation to estimate where nearby live aircraft are in the sky.</li><li>Live target labels show callsign, aircraft type, altitude and approximate distance.</li><li>Nearest/in-view target receives a highlighted treatment.</li><li>Open a target directly in the main live tracker.</li><li>Clearly labelled BETA because phone compass/orientation and ADS-B timing are approximate.</li></ul></div>
-<div class="releaseBlock"><h3>v3.0.1 — Radar Map Upgrade</h3><div class="releaseDate">11 August 2026</div><ul><li>Completely redesigned World Radar map presentation.</li><li>New dark tactical basemap treatment.</li><li>Animated radar rings and sweep overlay.</li><li>Glowing aircraft target markers.</li><li>Floating live radar HUD with target count and scan/reset controls.</li><li>New aircraft preview bottom sheet when a target is tapped.</li><li>Open or capture an aircraft directly from the map.</li><li>Improved mobile map proportions and controls.</li></ul></div>
-<div class="releaseBlock"><h3>v3.0.0 — SKYHUNT</h3><div class="releaseDate">11 August 2026</div><ul><li>Complete rebrand from Flight Roulette to SKYHUNT.</li><li>New visual identity and design system.</li><li>New radar-inspired landing experience.</li><li>New Hunt / Radar / Hangar / Flight ID navigation language.</li><li>Redesigned collector cards, tracking UI and world radar.</li><li>All proven live-aircraft functionality retained.</li></ul></div>
-    <div class="releaseBlock"><h3>v2.0.1 — World Radar Fix</h3><p>Rate-conscious Live World scanner and mobile radar redesign.</p></div>
-    <div class="releaseBlock"><h3>v2.0.0 — LIVE WORLD</h3><p>Introduced World Radar, bottom navigation and Pilot Passport.</p></div>
+    <div class="releaseBlock"><h3>v5.0.1 — Calm UI Fix</h3><div class="releaseDate">12 August 2026</div><ul><li>Removed stale version labels across the interface.</li><li>Top product badge now correctly displays v5.0.1.</li><li>Rebalanced the bright redesign with a calmer blue-grey palette.</li><li>Reduced saturation, gradients, shadows and visual noise.</li><li>Simplified cards and navigation for easier reading on mobile.</li></ul></div>
+<div class="releaseBlock"><h3>v5.0.1.1 — Release-Ready Demo</h3><div class="releaseDate">11 August 2026</div><ul><li>Final major UX and copy overhaul before release testing.</li><li>New first-run Terms acceptance flow.</li><li>New Terms, Privacy, Data & Sources and Safety notices.</li><li>Dual live-data architecture retained: adsb.lol primary with Airplanes.live fallback where already implemented.</li><li>Clearer accuracy, permission and local-storage language.</li><li>Existing Hangar storage preserved.</li><li>Discover, Global Radar, Nearby, Live Tracking, Hangar, Flight ID, Sky Lens and AI Finder retained.</li></ul></div>
+<div class="releaseBlock"><h3>v5.0.1.1 — AI Finder</h3><div class="releaseDate">11 August 2026</div><ul><li>New natural-language live aircraft finder.</li><li>Understands common airline names, aircraft families, altitude and speed constraints, and superlatives such as highest, lowest and fastest.</li><li>Searches sampled live ADS-B data rather than inventing aircraft.</li><li>No AI API key required: query interpretation runs locally in the browser.</li><li>Open, follow or capture matched live aircraft.</li><li>Clearly reports when the current live sample contains no match.</li></ul></div>
+<div class="releaseBlock"><h3>v5.0.1.1 — Sky Lens</h3><div class="releaseDate">11 August 2026</div><ul><li>Introduced SKYHUNT LABS.</li><li>New experimental camera-based Sky Lens mode.</li><li>Uses camera, location and device orientation to estimate where nearby live aircraft are in the sky.</li><li>Live target labels show callsign, aircraft type, altitude and approximate distance.</li><li>Nearest/in-view target receives a highlighted treatment.</li><li>Open a target directly in the main live tracker.</li><li>Clearly labelled BETA because phone compass/orientation and ADS-B timing are approximate.</li></ul></div>
+<div class="releaseBlock"><h3>v5.0.1.1 — Radar Map Upgrade</h3><div class="releaseDate">11 August 2026</div><ul><li>Completely redesigned Global Radar map presentation.</li><li>New dark tactical basemap treatment.</li><li>Animated radar rings and sweep overlay.</li><li>Glowing aircraft target markers.</li><li>Floating live radar HUD with target count and scan/reset controls.</li><li>New aircraft preview bottom sheet when a target is tapped.</li><li>Open or capture an aircraft directly from the map.</li><li>Improved mobile map proportions and controls.</li></ul></div>
+<div class="releaseBlock"><h3>v5.0.1.1 — SKYHUNT</h3><div class="releaseDate">11 August 2026</div><ul><li>Complete rebrand from Flight Roulette to SKYHUNT.</li><li>New visual identity and design system.</li><li>New radar-inspired landing experience.</li><li>New Hunt / Radar / Hangar / Flight ID navigation language.</li><li>Redesigned collector cards, tracking UI and world radar.</li><li>All proven live-aircraft functionality retained.</li></ul></div>
+    <div class="releaseBlock"><h3>v2.0.1 — Global Radar Fix</h3><p>Rate-conscious Live World scanner and mobile radar redesign.</p></div>
+    <div class="releaseBlock"><h3>v2.0.0 — LIVE WORLD</h3><p>Introduced Global Radar, bottom navigation and Pilot Passport.</p></div>
     <div class="releaseBlock"><h3>v1.3.1 — Local Radar Fix</h3><p>Dual-feed local radar.</p></div>
-    <div class="releaseBlock"><h3>v1.3.0 — What’s Above Me?</h3><p>Nearby aircraft discovery.</p></div>
+    <div class="releaseBlock"><h3>v1.3.0 — What’s Nearby?</h3><p>Nearby aircraft discovery.</p></div>
     <div class="releaseBlock"><h3>v1.2.0 — The Hangar Update</h3><p>Persistent collector cards and rarity.</p></div>
     <div class="releaseBlock"><h3>v1.1.0 — Live Tracker</h3><p>Live ICAO aircraft following.</p></div>
     <div class="releaseBlock"><h3>v1.0.0 — First Flight</h3><p>The original roulette launched.</p></div>
@@ -1604,7 +1759,7 @@ locateBtn.addEventListener("click",scanAboveMe);
 
 
 
-// ===== v3.1.0-beta SKY LENS =====
+// ===== v5.0.1.1 SKY LENS =====
 const skyLensBackdrop=$("#skyLensBackdrop"),skyLensVideo=$("#skyLensVideo"),skyLensClose=$("#skyLensClose");
 const skyLensStart=$("#skyLensStart"),lensStartBtn=$("#lensStartBtn"),lensUnsupported=$("#lensUnsupported");
 const skyLensTargets=$("#skyLensTargets"),skyLensHeading=$("#skyLensHeading"),lensStatus=$("#lensStatus");
@@ -1667,7 +1822,7 @@ function startOrientation(){
   lensOrientationHandler=e=>{
     lensHeading=orientationHeading(e);
     lensPitch=Number.isFinite(Number(e.beta))?Number(e.beta):0;
-    skyLensHeading.textContent=`HEADING ${Math.round(lensHeading).toString().padStart(3,"0")}°`;if($("#compassTape"))$("#compassTape").style.transform=`translateX(${-lensHeading*2.22}px)`;
+    skyLensHeading.textContent=`HEADING ${Math.round(lensHeading).toString().padStart(3,"0")}°`;
     renderLensTargets();
   };
   window.addEventListener("deviceorientation",lensOrientationHandler,true);
@@ -1799,9 +1954,9 @@ window.addEventListener("resize",renderLensTargets);
 
 
 
-// ===== v3.2.0-beta — AI FINDER =====
+// ===== v5.0.1.1 — AI FINDER =====
 const aiFinderBackdrop=$("#aiFinderBackdrop"),aiMessages=$("#aiMessages"),aiInput=$("#aiInput");
-const aiSend=$("#aiSend"),aiClose=$("#aiClose"),menuAiFinder=$("#menuAiFinder"),menuAirportLive=$("#menuAirportLive");
+const aiSend=$("#aiSend"),aiClose=$("#aiClose"),menuAiFinder=$("#menuAiFinder");
 let aiLastMatches=[];
 
 const AI_AIRLINES={
@@ -1865,7 +2020,7 @@ function aiMatchScore(a,p){
   return score;
 }
 async function aiLiveSample(){
-  // Reuse an existing fresh World Radar sample when available.
+  // Reuse an existing fresh Global Radar sample when available.
   if(Array.isArray(worldPlanes)&&worldPlanes.length>20)return worldPlanes;
   const sample=[...zones].sort(()=>Math.random()-.5).slice(0,5),all=[];
   for(let i=0;i<sample.length;i++){
@@ -1928,73 +2083,7 @@ menuAiFinder.addEventListener("click",openAiFinder);aiClose.addEventListener("cl
 aiInput.addEventListener("keydown",e=>{if(e.key==="Enter")aiSubmit()});
 document.querySelectorAll(".aiExample").forEach(b=>b.addEventListener("click",()=>{aiInput.value=b.textContent;aiSubmit()}));
 
-
-// ===== v4.1.0-beta — AIRPORT LIVE =====
-const airportBackdrop=$("#airportBackdrop"),airportClose=$("#airportClose"),airportSelect=$("#airportSelect"),airportScanBtn=$("#airportScanBtn");
-const airportList=$("#airportList"),airportCount=$("#airportCount"),airportApproach=$("#airportApproach"),airportDepart=$("#airportDepart"),airportOverfly=$("#airportOverfly");
-let airportMap=null,airportLayer=null,airportRows=[];
-const AIRPORTS={
- MAN:{name:"Manchester",lat:53.3537,lon:-2.2750},LHR:{name:"London Heathrow",lat:51.4700,lon:-0.4543},
- LGW:{name:"London Gatwick",lat:51.1537,lon:-0.1821},BHX:{name:"Birmingham",lat:52.4539,lon:-1.7480},
- AMS:{name:"Amsterdam",lat:52.3105,lon:4.7683},CDG:{name:"Paris CDG",lat:49.0097,lon:2.5479},
- FRA:{name:"Frankfurt",lat:50.0379,lon:8.5622},DXB:{name:"Dubai",lat:25.2532,lon:55.3657},
- JFK:{name:"New York JFK",lat:40.6413,lon:-73.7781},LAX:{name:"Los Angeles",lat:33.9416,lon:-118.4085},
- SIN:{name:"Singapore",lat:1.3644,lon:103.9915},SYD:{name:"Sydney",lat:-33.9399,lon:151.1753}
-};
-function headingToAirport(a,ap){
- const b=bearingDeg(Number(a.lat),Number(a.lon),ap.lat,ap.lon);
- return Math.abs(shortestAngle(b,Number(a.track)||0))<55;
-}
-function airportPhase(a,ap){
- const dist=distanceNm(Number(a.lat),Number(a.lon),ap.lat,ap.lon);
- const alt=String(a.alt_baro).toLowerCase()==="ground"?0:Number(a.alt_baro)||0;
- const speed=Number(a.gs)||0;
- if(dist<35&&alt<12000&&headingToAirport(a,ap))return "approach";
- if(dist<30&&alt<14000&&speed>120&&!headingToAirport(a,ap))return "depart";
- return "overfly";
-}
-function initAirportMap(ap){
- if(!airportMap){
-   airportMap=L.map("airportMap",{zoomControl:true}).setView([ap.lat,ap.lon],8);
-   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:"&copy; OpenStreetMap"}).addTo(airportMap);
-   airportLayer=L.layerGroup().addTo(airportMap);
- }else airportMap.setView([ap.lat,ap.lon],8);
- setTimeout(()=>airportMap.invalidateSize(),80);
-}
-async function scanAirport(){
- const code=airportSelect.value,ap=AIRPORTS[code];
- airportScanBtn.disabled=true;airportScanBtn.textContent="SCANNING…";
- initAirportMap(ap);airportLayer.clearLayers();airportList.innerHTML="";
- try{
-   let rows=[],source="adsb.lol";
-   try{rows=(await scanAdsbLol(ap.name,ap.lat,ap.lon)).slice(0,80)}
-   catch(e){await sleep(1100);rows=(await scanAirplanesLive(ap.name,ap.lat,ap.lon)).slice(0,80);source="Airplanes.live"}
-   airportRows=rows.map(a=>({...a,_airportName:ap.name,_source:source,_phase:airportPhase(a,ap),_distance:distanceNm(Number(a.lat),Number(a.lon),ap.lat,ap.lon)})).sort((a,b)=>a._distance-b._distance);
-   airportCount.textContent=airportRows.length;
-   airportApproach.textContent=airportRows.filter(x=>x._phase==="approach").length;
-   airportDepart.textContent=airportRows.filter(x=>x._phase==="depart").length;
-   airportOverfly.textContent=airportRows.filter(x=>x._phase==="overfly").length;
-   airportRows.forEach((a,i)=>L.marker([Number(a.lat),Number(a.lon)],{icon:radarPlaneIcon(a)}).addTo(airportLayer).on("click",()=>openAirportTarget(i)));
-   airportList.innerHTML=airportRows.slice(0,18).map((a,i)=>{
-     const call=(a.flight||"").trim()||a.r||a.hex||"UNKNOWN";
-     const alt=String(a.alt_baro).toLowerCase()==="ground"?"Ground":Number.isFinite(Number(a.alt_baro))?`${Math.round(Number(a.alt_baro)).toLocaleString("en-GB")} ft`:"Alt —";
-     return `<article class="airportPlane"><div><h4>${safeText(call)}</h4><div class="airportPlaneMeta">${safeText(a.t||"Unknown type")} · ${safeText(alt)} · ${a._distance.toFixed(1)} NM from ${safeText(ap.name)}<br><span class="phaseBadge ${a._phase}">${a._phase.toUpperCase()}</span></div></div><button data-airport-open="${i}">OPEN</button></article>`;
-   }).join("");
-   airportList.querySelectorAll("[data-airport-open]").forEach(b=>b.onclick=()=>openAirportTarget(Number(b.dataset.airportOpen)));
- }catch(e){
-   airportList.innerHTML=`<div class="aboveEmpty">Airport scan failed: ${safeText(friendlyLocalError(e))}</div>`;
- }finally{airportScanBtn.disabled=false;airportScanBtn.textContent="SCAN AIRPORT"}
-}
-function openAirportTarget(i){
- const a=airportRows[i];if(!a)return;
- closeAirportLive();renderAircraft(a,a._airportName||"Airport Live",a._source||"Live ADS-B");showV2View("spin");
- setTimeout(()=>result.scrollIntoView({behavior:"smooth",block:"start"}),150);
-}
-function openAirportLive(){closeMenu();airportBackdrop.classList.add("show");setTimeout(()=>initAirportMap(AIRPORTS[airportSelect.value]),100)}
-function closeAirportLive(){airportBackdrop.classList.remove("show")}
-menuAirportLive.addEventListener("click",openAirportLive);airportClose.addEventListener("click",closeAirportLive);airportScanBtn.addEventListener("click",scanAirport);
-
-const HANGAR_KEY="skyhuntHangar_STAGING_v4_1";
+const HANGAR_KEY="flightRouletteHangarV1";
 const TARGET_TYPES=30;
 
 function getHangar(){
@@ -2192,7 +2281,7 @@ function closeRelease(){
 }
 releaseClose.addEventListener("click",closeRelease);
 releaseBackdrop.addEventListener("click",e=>{if(e.target===releaseBackdrop)closeRelease()});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeRelease();closeMenu();closeHangar();closeAbove();closeSkyLens();closeAiFinder();closeAirportLive();closeLegal();}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeRelease();closeMenu();closeHangar();closeAbove();closeSkyLens();closeAiFinder();closeLabs();closeLegal();}});
 
 
 // ===== v2.0.0 LIVE WORLD =====
@@ -2414,11 +2503,11 @@ $("#v2ClearHangar").addEventListener("click",()=>{
 menuHangar.addEventListener("click",()=>showV2View("hangar"));
 
 
-// ===== v4.0.0-demo — TERMS / PRIVACY / DATA / SAFETY =====
+// ===== v5.0.1.1 — TERMS / PRIVACY / DATA / SAFETY =====
 const firstRunGate=$("#firstRunGate"),acceptTermsBtn=$("#acceptTermsBtn"),readTermsBtn=$("#readTermsBtn");
 const legalBackdrop=$("#legalBackdrop"),legalClose=$("#legalClose"),legalTitle=$("#legalTitle"),legalContent=$("#legalContent");
 const termsLink=$("#termsLink"),privacyLink=$("#privacyLink"),sourcesLink=$("#sourcesLink"),safetyLink=$("#safetyLink");
-const SKYHUNT_TERMS_KEY="skyhuntTermsAccepted_STAGING_v4_1";
+const SKYHUNT_TERMS_KEY="skyhuntTermsAccepted_v4_demo";
 
 const LEGAL_DOCS={
 terms:{
@@ -2430,13 +2519,13 @@ terms:{
  <div class="legalSection"><h3>4. Acceptable use</h3><p>Use SKYHUNT only for lawful discovery, entertainment and educational purposes. Do not use it to harass, stalk, threaten, interfere with aviation operations, facilitate unlawful activity, bypass service limits or overload connected services.</p></div>
  <div class="legalSection"><h3>5. Collector features</h3><p>Hangar cards, rarity labels, levels and collection mechanics are SKYHUNT game features. They are not official aviation classifications and do not imply ownership of, affiliation with or rights in an aircraft.</p></div>
  <div class="legalSection"><h3>6. Third-party data</h3><p>SKYHUNT relies on third-party aircraft-data and mapping services. Their availability, licensing and terms are separate from SKYHUNT and may change.</p></div>
- <div class="legalSection"><h3>7. Demo status</h3><p>This build is a release-ready demonstration. Before commercial use, data-provider licensing, hosting, legal terms, privacy obligations and infrastructure should be reviewed for the intended deployment.</p></div>`
+ <div class="legalSection"><h3>7. Demo status</h3><p>This build is a SKYHUNTnstration. Before commercial use, data-provider licensing, hosting, legal terms, privacy obligations and infrastructure should be reviewed for the intended deployment.</p></div>`
 },
 privacy:{
  title:"Privacy & Data Notice",
  html:`
  <div class="legalSection"><h3>Browser storage</h3><p>SKYHUNT stores your Hangar, collection progress and acceptance of these terms in your browser using localStorage. This data is local to the browser/device unless a future account service is introduced.</p></div>
- <div class="legalSection"><h3>Location</h3><p>Above Me and Sky Lens request location only after you choose to start them. Coordinates are used to request nearby aircraft from connected live-data services. SKYHUNT does not intentionally add your personal location to Hangar cards.</p></div>
+ <div class="legalSection"><h3>Location</h3><p>Nearby and Sky Lens request location only after you choose to start them. Coordinates are used to request nearby aircraft from connected live-data services. SKYHUNT does not intentionally add your personal location to Hangar cards.</p></div>
  <div class="legalSection"><h3>Camera & orientation</h3><p>Sky Lens may request camera and device-orientation access. The camera stream is displayed locally in the browser and is not intentionally recorded or uploaded by SKYHUNT. Device orientation is used to estimate target direction.</p></div>
  <div class="legalSection"><h3>Third parties</h3><p>Aircraft-data providers, map-tile providers and other third-party services can receive ordinary technical request data such as IP address, user agent and requested coordinates as part of normal internet requests.</p></div>
  <div class="legalSection"><h3>Accounts</h3><p>This demo does not require a SKYHUNT account and does not intentionally collect passwords or payment-card details.</p></div>`
@@ -2487,6 +2576,14 @@ if(!localStorage.getItem(SKYHUNT_TERMS_KEY)){
   firstRunGate.classList.add("show");
   firstRunGate.setAttribute("aria-hidden","false");
 }
+
+
+// SKYHUNT v5 — PRODUCT NAVIGATION
+const labsBackdrop=$("#labsBackdrop"),labsClose=$("#labsClose"),labsNavBtn=$("#labsNavBtn"),nearbyNavBtn=$("#nearbyNavBtn");
+const labsSkyLens=$("#labsSkyLens"),labsAiFinder=$("#labsAiFinder"),collectionHangarCard=$("#collectionHangarCard"),collectionFlightIdCard=$("#collectionFlightIdCard");
+function openLabs(){labsBackdrop.classList.add("show");labsBackdrop.setAttribute("aria-hidden","false")}
+function closeLabs(){labsBackdrop.classList.remove("show");labsBackdrop.setAttribute("aria-hidden","true")}
+labsNavBtn.addEventListener("click",openLabs);labsClose.addEventListener("click",closeLabs);labsBackdrop.addEventListener("click",e=>{if(e.target===labsBackdrop)closeLabs()});nearbyNavBtn.addEventListener("click",openAbove);labsSkyLens.addEventListener("click",()=>{closeLabs();openSkyLens()});labsAiFinder.addEventListener("click",()=>{closeLabs();openAiFinder()});collectionHangarCard.addEventListener("click",()=>showV2View("hangar"));collectionFlightIdCard.addEventListener("click",()=>showV2View("passport"));
 
 window.addEventListener("beforeunload",stopTracking);
 </script>
