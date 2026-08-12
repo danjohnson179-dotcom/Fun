@@ -1,4 +1,3 @@
-
 :root{
   --bg:#050609;
   --bg2:#080b11;
@@ -584,8 +583,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
 .aiMessages{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
 .aiBubble{max-width:88%;padding:12px 13px;border-radius:17px;font-size:11px;line-height:1.5}
 .aiBubble.bot{align-self:flex-start;background:#111923;border:1px solid var(--line);color:#d9e1e8;border-bottom-left-radius:6px}
-.aiBubble.user{align-self:flex-end;background:linear-gradient(135deg,var(--lime),var(--cyan));color:#071006;font-weight:850;border-bottom-right-radius:6px}
-.aiExamples{display:flex;gap:7px;overflow-x:auto;padding:0 16px 10px;scrollbar-width:none}.aiExamples::-webkit-scrollbar{display:none}
+.aiBubble.user{align-self:flex-end;background:linear-gradient(135deg,var(--lime),var(--cyan));color:#071006;font-weight:850;border-bottom-right-radius:.aiExamples{display:flex;gap:7px;overflow-x:auto;padding:0 16px 10px;scrollbar-width:none}.aiExamples::-webkit-scrollbar{display:none}
 .aiExample{white-space:nowrap;min-height:34px;padding:0 11px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.025);color:#9aa7b6;font-size:8px;font-weight:900}
 .aiComposer{padding:11px 12px max(11px,env(safe-area-inset-bottom));border-top:1px solid var(--line);background:rgba(7,11,16,.94)}
 .aiInputRow{display:flex;gap:8px}.aiInput{flex:1;min-width:0;min-height:48px;padding:0 14px;border:1px solid var(--line);border-radius:15px;background:#0e151e;color:#fff;outline:none;font-size:12px}.aiInput:focus{border-color:rgba(98,231,255,.34)}
@@ -600,7 +598,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
 
 
 /* ======================================================
-   SKYHUNT v5.1.4.1 — LIVE AIRCRAFT DISCOVERY
+   SKYHUNT v5.1.4.1 â LIVE AIRCRAFT DISCOVERY
    ====================================================== */
 :root{
   --launch-lime:#d6ff63;
@@ -708,7 +706,7 @@ body{
 }
 
 
-/* SKYHUNT v5.1.4 — NEW PRODUCT SYSTEM */
+/* SKYHUNT v5.1.4 â NEW PRODUCT SYSTEM */
 :root{--v5-bg:#f4f8fb;--v5-surface:#fff;--v5-ink:#10202e;--v5-muted:#6e8090;--v5-line:rgba(16,32,46,.09);--v5-blue:#54c7ff;--v5-cyan:#6de5ff;--v5-mint:#b9ffcb;--v5-lime:#d9ff75;--v5-violet:#a99cff;--v5-pink:#ff9bcf;--v5-shadow:0 24px 70px rgba(58,85,105,.13)}
 html{background:var(--v5-bg)}body{color:var(--v5-ink)!important;background:radial-gradient(circle at 8% -4%,rgba(84,199,255,.28),transparent 30rem),radial-gradient(circle at 96% 18%,rgba(169,156,255,.20),transparent 30rem),radial-gradient(circle at 45% 100%,rgba(185,255,203,.24),transparent 28rem),linear-gradient(180deg,#f8fbfd,#f3f8fb 55%,#f7fafc)!important}
 body::before{opacity:.25!important;background-image:radial-gradient(rgba(70,113,143,.16) .7px,transparent .7px)!important;background-size:26px 26px!important}.shell{width:min(1180px,calc(100% - 22px))!important}
@@ -729,7 +727,7 @@ body::before{opacity:.25!important;background-image:radial-gradient(rgba(70,113,
 @media(max-width:850px){.modeGrid{grid-template-columns:1fr 1fr!important}.mode.primary{grid-column:1/-1!important}}@media(max-width:520px){.modeGrid{grid-template-columns:1fr!important}.mode.primary{grid-column:auto!important}.heroRadar{min-height:235px!important}.v5HubGrid{grid-template-columns:1fr}}
 
 
-/* SKYHUNT v5.1.4 — CALM UI PATCH */
+/* SKYHUNT v5.1.4 â CALM UI PATCH */
 :root{
   --calm-bg:#eef3f7;
   --calm-surface:#ffffff;
@@ -936,7 +934,7 @@ footer,.footerLinks button{color:#748594!important}
 }
 
 
-/* SKYHUNT v5.1.4 — EMERGENCY RECOVERY
+/* SKYHUNT v5.1.4 â EMERGENCY RECOVERY
    Menu DOM intentionally retained but permanently hidden to preserve legacy JS hooks. */
 .topActions{display:none!important}
 .menuBackdrop{display:none!important}
@@ -972,113 +970,25 @@ body{
 .skyLensStart{background:#18222b!important}
 footer,.footerLinks button{color:#93a4b0!important}.versionBtn{color:#84cae6!important}
 
-
-/* v5.2.1 — Nearby full-page rebuild */
-.nearbyPageHead{padding-bottom:10px!important}
-.nearbyControlCard{
-  display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;
-  padding:18px;border:1px solid var(--v51-line);border-radius:22px;
-  background:var(--v51-surface);box-shadow:0 10px 28px rgba(0,0,0,.10)
+/* v5.2.4 â Collection/Hangar fix */
+.collectionToolbar{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  margin-bottom:12px;padding:15px 16px;border-radius:19px;
+  border:1px solid var(--v51-line);background:var(--v51-surface);
+  box-shadow:0 8px 22px rgba(0,0,0,.07)
 }
-.nearbyControlCopy strong{display:block;color:var(--v51-ink);font-size:20px;letter-spacing:-.035em}
-.nearbyControlCopy p{margin:5px 0 0;color:var(--v51-muted);font-size:10px;line-height:1.5;max-width:560px}
-.nearbyRadius{display:flex;gap:6px;grid-column:1/-1}
-.nearbyRadius button{
-  flex:1;min-height:39px;border-radius:12px;border:1px solid var(--v51-line);
-  background:rgba(255,255,255,.045);color:#a8b6c0;font-size:9px;font-weight:900
+.collectionToolbar strong{
+  display:block;color:var(--v51-ink);font-size:19px;letter-spacing:-.035em
 }
-.nearbyRadius button.active{
-  background:rgba(139,200,223,.17);border-color:rgba(139,200,223,.26);color:#d8f1fa
+.collectionToolbar span{
+  display:block;margin-top:4px;color:var(--v51-muted);font-size:9px;line-height:1.4
 }
-.nearbyScanBtn{
-  grid-column:1/-1;min-height:50px;border:0;border-radius:14px;
-  background:linear-gradient(135deg,#a9d3b5,#8bc8df);color:#18313f;font-weight:950
+.collectionFlightIdBtn{
+  min-height:42px;padding:0 13px;border-radius:12px;border:1px solid var(--v51-line);
+  background:rgba(255,255,255,.05);color:var(--v51-ink);font-size:8px;font-weight:950;
+  white-space:nowrap
 }
-.nearbyScanBtn:disabled{opacity:.62}
-.nearbyStatusRow{
-  grid-column:1/-1;display:flex;align-items:center;gap:9px;min-height:24px;
-  padding-top:4px;color:#a7b5bf;font-size:9px;font-weight:850
-}
-.nearbyStats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:10px}
-.nearbyStat{
-  padding:13px;border-radius:17px;border:1px solid var(--v51-line);
-  background:var(--v51-surface);box-shadow:0 8px 22px rgba(0,0,0,.07)
-}
-.nearbyStat b{display:block;color:var(--v51-ink);font-size:22px;letter-spacing:-.04em}
-.nearbyStat span{display:block;margin-top:3px;color:#7f919e;font-size:7px;font-weight:950;letter-spacing:.09em}
-.nearbyMapCard{
-  height:360px;margin-top:10px;border-radius:22px;overflow:hidden;position:relative;
-  border:1px solid var(--v51-line);background:#1f2c35
-}
-#nearbyMap{height:100%;width:100%}
-.nearbyMapCard .leaflet-tile-pane{filter:saturate(.62) brightness(.72) contrast(1.02)}
-.nearbyMapHint{
-  position:absolute;z-index:500;left:9px;bottom:9px;padding:8px 10px;border-radius:999px;
-  background:rgba(31,44,53,.90);border:1px solid var(--v51-line);
-  color:#a6b6c1;font-size:8px;font-weight:850;backdrop-filter:blur(10px)
-}
-.nearbyPlaneMarker{
-  width:28px;height:28px;display:grid;place-items:center;border-radius:50%;
-  background:#78b8d0;color:#142c39;font-size:13px;font-weight:950;
-  box-shadow:0 0 0 4px rgba(120,184,208,.10),0 5px 15px rgba(0,0,0,.18)
-}
-.nearbyResultsHead{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:22px 1px 10px}
-.nearbyResultsHead h3{margin:0;color:var(--v51-ink);font-size:24px;letter-spacing:-.04em}
-.nearbyResultsHead p{margin:4px 0 0;color:var(--v51-muted);font-size:9px}
-.nearbyRefreshBtn{
-  min-height:37px;padding:0 11px;border-radius:11px;border:1px solid var(--v51-line);
-  background:rgba(255,255,255,.05);color:var(--v51-ink);font-size:8px;font-weight:900
-}
-.nearbyResults{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
-.nearbyAircraftCard{
-  padding:14px;border-radius:19px;border:1px solid var(--v51-line);
-  background:var(--v51-surface);box-shadow:0 8px 22px rgba(0,0,0,.07)
-}
-.nearbyAircraftMain{padding-right:74px}
-.nearbyCall{color:var(--v51-ink);font-size:21px;font-weight:950;letter-spacing:-.04em}
-.nearbyType{margin-top:3px;color:var(--v51-muted);font-size:9px}
-.nearbyDistance{
-  float:right;margin-top:-37px;color:#bce7f5;font-size:21px;font-weight:950;letter-spacing:-.04em
-}
-.nearbyDistance small{font-size:8px;color:#7e94a2}
-.nearbyAircraftStats{clear:both;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:13px}
-.nearbyAircraftStats span{
-  padding:8px;border-radius:11px;background:rgba(255,255,255,.035)
-}
-.nearbyAircraftStats b{display:block;color:#eaf1f5;font-size:11px}
-.nearbyAircraftStats small{display:block;margin-top:3px;color:#748793;font-size:7px}
-.nearbyAircraftActions{display:flex;gap:7px;margin-top:9px}
-.nearbyAction{
-  flex:1;min-height:39px;border-radius:11px;border:1px solid var(--v51-line);
-  background:rgba(255,255,255,.05);color:#f3f7f9;font-size:8px;font-weight:950
-}
-.nearbyAction.primary{
-  border:0;background:linear-gradient(135deg,#a9d3b5,#8bc8df);color:#18313f
-}
-.nearbyEmpty{
-  grid-column:1/-1;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;padding:24px;border-radius:20px;border:1px dashed rgba(255,255,255,.12);
-  color:#8fa1ad;background:rgba(255,255,255,.018)
-}
-.nearbyEmptyIcon{font-size:28px;margin-bottom:8px;color:#9acbdd}
-.nearbyEmpty strong{color:#eff4f7;font-size:16px}
-.nearbyEmpty span{max-width:420px;margin-top:5px;font-size:9px;line-height:1.45}
-.nearbyEmpty.error .nearbyEmptyIcon{color:#ff9fbd}
-.nearbyLoadingRing{
-  width:30px;height:30px;border-radius:50%;border:3px solid rgba(255,255,255,.08);
-  border-top-color:#8bc8df;animation:nearSpin .8s linear infinite;margin-bottom:10px
-}
-@keyframes nearSpin{to{transform:rotate(360deg)}}
-.nearbyPrivacy{margin:12px 2px 0;color:#758894;font-size:8px;line-height:1.45}
-@media(max-width:680px){
-  .nearbyControlCard{grid-template-columns:1fr}
-  .nearbyStats{grid-template-columns:repeat(3,1fr)}
-  .nearbyMapCard{height:330px}
-  .nearbyResults{grid-template-columns:1fr}
-}
-@media(max-width:430px){
-  .nearbyStats{grid-template-columns:1fr 1fr 1fr}
-  .nearbyStat{padding:10px}
-  .nearbyStat b{font-size:18px}
-  .nearbyMapCard{height:300px}
+@media(max-width:520px){
+  .collectionToolbar{align-items:flex-start}
+  .collectionFlightIdBtn{min-height:40px}
 }
