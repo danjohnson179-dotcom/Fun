@@ -1,4 +1,4 @@
-/* SKYHUNT v1.2 — news.js
+/* SKYHUNT v1.2.1 — news.js
    Live aviation news via the GDELT DOC 2.0 API. */
 
 const SKYHUNT_NEWS={
@@ -7,7 +7,7 @@ const SKYHUNT_NEWS={
   articles:[],
   loading:false,
   loadedOnce:false,
-  CACHE_MS:5*60*1000,
+  CACHE_MS:10*60*1000,
 
   categories:{
     latest:'(aviation OR airline OR airlines OR aircraft OR airport) sourcelang:english',
@@ -86,24 +86,70 @@ const SKYHUNT_NEWS={
     return this.categories[this.category]||this.categories.latest;
   },
 
-  apiUrl(query){
+  apiUrl(query,{maxrecords=24,timespan="1d"}={}){
     const params=new URLSearchParams({
       query,
       mode:"artlist",
-      maxrecords:"60",
-      timespan:"3d",
+      maxrecords:String(maxrecords),
+      timespan,
       sort:"datedesc",
       format:"json"
     });
     return `https://api.gdeltproject.org/api/v2/doc/doc?${params.toString()}`;
   },
 
+  async fetchAttempt(query,{maxrecords=24,timespan="1d",timeout=22000}={}){
+    const ctl=new AbortController();
+    const timer=setTimeout(()=>ctl.abort(),timeout);
+
+    try{
+      const response=await fetch(this.apiUrl(query,{maxrecords,timespan}),{
+        signal:ctl.signal,
+        cache:"no-store",
+        headers:{Accept:"application/json"}
+      });
+
+      if(!response.ok){
+        throw new Error(`News service returned HTTP ${response.status}`);
+      }
+
+      const data=await response.json();
+      const rows=Array.isArray(data?.articles)?data.articles:
+                 Array.isArray(data?.items)?data.items:[];
+
+      return this.cleanArticles(rows);
+    }finally{
+      clearTimeout(timer);
+    }
+  },
+
+  fallbackQuery(){
+    const category=this.category;
+    if(this.query.trim()){
+      const clean=this.query.trim().replace(/[()"]/g," ").replace(/\s+/g," ").slice(0,60);
+      return `${clean} aviation sourcelang:english`;
+    }
+
+    const simple={
+      latest:"aviation sourcelang:english",
+      airlines:"airline sourcelang:english",
+      airports:"airport sourcelang:english",
+      aircraft:"aircraft sourcelang:english",
+      safety:'"aviation safety" sourcelang:english'
+    };
+
+    return simple[category]||simple.latest;
+  },
+
   async fetchArticles(force=false){
     if(this.loading)return;
+
     this.loading=true;
     this.setLoading(true);
 
     const query=this.buildQuery();
+    const hadArticles=this.articles.length>0;
+
     try{
       if(!force){
         const cached=this.readCache(query);
@@ -111,41 +157,80 @@ const SKYHUNT_NEWS={
           this.articles=this.cleanArticles(cached);
           this.render();
           this.setStatus(`${this.articles.length} stories · cached moments ago`);
+          this.loadedOnce=true;
           return;
         }
       }
 
-      this.setStatus("Scanning the live aviation news index…");
-      const ctl=new AbortController();
-      const timer=setTimeout(()=>ctl.abort(),12000);
-      let response;
-      try{
-        response=await fetch(this.apiUrl(query),{
-          signal:ctl.signal,
-          cache:"no-store",
-          headers:{Accept:"application/json"}
-        });
-      }finally{
-        clearTimeout(timer);
+      // Keep existing stories visible while refreshing.
+      if(!hadArticles){
+        this.setStatus("Scanning the latest aviation coverage…");
+      }else{
+        this.setStatus("Refreshing aviation coverage…");
       }
 
-      if(!response.ok)throw new Error(`News service returned HTTP ${response.status}`);
-      const data=await response.json();
-      const rows=Array.isArray(data?.articles)?data.articles:
-                 Array.isArray(data?.items)?data.items:[];
-      this.articles=this.cleanArticles(rows);
-      this.saveCache(query,this.articles);
+      let articles=[];
+      let sourceNote="";
+
+      // Attempt 1: focused query, smaller result set, recent window.
+      try{
+        articles=await this.fetchAttempt(query,{
+          maxrecords:24,
+          timespan:"1d",
+          timeout:22000
+        });
+        sourceNote="live";
+      }catch(firstError){
+        console.warn("SKYHUNT News primary request failed:",firstError);
+
+        // Attempt 2: much simpler GDELT query. Complex OR expressions can be slower.
+        this.setStatus("News index is responding slowly · trying a lighter search…");
+
+        try{
+          articles=await this.fetchAttempt(this.fallbackQuery(),{
+            maxrecords:18,
+            timespan:"3d",
+            timeout:28000
+          });
+          sourceNote="live · fallback search";
+        }catch(secondError){
+          console.warn("SKYHUNT News fallback request failed:",secondError);
+          throw secondError;
+        }
+      }
+
+      // A successful empty result should not look like a network failure.
+      this.articles=articles;
+      this.saveCache(query,articles);
       this.render();
-      this.setStatus(`${this.articles.length} live stories · newest first`);
       this.loadedOnce=true;
+
+      this.setStatus(
+        articles.length
+          ? `${articles.length} ${sourceNote} stories · newest first`
+          : "Live news search completed · no matching stories found"
+      );
 
     }catch(err){
       console.error("SKYHUNT News:",err);
-      const message=/abort/i.test(String(err?.name||err?.message))
-        ?"The aviation news request timed out."
-        :"Aviation news is temporarily unavailable. Tap refresh to try again.";
-      this.setStatus(message,true);
-      if(!this.articles.length)this.renderEmpty(true);
+
+      const timeout=/abort/i.test(String(err?.name||err?.message));
+      const message=timeout
+        ?"The aviation news index is taking too long to respond."
+        :"Aviation news is temporarily unavailable.";
+
+      this.setStatus(
+        hadArticles
+          ? `${message} Showing your previously loaded stories.`
+          : `${message} Tap refresh to try again.`,
+        true
+      );
+
+      // Never wipe a working feed just because refresh failed.
+      if(!hadArticles){
+        this.renderEmpty(true);
+      }
+
     }finally{
       this.loading=false;
       this.setLoading(false);
@@ -230,7 +315,7 @@ const SKYHUNT_NEWS={
       const strong=empty.querySelector("strong");
       const span=empty.querySelector("span");
       if(strong)strong.textContent=error?"News feed unavailable.":"No stories found.";
-      if(span)span.textContent=error?"Check your connection or try again shortly.":"Try another category or search phrase.";
+      if(span)span.textContent=error?"The external news index may be slow. Tap refresh to retry.":"Try another category or search phrase.";
     }
   },
 
