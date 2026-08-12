@@ -1,5 +1,5 @@
 /*
-SKYHUNT v5.1.2 — SAFE FILE REFACTOR
+SKYHUNT v5.1.3 — SAFE FILE REFACTOR
 Core JavaScript remains together intentionally in this first split so functionality is unchanged.
 Feature files are prepared for the next modularisation pass but are not loaded by index.html yet.
 */
@@ -901,7 +901,7 @@ function renderHangar(){
   uniqueTypes.textContent=types.length;
   rareCards.textContent=rarePlus.length;
   uniqueAircraft.textContent=aircraftIds.length;
-  menuHangarCount.textContent=items.reduce((sum,x)=>sum+(x.discoveries||1),0);
+  if(menuHangarCount) menuHangarCount.textContent=items.reduce((sum,x)=>sum+(x.discoveries||1),0);
 
   const pct=Math.min(100,(types.length/TARGET_TYPES)*100);
   progressText.textContent=`${types.length} / ${TARGET_TYPES}`;
