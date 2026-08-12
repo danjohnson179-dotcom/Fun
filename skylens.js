@@ -1,4 +1,4 @@
-/* SKYHUNT v5.2.5 — skylens.js */
+/* SKYHUNT v5.3.0 — skylens.js */
 // ===== v5.2.5 SKY LENS =====
 const skyLensBackdrop=$("#skyLensBackdrop"),skyLensVideo=$("#skyLensVideo"),skyLensClose=$("#skyLensClose");
 const skyLensStart=$("#skyLensStart"),lensStartBtn=$("#lensStartBtn"),lensUnsupported=$("#lensUnsupported");
