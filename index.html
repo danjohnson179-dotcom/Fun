@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050609">
-<title>SKYHUNT v5.1.0 — Live Aircraft Discovery</title>
+<title>SKYHUNT v5.1.1 — Live Aircraft Discovery</title>
 <meta name="description" content="Discover, track and collect real aircraft flying now with SKYHUNT.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <style>
@@ -1082,7 +1082,7 @@ footer,.footerLinks button{color:#93a4b0!important}
   <div class="brand">
     <div class="brandMark">✦</div>
     <div class="brandText"><strong>SKYHUNT</strong><small>LIVE AIRCRAFT DISCOVERY</small></div>
-    <span class="v2pill">v5.1.0</span>
+    <span class="v2pill">v5.1.1</span>
   </div>
   
 </header>
@@ -1256,7 +1256,7 @@ footer,.footerLinks button{color:#93a4b0!important}
 </section>
 
 <footer>
-  SKYHUNT • <button class="versionBtn" id="versionBtn">v5.1.0</button>
+  SKYHUNT • <button class="versionBtn" id="versionBtn">v5.1.1</button>
   <div class="footerLinks">
     <button id="termsLink">Terms</button>
     <button id="privacyLink">Privacy</button>
@@ -1396,9 +1396,10 @@ footer,.footerLinks button{color:#93a4b0!important}
 
 <div class="modalBackdrop" id="releaseBackdrop">
   <div class="releaseModal">
-    <div class="releaseTop"><div><h2>SKYHUNT releases</h2><div class="releaseDate">Current version: v5.1.0.1</div></div><button class="releaseClose" id="releaseClose">×</button></div>
+    <div class="releaseTop"><div><h2>SKYHUNT releases</h2><div class="releaseDate">Current version: v5.1.1.1</div></div><button class="releaseClose" id="releaseClose">×</button></div>
 
-    <div class="releaseBlock"><h3>v5.1.0 — Home-First Navigation</h3><div class="releaseDate">12 August 2026</div><ul><li>Removed the sandwich menu entirely.</li><li>Home is now the single landing page for every visit.</li><li>All core product navigation is handled by the bottom tabs.</li><li>Bottom navigation is now Home, Radar, Nearby, Collection and Labs.</li><li>Experimental tools remain grouped under Labs.</li><li>Colour system moved darker for stronger readability and reduced glare.</li><li>No live-aircraft functionality was removed.</li></ul></div>
+    <div class="releaseBlock"><h3>v5.1.1 — Navigation Hotfix</h3><div class="releaseDate">12 August 2026</div><ul><li>Fixed a JavaScript startup error caused by obsolete sandwich-menu event handlers.</li><li>Bottom navigation now binds only to real page tabs.</li><li>Nearby and Labs retain their own dedicated actions.</li><li>No aircraft, Hangar, Radar, Sky Lens or AI Finder functionality changed.</li></ul></div>
+<div class="releaseBlock"><h3>v5.1.0 — Home-First Navigation</h3><div class="releaseDate">12 August 2026</div><ul><li>Removed the sandwich menu entirely.</li><li>Home is now the single landing page for every visit.</li><li>All core product navigation is handled by the bottom tabs.</li><li>Bottom navigation is now Home, Radar, Nearby, Collection and Labs.</li><li>Experimental tools remain grouped under Labs.</li><li>Colour system moved darker for stronger readability and reduced glare.</li><li>No live-aircraft functionality was removed.</li></ul></div>
 <div class="releaseBlock"><h3>v5.1.0 — Calm UI Fix</h3><div class="releaseDate">12 August 2026</div><ul><li>Removed stale version labels across the interface.</li><li>Top product badge now correctly displays v5.1.0.</li><li>Rebalanced the bright redesign with a calmer blue-grey palette.</li><li>Reduced saturation, gradients, shadows and visual noise.</li><li>Simplified cards and navigation for easier reading on mobile.</li></ul></div>
 <div class="releaseBlock"><h3>v5.1.0.1 — Release-Ready Demo</h3><div class="releaseDate">11 August 2026</div><ul><li>Final major UX and copy overhaul before release testing.</li><li>New first-run Terms acceptance flow.</li><li>New Terms, Privacy, Data & Sources and Safety notices.</li><li>Dual live-data architecture retained: adsb.lol primary with Airplanes.live fallback where already implemented.</li><li>Clearer accuracy, permission and local-storage language.</li><li>Existing Hangar storage preserved.</li><li>Discover, Global Radar, Nearby, Live Tracking, Hangar, Flight ID, Sky Lens and AI Finder retained.</li></ul></div>
 <div class="releaseBlock"><h3>v5.1.0.1 — AI Finder</h3><div class="releaseDate">11 August 2026</div><ul><li>New natural-language live aircraft finder.</li><li>Understands common airline names, aircraft families, altitude and speed constraints, and superlatives such as highest, lowest and fastest.</li><li>Searches sampled live ADS-B data rather than inventing aircraft.</li><li>No AI API key required: query interpretation runs locally in the browser.</li><li>Open, follow or capture matched live aircraft.</li><li>Clearly reports when the current live sample contains no match.</li></ul></div>
@@ -1422,7 +1423,7 @@ const $=s=>document.querySelector(s);
 
 const spinBtn=$("#spinBtn"),spinAgain=$("#spinAgain"),scan=$("#scan"),errorBox=$("#error"),result=$("#result");
 const showMapBtn=$("#showMapBtn"),mapSection=$("#mapSection"),autoFollowBtn=$("#autoFollowBtn"),centreBtn=$("#centreBtn");
-const saveCardBtn=$("#saveCardBtn"),menuBackdrop=$("#menuBackdrop"),menuClose=$("#menuClose"),menuSpin=$("#menuSpin"),menuHangar=$("#menuHangar"),menuReleases=$("#menuReleases"),menuAbove=$("#menuAbove"),menuSkyLens=$("#menuSkyLens");
+const saveCardBtn=$("#saveCardBtn");
 const hangarBackdrop=$("#hangarBackdrop"),hangarClose=$("#hangarClose"),hangarGrid=$("#hangarGrid"),collectorToast=$("#collectorToast");
 const aboveBackdrop=$("#aboveBackdrop"),aboveClose=$("#aboveClose"),locateBtn=$("#locateBtn"),aboveStatus=$("#aboveStatus"),aboveList=$("#aboveList");
 const totalCards=$("#totalCards"),uniqueTypes=$("#uniqueTypes"),rareCards=$("#rareCards"),uniqueAircraft=$("#uniqueAircraft"),progressText=$("#progressText"),progressFill=$("#progressFill"),menuHangarCount=$("#menuHangarCount"),clearHangar=$("#clearHangar");
@@ -1704,6 +1705,7 @@ function openAbove(){
 function closeAbove(){
   aboveBackdrop.classList.remove("show");
   aboveBackdrop.setAttribute("aria-hidden","true");
+  if(!document.querySelector(".bottomNav button.active[data-view]")) showV2View("spin");
 }
 function distanceNm(lat1,lon1,lat2,lon2){
   const R=3440.065;
@@ -1883,7 +1885,6 @@ function renderNearby(){
     });
   });
 }
-menuAbove.addEventListener("click",openAbove);
 aboveClose.addEventListener("click",closeAbove);
 aboveBackdrop.addEventListener("click",e=>{if(e.target===aboveBackdrop)closeAbove()});
 locateBtn.addEventListener("click",scanAboveMe);
@@ -2076,7 +2077,6 @@ function closeSkyLens(){
   skyLensBackdrop.classList.remove("show");
   skyLensBackdrop.setAttribute("aria-hidden","true");
 }
-menuSkyLens.addEventListener("click",openSkyLens);
 skyLensClose.addEventListener("click",closeSkyLens);
 lensStartBtn.addEventListener("click",startSkyLens);
 lensRescanBtn.addEventListener("click",scanLensAircraft);
@@ -2087,7 +2087,7 @@ window.addEventListener("resize",renderLensTargets);
 
 // ===== v5.1.0.1 — AI FINDER =====
 const aiFinderBackdrop=$("#aiFinderBackdrop"),aiMessages=$("#aiMessages"),aiInput=$("#aiInput");
-const aiSend=$("#aiSend"),aiClose=$("#aiClose"),menuAiFinder=$("#menuAiFinder");
+const aiSend=$("#aiSend"),aiClose=$("#aiClose");
 let aiLastMatches=[];
 
 const AI_AIRLINES={
@@ -2209,8 +2209,7 @@ function aiSave(i,btn){
 }
 function openAiFinder(){closeMenu();aiFinderBackdrop.classList.add("show");setTimeout(()=>aiInput.focus(),150)}
 function closeAiFinder(){aiFinderBackdrop.classList.remove("show")}
-function aiSubmit(){const q=aiInput.value.trim();if(!q)return;aiAddBubble(q,"user");aiInput.value="";aiSearch(q)}
-menuAiFinder.addEventListener("click",openAiFinder);aiClose.addEventListener("click",closeAiFinder);aiSend.addEventListener("click",aiSubmit);
+function aiSubmit(){const q=aiInput.value.trim();if(!q)return;aiAddBubble(q,"user");aiInput.value="";aiSearch(q)}aiClose.addEventListener("click",closeAiFinder);aiSend.addEventListener("click",aiSubmit);
 aiInput.addEventListener("keydown",e=>{if(e.key==="Enter")aiSubmit()});
 document.querySelectorAll(".aiExample").forEach(b=>b.addEventListener("click",()=>{aiInput.value=b.textContent;aiSubmit()}));
 
@@ -2361,15 +2360,6 @@ function closeMenu(){}
 
 saveCardBtn.addEventListener("click",saveCurrentCard);
 
-menuClose.addEventListener("click",closeMenu);
-menuBackdrop.addEventListener("click",e=>{if(e.target===menuBackdrop)closeMenu()});
-menuSpin.addEventListener("click",()=>{closeMenu();showV2View("spin");});
-menuHangar.addEventListener("click",()=>{closeMenu();openHangar()});
-menuReleases.addEventListener("click",()=>{
-  closeMenu();
-  releaseBackdrop.classList.add("show");
-  releaseBackdrop.setAttribute("aria-hidden","false");
-});
 hangarClose.addEventListener("click",closeHangar);
 hangarBackdrop.addEventListener("click",e=>{if(e.target===hangarBackdrop)closeHangar()});
 clearHangar.addEventListener("click",()=>{
@@ -2426,7 +2416,7 @@ function showV2View(name){
   if(name==="passport"){renderPassport()}
   window.scrollTo({top:0,behavior:"smooth"});
 }
-bottomBtns.forEach(b=>b.addEventListener("click",()=>showV2View(b.dataset.view)));
+bottomBtns.filter(b=>b.dataset.view).forEach(b=>b.addEventListener("click",()=>showV2View(b.dataset.view)));
 
 function initWorldMap(){
   if(worldMap) return;
@@ -2625,7 +2615,6 @@ $("#v2ClearHangar").addEventListener("click",()=>{
 });
 
 // Upgrade old navigation targets into v2 views
-menuHangar.addEventListener("click",()=>showV2View("hangar"));
 
 
 // ===== v5.1.0.1 — TERMS / PRIVACY / DATA / SAFETY =====
@@ -2708,7 +2697,7 @@ const labsBackdrop=$("#labsBackdrop"),labsClose=$("#labsClose"),labsNavBtn=$("#l
 const labsSkyLens=$("#labsSkyLens"),labsAiFinder=$("#labsAiFinder"),collectionHangarCard=$("#collectionHangarCard"),collectionFlightIdCard=$("#collectionFlightIdCard");
 function openLabs(){labsBackdrop.classList.add("show");labsBackdrop.setAttribute("aria-hidden","false")}
 function closeLabs(){labsBackdrop.classList.remove("show");labsBackdrop.setAttribute("aria-hidden","true")}
-labsNavBtn.addEventListener("click",openLabs);labsClose.addEventListener("click",closeLabs);labsBackdrop.addEventListener("click",e=>{if(e.target===labsBackdrop)closeLabs()});nearbyNavBtn.addEventListener("click",openAbove);labsSkyLens.addEventListener("click",()=>{closeLabs();openSkyLens()});labsAiFinder.addEventListener("click",()=>{closeLabs();openAiFinder()});collectionHangarCard.addEventListener("click",()=>showV2View("hangar"));collectionFlightIdCard.addEventListener("click",()=>showV2View("passport"));
+labsNavBtn.addEventListener("click",()=>{bottomBtns.forEach(b=>b.classList.remove("active"));labsNavBtn.classList.add("active");openLabs()});labsClose.addEventListener("click",closeLabs);labsBackdrop.addEventListener("click",e=>{if(e.target===labsBackdrop)closeLabs()});nearbyNavBtn.addEventListener("click",()=>{bottomBtns.forEach(b=>b.classList.remove("active"));nearbyNavBtn.classList.add("active");openAbove()});labsSkyLens.addEventListener("click",()=>{closeLabs();openSkyLens()});labsAiFinder.addEventListener("click",()=>{closeLabs();openAiFinder()});collectionHangarCard.addEventListener("click",()=>showV2View("hangar"));collectionFlightIdCard.addEventListener("click",()=>showV2View("passport"));
 
 window.addEventListener("beforeunload",stopTracking);
 </script>
