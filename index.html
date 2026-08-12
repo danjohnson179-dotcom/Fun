@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050609">
-<title>SKYHUNT v5.3.0 — Modular Recovery</title>
+<title>SKYHUNT v5.3.1 — Modular Recovery</title>
 <meta name="description" content="Discover, track and collect real aircraft flying now with SKYHUNT.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <link rel="stylesheet" href="styles.css">
@@ -17,7 +17,7 @@
   <div class="brand">
     <div class="brandMark">✦</div>
     <div class="brandText"><strong>SKYHUNT</strong><small>LIVE AIRCRAFT DISCOVERY</small></div>
-    <span class="v2pill">v5.3.0</span>
+    <span class="v2pill">v5.3.1</span>
   </div>
   
 </header>
@@ -254,7 +254,7 @@
 </section>
 
 <footer>
-  SKYHUNT • <button class="versionBtn" id="versionBtn">v5.3.0</button>
+  SKYHUNT • <button class="versionBtn" id="versionBtn">v5.3.1</button>
   <div class="footerLinks">
     <button id="termsLink">Terms</button>
     <button id="privacyLink">Privacy</button>
@@ -270,7 +270,7 @@
 <div class="firstRunGate" id="firstRunGate" aria-hidden="true">
   <div class="firstRunCard">
     <div class="firstRunMark">✦</div>
-    <div class="releaseReadyBadge">SKYHUNT v5.3.0 · LIVE AIRCRAFT DISCOVERY</div>
+    <div class="releaseReadyBadge">SKYHUNT v5.3.1 · LIVE AIRCRAFT DISCOVERY</div>
     <h2>Welcome to SKYHUNT.</h2>
     <p>Explore live aircraft using public and third-party aviation data. A few important things before you continue.</p>
 
@@ -376,16 +376,16 @@
 
 <div class="modalBackdrop" id="releaseBackdrop">
   <div class="releaseModal">
-    <div class="releaseTop"><div><h2>SKYHUNT releases</h2><div class="releaseDate">Current version: v5.3.0</div></div><button class="releaseClose" id="releaseClose">×</button></div>
+    <div class="releaseTop"><div><h2>SKYHUNT releases</h2><div class="releaseDate">Current version: v5.3.1</div></div><button class="releaseClose" id="releaseClose">×</button></div>
 
-    <div class="releaseBlock"><h3>v5.3.0 — Full Recovery</h3><div class="releaseDate">12 August 2026</div><ul><li>Rebuilt the modular app from one consistent baseline.</li><li>Restored the darker v5.3.0 visual system.</li><li>Restored the full-page Nearby experience and latest results renderer.</li><li>Restored Labs navigation and experimental tools.</li><li>Retained the corrected Collection/Hangar save flow.</li><li>Removed the legacy Hangar modal from the active UI.</li><li>Validated all shipped modules together against the same HTML.</li></ul></div>
-<div class="releaseBlock"><h3>v5.3.0 — Modular Recovery</h3><div class="releaseDate">12 August 2026</div><ul><li>Restored the last fully wired JavaScript/DOM structure.</li><li>Hamburger menu is hidden visually but its compatibility hooks remain in the DOM.</li><li>Bottom navigation remains Home, Radar, Nearby, Collection and Labs.</li><li>Darker comfort palette retained.</li><li>No aircraft features removed.</li></ul></div>
-<div class="releaseBlock"><h3>v5.3.0 — Calm UI Fix</h3><div class="releaseDate">12 August 2026</div><ul><li>Removed stale version labels across the interface.</li><li>Top product badge now correctly displays v5.3.0.</li><li>Rebalanced the bright redesign with a calmer blue-grey palette.</li><li>Reduced saturation, gradients, shadows and visual noise.</li><li>Simplified cards and navigation for easier reading on mobile.</li></ul></div>
-<div class="releaseBlock"><h3>v5.3.0 — Release-Ready Demo</h3><div class="releaseDate">11 August 2026</div><ul><li>Final major UX and copy overhaul before release testing.</li><li>New first-run Terms acceptance flow.</li><li>New Terms, Privacy, Data & Sources and Safety notices.</li><li>Dual live-data architecture retained: adsb.lol primary with Airplanes.live fallback where already implemented.</li><li>Clearer accuracy, permission and local-storage language.</li><li>Existing Hangar storage preserved.</li><li>Discover, Global Radar, Nearby, Live Tracking, Hangar, Flight ID, Sky Lens and AI Finder retained.</li></ul></div>
-<div class="releaseBlock"><h3>v5.3.0 — AI Finder</h3><div class="releaseDate">11 August 2026</div><ul><li>New natural-language live aircraft finder.</li><li>Understands common airline names, aircraft families, altitude and speed constraints, and superlatives such as highest, lowest and fastest.</li><li>Searches sampled live ADS-B data rather than inventing aircraft.</li><li>No AI API key required: query interpretation runs locally in the browser.</li><li>Open, follow or capture matched live aircraft.</li><li>Clearly reports when the current live sample contains no match.</li></ul></div>
-<div class="releaseBlock"><h3>v5.3.0 — Sky Lens</h3><div class="releaseDate">11 August 2026</div><ul><li>Introduced SKYHUNT LABS.</li><li>New experimental camera-based Sky Lens mode.</li><li>Uses camera, location and device orientation to estimate where nearby live aircraft are in the sky.</li><li>Live target labels show callsign, aircraft type, altitude and approximate distance.</li><li>Nearest/in-view target receives a highlighted treatment.</li><li>Open a target directly in the main live tracker.</li><li>Clearly labelled BETA because phone compass/orientation and ADS-B timing are approximate.</li></ul></div>
-<div class="releaseBlock"><h3>v5.3.0 — Radar Map Upgrade</h3><div class="releaseDate">11 August 2026</div><ul><li>Completely redesigned Global Radar map presentation.</li><li>New dark tactical basemap treatment.</li><li>Animated radar rings and sweep overlay.</li><li>Glowing aircraft target markers.</li><li>Floating live radar HUD with target count and scan/reset controls.</li><li>New aircraft preview bottom sheet when a target is tapped.</li><li>Open or capture an aircraft directly from the map.</li><li>Improved mobile map proportions and controls.</li></ul></div>
-<div class="releaseBlock"><h3>v5.3.0 — SKYHUNT</h3><div class="releaseDate">11 August 2026</div><ul><li>Complete rebrand from Flight Roulette to SKYHUNT.</li><li>New visual identity and design system.</li><li>New radar-inspired landing experience.</li><li>New Hunt / Radar / Hangar / Flight ID navigation language.</li><li>Redesigned collector cards, tracking UI and world radar.</li><li>All proven live-aircraft functionality retained.</li></ul></div>
+    <div class="releaseBlock"><h3>v5.3.1 — Full Recovery</h3><div class="releaseDate">12 August 2026</div><ul><li>Rebuilt the modular app from one consistent baseline.</li><li>Restored the darker v5.3.1 visual system.</li><li>Restored the full-page Nearby experience and latest results renderer.</li><li>Restored Labs navigation and experimental tools.</li><li>Retained the corrected Collection/Hangar save flow.</li><li>Removed the legacy Hangar modal from the active UI.</li><li>Validated all shipped modules together against the same HTML.</li></ul></div>
+<div class="releaseBlock"><h3>v5.3.1 — Modular Recovery</h3><div class="releaseDate">12 August 2026</div><ul><li>Restored the last fully wired JavaScript/DOM structure.</li><li>Hamburger menu is hidden visually but its compatibility hooks remain in the DOM.</li><li>Bottom navigation remains Home, Radar, Nearby, Collection and Labs.</li><li>Darker comfort palette retained.</li><li>No aircraft features removed.</li></ul></div>
+<div class="releaseBlock"><h3>v5.3.1 — Calm UI Fix</h3><div class="releaseDate">12 August 2026</div><ul><li>Removed stale version labels across the interface.</li><li>Top product badge now correctly displays v5.3.1.</li><li>Rebalanced the bright redesign with a calmer blue-grey palette.</li><li>Reduced saturation, gradients, shadows and visual noise.</li><li>Simplified cards and navigation for easier reading on mobile.</li></ul></div>
+<div class="releaseBlock"><h3>v5.3.1 — Release-Ready Demo</h3><div class="releaseDate">11 August 2026</div><ul><li>Final major UX and copy overhaul before release testing.</li><li>New first-run Terms acceptance flow.</li><li>New Terms, Privacy, Data & Sources and Safety notices.</li><li>Dual live-data architecture retained: adsb.lol primary with Airplanes.live fallback where already implemented.</li><li>Clearer accuracy, permission and local-storage language.</li><li>Existing Hangar storage preserved.</li><li>Discover, Global Radar, Nearby, Live Tracking, Hangar, Flight ID, Sky Lens and AI Finder retained.</li></ul></div>
+<div class="releaseBlock"><h3>v5.3.1 — AI Finder</h3><div class="releaseDate">11 August 2026</div><ul><li>New natural-language live aircraft finder.</li><li>Understands common airline names, aircraft families, altitude and speed constraints, and superlatives such as highest, lowest and fastest.</li><li>Searches sampled live ADS-B data rather than inventing aircraft.</li><li>No AI API key required: query interpretation runs locally in the browser.</li><li>Open, follow or capture matched live aircraft.</li><li>Clearly reports when the current live sample contains no match.</li></ul></div>
+<div class="releaseBlock"><h3>v5.3.1 — Sky Lens</h3><div class="releaseDate">11 August 2026</div><ul><li>Introduced SKYHUNT LABS.</li><li>New experimental camera-based Sky Lens mode.</li><li>Uses camera, location and device orientation to estimate where nearby live aircraft are in the sky.</li><li>Live target labels show callsign, aircraft type, altitude and approximate distance.</li><li>Nearest/in-view target receives a highlighted treatment.</li><li>Open a target directly in the main live tracker.</li><li>Clearly labelled BETA because phone compass/orientation and ADS-B timing are approximate.</li></ul></div>
+<div class="releaseBlock"><h3>v5.3.1 — Radar Map Upgrade</h3><div class="releaseDate">11 August 2026</div><ul><li>Completely redesigned Global Radar map presentation.</li><li>New dark tactical basemap treatment.</li><li>Animated radar rings and sweep overlay.</li><li>Glowing aircraft target markers.</li><li>Floating live radar HUD with target count and scan/reset controls.</li><li>New aircraft preview bottom sheet when a target is tapped.</li><li>Open or capture an aircraft directly from the map.</li><li>Improved mobile map proportions and controls.</li></ul></div>
+<div class="releaseBlock"><h3>v5.3.1 — SKYHUNT</h3><div class="releaseDate">11 August 2026</div><ul><li>Complete rebrand from Flight Roulette to SKYHUNT.</li><li>New visual identity and design system.</li><li>New radar-inspired landing experience.</li><li>New Hunt / Radar / Hangar / Flight ID navigation language.</li><li>Redesigned collector cards, tracking UI and world radar.</li><li>All proven live-aircraft functionality retained.</li></ul></div>
     <div class="releaseBlock"><h3>v2.0.1 — Global Radar Fix</h3><p>Rate-conscious Live World scanner and mobile radar redesign.</p></div>
     <div class="releaseBlock"><h3>v2.0.0 — LIVE WORLD</h3><p>Introduced Global Radar, bottom navigation and Pilot Passport.</p></div>
     <div class="releaseBlock"><h3>v1.3.1 — Local Radar Fix</h3><p>Dual-feed local radar.</p></div>
@@ -402,8 +402,8 @@
 <script src="nearby.js?v=5.3.0"></script>
 <script src="skylens.js"></script>
 <script src="ai-finder.js?v=5.3.0"></script>
-<script src="collection.js?v=5.3.0"></script>
-<script src="radar.js?v=5.3.0"></script>
+<script src="collection.js?v=5.3.1"></script>
+<script src="radar.js?v=5.3.1"></script>
 <script src="legal.js"></script>
 <script src="app.js?v=5.3.0"></script>
 </body>
