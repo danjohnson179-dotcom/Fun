@@ -1,4 +1,4 @@
-/* SKYHUNT v5.2.4 — core.js */
+/* SKYHUNT v5.2.5 — core.js */
 const $=s=>document.querySelector(s);
 
 const spinBtn=$("#spinBtn"),spinAgain=$("#spinAgain"),scan=$("#scan"),errorBox=$("#error"),result=$("#result");
