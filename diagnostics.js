@@ -6,6 +6,10 @@ const $=s=>document.querySelector(s);
 const results=[];
 let discoveredHex="";
 let userLocation=null;
+let aircraftPointResult=null;
+let aircraftPointRanAt=0;
+let cooldownTimer=null;
+const AIRCRAFT_COOLDOWN_MS=60*1000;
 
 const groups={
  browser:"#browserTests",
@@ -21,9 +25,9 @@ const tests=[
  {id:"providerWiring",group:"browser",name:"Aircraft provider wiring",run:testProviderWiring},
  {id:"online",group:"browser",name:"Browser network state",run:testOnline},
 
- {id:"airPoint",group:"aircraft",name:"Airplanes.live point search",run:testAircraftPoint},
+ {id:"airPoint",group:"aircraft",name:"Airplanes.live single point request",run:testAircraftPoint},
  {id:"airShape",group:"aircraft",name:"Aircraft response format",run:testAircraftShape},
- {id:"airRepeat",group:"aircraft",name:"Rate-limit / repeat request",run:testAircraftRepeat},
+ {id:"airRepeat",group:"aircraft",name:"Rate-limit / block evidence",run:testAircraftRateEvidence},
  {id:"airHex",group:"aircraft",name:"Airplanes.live hex lookup",run:testAircraftHex},
 
  {id:"geoSupport",group:"device",name:"Geolocation support",run:testGeoSupport},
@@ -71,18 +75,23 @@ async function timedFetch(url,opts={},timeout=12000){
    const text=await res.text();
    let json=null;
    try{json=JSON.parse(text)}catch(_){}
-   return {ok:res.ok,status:res.status,statusText:res.statusText,ms,text,json,headers:res.headers};
+   const headerObj={};
+   try{res.headers.forEach((v,k)=>headerObj[k]=v)}catch(_){}
+   return {ok:res.ok,status:res.status,statusText:res.statusText,ms,text,json,headers:headerObj,type:res.type,url:res.url};
  }catch(err){
    return {ok:false,networkError:true,error:err,ms:Math.round(performance.now()-started),explanation:classifyFetchError(err,url)};
  }finally{clearTimeout(timer)}
 }
 
 function providerMeaning(r){
- if(r.networkError)return r.explanation;
+ if(r.networkError){
+   return `${r.explanation}
+No HTTP status was received. That makes a normal 429 response less likely, but a provider-side IP/network block can still present this way in Safari.`;
+ }
  if(r.status===401)return "HTTP 401: authentication is required or the request is not authorised.";
- if(r.status===403)return "HTTP 403: Airplanes.live actively rejected this request/browser/IP.";
+ if(r.status===403)return "HTTP 403: Airplanes.live actively rejected this request/browser/IP. This may indicate access blocking rather than a normal rate limit.";
  if(r.status===404)return "HTTP 404: the endpoint path is not available.";
- if(r.status===429)return "HTTP 429: the public API rate limit has been exceeded. Wait before scanning again.";
+ if(r.status===429)return "HTTP 429: confirmed rate limit. Stop all Airplanes.live requests and wait before trying again.";
  if(r.status>=500)return `HTTP ${r.status}: Airplanes.live is failing server-side. SKYHUNT code cannot repair this.`;
  if(!r.ok)return `HTTP ${r.status}: the API responded but rejected the request.`;
  if(r.json?.error)return `API ERROR: the server returned JSON with error="${r.json.error}".`;
@@ -170,17 +179,99 @@ async function testProviderWiring(){
  else setResult("providerWiring","pass","The deployed aircraft feature files are consistent with the Airplanes.live-only build.",details.join("\n"));
 }
 
+
+function formatHeaders(r){
+ if(!r||r.networkError)return "Response headers: unavailable because no HTTP response was exposed to JavaScript.";
+ const entries=Object.entries(r.headers||{});
+ if(!entries.length)return "Response headers: none exposed to browser JavaScript.";
+ return "Response headers:\n"+entries.map(([k,v])=>`${k}: ${v}`).join("\n");
+}
+
+function updateCooldown(){
+ const last=Number(localStorage.getItem("skyhuntDiagLastAircraftRequest")||0);
+ if(!last){
+   $("#lastAircraftRequest").textContent="NEVER";
+   $("#cooldownState").textContent="READY";
+   return;
+ }
+ const age=Date.now()-last;
+ $("#lastAircraftRequest").textContent=new Date(last).toLocaleTimeString("en-GB");
+ const left=Math.max(0,AIRCRAFT_COOLDOWN_MS-age);
+ $("#cooldownState").textContent=left>0?`${Math.ceil(left/1000)}s`:"READY";
+}
+
+function markAircraftRequest(){
+ aircraftPointRanAt=Date.now();
+ localStorage.setItem("skyhuntDiagLastAircraftRequest",String(aircraftPointRanAt));
+ updateCooldown();
+}
+
+async function isolatedAircraftTest(){
+ const btn=$("#runAircraftOnly");
+ btn.disabled=true;
+ btn.textContent="TESTING AIRPLANES.LIVEâ¦";
+ setRunning("airPoint");
+ setRunning("airShape");
+ setRunning("airRepeat");
+ setResult("airHex","warn","Hex lookup is intentionally skipped in isolated mode.","The isolated test makes exactly one provider request to avoid creating its own rate-limit problem.");
+ aircraftPointResult=null;
+ window.__diagPoint=null;
+ discoveredHex="";
+ try{
+   await testAircraftPoint();
+   await testAircraftShape();
+   await testAircraftRateEvidence();
+ }finally{
+   btn.disabled=false;
+   btn.textContent="TEST AIRPLANES.LIVE ONCE";
+   updateSummary();
+ }
+}
+
 async function testAircraftPoint(){
  const url="https://api.airplanes.live/v2/point/51.4700/-0.4543/100";
+
+ if(aircraftPointResult){
+   const r=aircraftPointResult;
+   const meaning=providerMeaning(r);
+   if(meaning){
+     setResult("airPoint","fail","Airplanes.live point search failed.",`${meaning}
+URL: ${url}
+${formatHeaders(r)}${r.text?`
+Body: ${r.text.slice(0,500)}`:""}`,r.ms);
+     return;
+   }
+ }
+
+ markAircraftRequest();
  const r=await timedFetch(url,{headers:{Accept:"application/json"}},12000);
+ aircraftPointResult=r;
  window.__diagPoint=r;
+
  const meaning=providerMeaning(r);
- if(meaning){setResult("airPoint","fail","Airplanes.live point search failed.",`${meaning}\nURL: ${url}${r.text?`\nBody: ${r.text.slice(0,500)}`:""}`,r.ms);return}
+ if(meaning){
+   setResult("airPoint","fail","Airplanes.live single point request failed.",`${meaning}
+URL: ${url}
+Fetch type: ${r.type||"n/a"}
+${formatHeaders(r)}${r.text?`
+Body: ${r.text.slice(0,500)}`:""}`,r.ms);
+   return;
+ }
  const rows=r.json?.ac||r.json?.aircraft||[];
- if(!Array.isArray(rows)){setResult("airPoint","fail","Airplanes.live returned JSON but not an aircraft array.",`HTTP ${r.status}\nBody: ${r.text.slice(0,500)}`,r.ms);return}
- if(!rows.length){setResult("airPoint","warn","Airplanes.live is reachable but returned zero aircraft.","This is not a browser/CORS failure. The API successfully responded, but its live dataset contained no aircraft for the Heathrow 100 NM test area.",r.ms);return}
+ if(!Array.isArray(rows)){
+   setResult("airPoint","fail","Airplanes.live returned JSON but not an aircraft array.",`HTTP ${r.status}
+${formatHeaders(r)}
+Body: ${r.text.slice(0,500)}`,r.ms);
+   return;
+ }
+ if(!rows.length){
+   setResult("airPoint","warn","Airplanes.live is reachable but returned zero aircraft.",`This is a successful HTTP response, not CORS. HTTP ${r.status}
+${formatHeaders(r)}`,r.ms);
+   return;
+ }
  discoveredHex=String(rows.find(a=>a?.hex)?.hex||"").trim();
- setResult("airPoint","pass",`Airplanes.live returned ${rows.length} aircraft around Heathrow.`,`HTTP ${r.status} Â· JSON OK${discoveredHex?` Â· test hex ${discoveredHex}`:""}`,r.ms);
+ setResult("airPoint","pass",`Airplanes.live returned ${rows.length} aircraft around Heathrow.`,`HTTP ${r.status} Â· JSON OK${discoveredHex?` Â· test hex ${discoveredHex}`:""}
+${formatHeaders(r)}`,r.ms);
 }
 async function testAircraftShape(){
  const r=window.__diagPoint;
@@ -192,17 +283,40 @@ async function testAircraftShape(){
  if(missing.length)setResult("airShape","fail","Aircraft objects are missing fields SKYHUNT requires.",`Missing: ${missing.join(", ")}\nSample keys: ${Object.keys(a).slice(0,40).join(", ")}`);
  else setResult("airShape","pass","Aircraft response shape is compatible with SKYHUNT.",`Sample: hex=${a.hex} Â· callsign=${String(a.flight||"").trim()||"n/a"} Â· lat=${a.lat} Â· lon=${a.lon} Â· altitude=${a.alt_baro??"n/a"} Â· speed=${a.gs??"n/a"}`);
 }
-async function testAircraftRepeat(){
- await sleep(1200);
- const r=await timedFetch("https://api.airplanes.live/v2/point/51.4700/-0.4543/25",{headers:{Accept:"application/json"}},12000);
- const meaning=providerMeaning(r);
- if(meaning){setResult("airRepeat","fail","A correctly spaced second Airplanes.live request failed.",`${meaning}${r.text?`\nBody: ${r.text.slice(0,400)}`:""}`,r.ms);return}
- const rows=r.json?.ac||r.json?.aircraft||[];
- setResult("airRepeat","pass",`Second request succeeded after a 1.2 second pause.`,`HTTP ${r.status} Â· ${Array.isArray(rows)?rows.length:"?"} aircraft returned. This suggests normal scanning cadence is not immediately rate-limited.`,r.ms);
+async function testAircraftRateEvidence(){
+ const r=aircraftPointResult||window.__diagPoint;
+ if(!r){
+   setResult("airRepeat","warn","No aircraft request was available to assess for rate limiting.");
+   return;
+ }
+
+ if(r.networkError){
+   setResult("airRepeat","warn","No HTTP status was received, so a normal API rate-limit response cannot be confirmed.",
+     "A standard rate limit would normally be HTTP 429. Safari instead failed before exposing any HTTP response. Temporary IP-level blocking remains possible, but this test cannot prove it.");
+   return;
+ }
+
+ if(r.status===429){
+   setResult("airRepeat","fail","Confirmed Airplanes.live rate limit: HTTP 429.",
+     `${formatHeaders(r)}
+Stop aircraft requests and wait before retrying.`);
+   return;
+ }
+
+ const rateHeaders=Object.entries(r.headers||{}).filter(([k])=>/rate|retry|limit/i.test(k));
+ if(rateHeaders.length){
+   setResult("airRepeat","warn","The API exposed rate-limit-related headers.",
+     rateHeaders.map(([k,v])=>`${k}: ${v}`).join("\n"));
+   return;
+ }
+
+ setResult("airRepeat","pass",`The aircraft request returned HTTP ${r.status}, not 429.`,
+   "There is no direct evidence of a normal HTTP rate-limit response in this request. This does not rule out provider-side IP blocking.");
 }
 async function testAircraftHex(){
  if(!discoveredHex){setResult("airHex","warn","Hex lookup could not be tested because point search returned no aircraft.","The diagnostic will not invent an ICAO address.");return}
- await sleep(1200);
+ await sleep(2200);
+ markAircraftRequest();
  const url=`https://api.airplanes.live/v2/hex/${encodeURIComponent(discoveredHex)}`;
  const r=await timedFetch(url,{headers:{Accept:"application/json"}},12000);
  const meaning=providerMeaning(r);
@@ -313,7 +427,7 @@ async function testMicrolink(){
 }
 
 async function runAll(){
- results.length=0;discoveredHex="";window.__diagPoint=null;
+ results.length=0;discoveredHex="";window.__diagPoint=null;aircraftPointResult=null;
  tests.forEach(t=>{const el=$("#test-"+t.id);el.className="testCard";el.querySelector(".badge").textContent="QUEUED";el.querySelector(".testMessage").textContent="Waitingâ¦";el.querySelector(".testDetail").textContent="";el.querySelector(".testTime").textContent=""});
  $("#runAll").disabled=true;$("#runAll").textContent="DIAGNOSTICS RUNNINGâ¦";
  for(const t of tests){
@@ -325,6 +439,7 @@ async function runAll(){
  updateSummary();
 }
 
+$("#runAircraftOnly").addEventListener("click",isolatedAircraftTest);
 $("#runAll").addEventListener("click",runAll);
 $("#clearResults").addEventListener("click",()=>location.reload());
 $("#copyReport").addEventListener("click",async()=>{
@@ -337,5 +452,7 @@ $("#copyReport").addEventListener("click",async()=>{
    const ta=document.createElement("textarea");ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove();
  }
 });
+updateCooldown();
+cooldownTimer=setInterval(updateCooldown,1000);
 renderReport();
 })();
