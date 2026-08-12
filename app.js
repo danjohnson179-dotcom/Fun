@@ -1,5 +1,5 @@
-/* SKYHUNT v5.2.4 — app.js */
-// SKYHUNT v5.2.4 — APP BOOTSTRAP
+/* SKYHUNT v5.2.5 — app.js */
+// SKYHUNT v5.2.5 — APP BOOTSTRAP
 window.addEventListener("error", (event) => {
   console.error("SKYHUNT runtime error:", event.error || event.message);
 });
@@ -31,15 +31,33 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeRelease();clos
 
 
 
-// SKYHUNT v5 — PRODUCT NAVIGATION
-const labsBackdrop=$("#labsBackdrop"),labsClose=$("#labsClose"),labsNavBtn=$("#labsNavBtn");
-const labsSkyLens=$("#labsSkyLens"),labsAiFinder=$("#labsAiFinder"),collectionFlightIdCard=$("#collectionFlightIdCard");
-function openLabs(){labsBackdrop.classList.add("show");labsBackdrop.setAttribute("aria-hidden","false")}
-function closeLabs(){labsBackdrop.classList.remove("show");labsBackdrop.setAttribute("aria-hidden","true")}
-labsNavBtn.addEventListener("click",openLabs);labsClose.addEventListener("click",closeLabs);labsBackdrop.addEventListener("click",e=>{if(e.target===labsBackdrop)closeLabs()});labsSkyLens.addEventListener("click",()=>{closeLabs();openSkyLens()});labsAiFinder.addEventListener("click",()=>{closeLabs();openAiFinder()});collectionFlightIdCard.addEventListener("click",()=>showV2View("passport"));
+// SKYHUNT v5.2.5 — PRODUCT NAVIGATION
+const labsBackdrop=$("#labsBackdrop");
+const labsClose=$("#labsClose");
+const labsNavBtn=$("#labsNavBtn");
+const labsSkyLens=$("#labsSkyLens");
+const labsAiFinder=$("#labsAiFinder");
+const collectionFlightIdCard=$("#collectionFlightIdCard");
 
+function openLabs(){
+  if(!labsBackdrop)return;
+  labsBackdrop.classList.add("show");
+  labsBackdrop.setAttribute("aria-hidden","false");
+}
+function closeLabs(){
+  if(!labsBackdrop)return;
+  labsBackdrop.classList.remove("show");
+  labsBackdrop.setAttribute("aria-hidden","true");
+}
 
+if(labsNavBtn)labsNavBtn.addEventListener("click",openLabs);
+if(labsClose)labsClose.addEventListener("click",closeLabs);
+if(labsBackdrop)labsBackdrop.addEventListener("click",e=>{if(e.target===labsBackdrop)closeLabs()});
+if(labsSkyLens)labsSkyLens.addEventListener("click",()=>{closeLabs();openSkyLens()});
+if(labsAiFinder)labsAiFinder.addEventListener("click",()=>{closeLabs();openAiFinder()});
+if(collectionFlightIdCard)collectionFlightIdCard.addEventListener("click",()=>showV2View("passport"));
+
+const heroNearby=$("#heroNearbyBtn");
+if(heroNearby)heroNearby.addEventListener("click",()=>showV2View("nearby"));
 
 window.addEventListener("beforeunload",stopTracking);
-
-$("#heroNearbyBtn").addEventListener("click",()=>showV2View("nearby"));
