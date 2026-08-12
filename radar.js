@@ -1,18 +1,19 @@
-/* SKYHUNT v5.3.1 — radar.js */
+/* SKYHUNT v1.2 — radar.js */
 // ===== v2.0.0 LIVE WORLD =====
-const worldView=$("#worldView"), homeView=$("#homeView"), nearbyView=$("#nearbyView"), collectionView=$("#collectionView"), passportView=$("#passportView");
+const worldView=$("#worldView"), homeView=$("#homeView"), nearbyView=$("#nearbyView"), newsView=$("#newsView"), collectionView=$("#collectionView"), passportView=$("#passportView");
 const bottomBtns=[...document.querySelectorAll(".bottomNav button[data-view]")];
 const worldStatus=$("#worldStatus"), worldMapEl=$("#worldMap"), worldCount=$("#worldCount");
 let worldMap=null, worldLayer=null, worldPlanes=[], worldBusy=false;
 let selectedWorldAircraft=null;
 
 function showV2View(name){
-  [homeView,worldView,nearbyView,collectionView,passportView].forEach(v=>v&&v.classList.remove("activeView"));
-  const target={spin:homeView,world:worldView,nearby:nearbyView,collection:collectionView,passport:passportView}[name]||homeView;
+  [homeView,worldView,nearbyView,newsView,collectionView,passportView].forEach(v=>v&&v.classList.remove("activeView"));
+  const target={spin:homeView,world:worldView,nearby:nearbyView,news:newsView,collection:collectionView,passport:passportView}[name]||homeView;
   target.classList.add("activeView");
   bottomBtns.forEach(b=>b.classList.toggle("active",b.dataset.view===name));
   if(name==="world"){ setTimeout(()=>{initWorldMap();worldMap.invalidateSize()},80); }
   if(name==="nearby"){ setTimeout(()=>{initNearbyMap();nearbyMap.invalidateSize()},80); }
+  if(name==="news"){setTimeout(()=>window.SKYHUNT_NEWS?.activate(),20);}
   if(name==="hangar"){renderHangarV2()}
   if(name==="passport"){renderPassport()}
   window.scrollTo({top:0,behavior:"smooth"});
