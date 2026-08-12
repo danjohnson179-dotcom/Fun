@@ -1,4 +1,4 @@
-/* SKYHUNT v5.2.9 — nearby.js
+/* SKYHUNT v5.3.0 — nearby.js
    Full-page Nearby experience. No modal architecture. */
 
 let nearbyAircraft=[];
@@ -225,7 +225,7 @@ function bindNearbyCardActions(){
       currentSource=a._localSource||"Live ADS-B";
       lastLat=Number(a.lat);
       lastLon=Number(a.lon);
-      const ok=window.SKYHUNT_HANGAR?.captureAircraft(a,{zone:"Nearby",source:a._localSource||"Live ADS-B"});
+      const ok=window.SKYHUNT_COLLECTION?.capture(a,{zone:"Nearby",source:a._localSource||"Live ADS-B"});
       btn.textContent=ok?"CAPTURED ✓":"CAPTURE FAILED";
       btn.disabled=!!ok;
     });
