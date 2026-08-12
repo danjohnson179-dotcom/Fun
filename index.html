@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050609">
-<title>SKYHUNT v5.0.1 — Live Aircraft Discovery</title>
+<title>SKYHUNT v5.1.0 — Live Aircraft Discovery</title>
 <meta name="description" content="Discover, track and collect real aircraft flying now with SKYHUNT.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <style>
@@ -287,7 +287,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
   .nearPlane{flex-direction:column}
 }
 
-/* v5.0.1.1 — RADAR MAP UPGRADE */
+/* v5.1.0.1 — RADAR MAP UPGRADE */
 .worldWrap{
   height:min(64vh,620px)!important;
   min-height:460px!important;
@@ -476,7 +476,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
 }
 
 
-/* v5.0.1.1 — SKY LENS */
+/* v5.1.0.1 — SKY LENS */
 .labsBadge{
   display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border-radius:999px;
   background:rgba(200,255,82,.08);border:1px solid rgba(200,255,82,.15);
@@ -582,7 +582,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
 }
 
 
-/* v5.0.1.1 — SKYHUNT AI FINDER */
+/* v5.1.0.1 — SKYHUNT AI FINDER */
 .aiFinderBackdrop{display:none;position:fixed;inset:0;z-index:9750;background:rgba(3,6,9,.92);backdrop-filter:blur(18px);padding:10px}
 .aiFinderBackdrop.show{display:flex;align-items:center;justify-content:center}
 .aiFinderApp{width:min(760px,100%);height:min(880px,calc(100vh - 20px));display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg,#0b1119,#070b10);box-shadow:0 35px 110px rgba(0,0,0,.55)}
@@ -609,7 +609,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
 
 
 /* ======================================================
-   SKYHUNT v5.0.1.1 — LIVE AIRCRAFT DISCOVERY
+   SKYHUNT v5.1.0.1 — LIVE AIRCRAFT DISCOVERY
    ====================================================== */
 :root{
   --launch-lime:#d6ff63;
@@ -717,7 +717,7 @@ body{
 }
 
 
-/* SKYHUNT v5.0.1 — NEW PRODUCT SYSTEM */
+/* SKYHUNT v5.1.0 — NEW PRODUCT SYSTEM */
 :root{--v5-bg:#f4f8fb;--v5-surface:#fff;--v5-ink:#10202e;--v5-muted:#6e8090;--v5-line:rgba(16,32,46,.09);--v5-blue:#54c7ff;--v5-cyan:#6de5ff;--v5-mint:#b9ffcb;--v5-lime:#d9ff75;--v5-violet:#a99cff;--v5-pink:#ff9bcf;--v5-shadow:0 24px 70px rgba(58,85,105,.13)}
 html{background:var(--v5-bg)}body{color:var(--v5-ink)!important;background:radial-gradient(circle at 8% -4%,rgba(84,199,255,.28),transparent 30rem),radial-gradient(circle at 96% 18%,rgba(169,156,255,.20),transparent 30rem),radial-gradient(circle at 45% 100%,rgba(185,255,203,.24),transparent 28rem),linear-gradient(180deg,#f8fbfd,#f3f8fb 55%,#f7fafc)!important}
 body::before{opacity:.25!important;background-image:radial-gradient(rgba(70,113,143,.16) .7px,transparent .7px)!important;background-size:26px 26px!important}.shell{width:min(1180px,calc(100% - 22px))!important}
@@ -738,7 +738,7 @@ body::before{opacity:.25!important;background-image:radial-gradient(rgba(70,113,
 @media(max-width:850px){.modeGrid{grid-template-columns:1fr 1fr!important}.mode.primary{grid-column:1/-1!important}}@media(max-width:520px){.modeGrid{grid-template-columns:1fr!important}.mode.primary{grid-column:auto!important}.heroRadar{min-height:235px!important}.v5HubGrid{grid-template-columns:1fr}}
 
 
-/* SKYHUNT v5.0.1 — CALM UI PATCH */
+/* SKYHUNT v5.1.0 — CALM UI PATCH */
 :root{
   --calm-bg:#eef3f7;
   --calm-surface:#ffffff;
@@ -944,6 +944,134 @@ footer,.footerLinks button{color:#748594!important}
   .modeGrid{margin-bottom:24px!important}
 }
 
+
+/* SKYHUNT v5.1.0 — HOME-FIRST DARKER UI */
+:root{
+  --v51-bg:#18222b;
+  --v51-bg2:#202d37;
+  --v51-surface:#26343f;
+  --v51-surface2:#2c3b47;
+  --v51-ink:#f4f7f9;
+  --v51-muted:#a9b6c0;
+  --v51-line:rgba(255,255,255,.08);
+  --v51-blue:#78c6e6;
+  --v51-green:#a8d8b6;
+  --v51-violet:#aaa9d8;
+}
+html{background:var(--v51-bg)!important}
+body{
+  background:
+    radial-gradient(circle at 8% -8%,rgba(120,198,230,.11),transparent 30rem),
+    radial-gradient(circle at 100% 18%,rgba(170,169,216,.08),transparent 28rem),
+    linear-gradient(180deg,var(--v51-bg2),var(--v51-bg) 58%,#151e26)!important;
+  color:var(--v51-ink)!important;
+}
+body::before{
+  opacity:.10!important;
+  background-image:radial-gradient(rgba(255,255,255,.12) .65px,transparent .65px)!important;
+}
+.topbar{
+  background:rgba(24,34,43,.90)!important;
+  border-bottom:1px solid var(--v51-line)!important;
+}
+.brandText strong{color:var(--v51-ink)!important}
+.brandText small,.v2pill{color:#9aabb7!important}
+.v2pill{background:rgba(255,255,255,.055)!important}
+.heroV2 h1,.callsign,.where,.value,.sectionHead h2,.passport h2,.v2Call,.aiTitle,.aiResultCall{
+  color:var(--v51-ink)!important;
+}
+.heroV2 p,.ident,.whereSub,.small,.sectionHead p,.passportNext,.v2Type,.v2Reg,.v2Rarity{
+  color:var(--v51-muted)!important;
+}
+.gradient{
+  background:linear-gradient(90deg,#8ed4ef,#b7b7ea 58%,#e1a9c8)!important;
+  -webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;
+}
+.eyebrow,.metaChip{
+  background:rgba(255,255,255,.045)!important;
+  color:#b3c0c9!important;
+  border-color:var(--v51-line)!important;
+}
+.heroRadar{
+  background:
+    radial-gradient(circle at 50% 50%,rgba(120,198,230,.10),transparent 18%),
+    radial-gradient(circle at 50% 50%,transparent 0 28%,rgba(120,198,230,.10) 28.4% 28.8%,transparent 29.2% 42%,rgba(120,198,230,.05) 42.4% 42.8%,transparent 43.2%),
+    linear-gradient(145deg,#263641,#1c2933)!important;
+  border-color:var(--v51-line)!important;
+  box-shadow:0 18px 48px rgba(0,0,0,.14)!important;
+}
+.heroRadarLabel{color:#91a4b1!important}
+.mode,.heroCard,.card,.mapSection,.summaryBox,.passport,.worldIntro,.worldStatusBar,.worldTip,
+.v2CollectCard,.sideMenu,.hangarModal,.aboveModal,.releaseModal,.legalModal,.lensStartCard,.aiFinderApp,
+.v5HubCard{
+  background:var(--v51-surface)!important;
+  border-color:var(--v51-line)!important;
+  color:var(--v51-ink)!important;
+  box-shadow:0 10px 28px rgba(0,0,0,.10)!important;
+}
+.mode.primary{
+  background:linear-gradient(145deg,#2a3c48,#24343f)!important;
+}
+.mode h3,.v5HubCard h3{color:var(--v51-ink)!important}
+.mode p,.v5HubCard p{color:var(--v51-muted)!important}
+.mode .go,.action,.trackBtn,.menuLink,.menuClose,.hangarClose,.aboveClose,.releaseClose,.legalClose,.aiClose,
+.sheetBtn,.readTermsBtn{
+  background:rgba(255,255,255,.05)!important;
+  color:var(--v51-ink)!important;
+  border-color:var(--v51-line)!important;
+}
+.globe{
+  background:
+    radial-gradient(circle at 33% 26%,rgba(255,255,255,.92) 0,transparent 7%),
+    radial-gradient(circle at 50% 55%,#a8d9e9 0%,#7cb8d0 38%,#8b8fbe 68%,#c38eac 100%)!important;
+  color:#17303d!important;
+  box-shadow:0 22px 65px rgba(0,0,0,.18),inset 0 0 0 8px rgba(255,255,255,.14)!important;
+}
+.label{color:#99aab6!important}
+.badge{background:rgba(168,216,182,.12)!important;color:#bfe6cb!important;border-color:rgba(168,216,182,.15)!important}
+.action.primary,.saveCardBtn,.locateBtn,.worldScanPrimary,.aiSend,.lensStartBtn,.lensBtn.primary,.sheetBtn.primary{
+  background:linear-gradient(135deg,#a9d3b5,#8bc8df)!important;color:#18313f!important;
+}
+.worldWrap{
+  background:#1f2c35!important;
+  border-color:var(--v51-line)!important;
+  box-shadow:0 12px 34px rgba(0,0,0,.12)!important;
+}
+.worldWrap .leaflet-tile-pane{
+  filter:saturate(.62) brightness(.72) contrast(1.02)!important;
+}
+.radarChip,.radarAction,.worldLegend,.mapHint,.aircraftSheet{
+  background:rgba(31,44,53,.90)!important;color:var(--v51-ink)!important;border-color:var(--v51-line)!important;
+}
+.radarPlane{background:#78b8d0!important;color:#142c39!important}
+.bottomNav{
+  background:rgba(30,42,51,.96)!important;
+  border-color:var(--v51-line)!important;
+  box-shadow:0 12px 34px rgba(0,0,0,.18)!important;
+}
+.bottomNav button{color:#97a8b4!important}
+.bottomNav button.active{
+  background:rgba(255,255,255,.075)!important;color:#f5f8fa!important;
+}
+.firstRunGate{
+  background:
+    radial-gradient(circle at 50% 10%,rgba(120,198,230,.12),transparent 28rem),
+    var(--v51-bg)!important;
+}
+.firstRunCard{
+  background:var(--v51-surface)!important;color:var(--v51-ink)!important;border-color:var(--v51-line)!important;
+}
+.firstRunCard>p,.consentRow div{color:var(--v51-muted)!important}
+.consentRow b{color:var(--v51-ink)!important}
+.consentRow{background:rgba(255,255,255,.035)!important;border-color:var(--v51-line)!important}
+.aiMessages{background:#1d2831!important}
+.aiBubble.bot{background:#2a3944!important;color:#eef3f6!important}
+.aiBubble.user{background:#9acbdc!important;color:#18313f!important}
+.aiInput{background:#202d37!important;color:#f4f7f9!important;border-color:var(--v51-line)!important}
+.skyLensStart{background:#18222b!important}
+footer,.footerLinks button{color:#93a4b0!important}
+.versionBtn{color:#84cae6!important}
+
 </style>
 </head>
 <body>
@@ -954,9 +1082,9 @@ footer,.footerLinks button{color:#748594!important}
   <div class="brand">
     <div class="brandMark">✦</div>
     <div class="brandText"><strong>SKYHUNT</strong><small>LIVE AIRCRAFT DISCOVERY</small></div>
-    <span class="v2pill">v5.0.1</span>
+    <span class="v2pill">v5.1.0</span>
   </div>
-  <div class="topActions"><button class="iconBtn" id="menuBtn">☰</button></div>
+  
 </header>
 
 <section class="view activeView" id="homeView">
@@ -964,8 +1092,8 @@ footer,.footerLinks button{color:#748594!important}
     <div class="heroGrid">
       <div>
         <div class="eyebrow"><span class="livePulse"></span> REAL AIRCRAFT · LIVE NOW</div>
-        <h1>The sky is live.<br><span class="gradient">Go explore it.</span></h1>
-        <p>Discover real aircraft flying now. Explore the world, scan your local sky, follow live targets and build a collection from real ADS-B data.</p>
+        <h1>Your live sky.<br><span class="gradient">Start here.</span></h1>
+        <p>Start from Home, then explore live radar, nearby aircraft, your collection and experimental SKYHUNT Labs.</p>
         <div class="heroMeta">
           <span class="metaChip">NO ACCOUNT REQUIRED</span>
           <span class="metaChip">NO API KEY</span>
@@ -984,13 +1112,13 @@ footer,.footerLinks button{color:#748594!important}
 
   <div class="modeGrid">
     <button class="mode primary" id="heroSpinMode">
-      <div class="modeIcon">✦</div><h3>Discover</h3><p>Start with a random real aircraft somewhere on Earth.</p><span class="go">→</span>
+      <div class="modeIcon">✦</div><h3>Random Hunt</h3><p>Find a real aircraft somewhere in the world right now.</p><span class="go">→</span>
     </button>
     <button class="mode" id="heroWorldBtn">
-      <div class="modeIcon">◎</div><h3>Global Radar</h3><p>Explore live aircraft across sampled aviation hotspots.</p><span class="go">→</span>
+      <div class="modeIcon">◎</div><h3>Open Radar</h3><p>Move into the live global radar and choose your own target.</p><span class="go">→</span>
     </button>
     <button class="mode" id="heroNearbyBtn">
-      <div class="modeIcon">⌖</div><h3>Nearby</h3><p>See real aircraft flying around your current location.</p><span class="go">→</span>
+      <div class="modeIcon">⌖</div><h3>What’s Nearby?</h3><p>Scan the live sky around your current location.</p><span class="go">→</span>
     </button>
   </div>
 
@@ -1128,7 +1256,7 @@ footer,.footerLinks button{color:#748594!important}
 </section>
 
 <footer>
-  SKYHUNT • <button class="versionBtn" id="versionBtn">v5.0.1</button>
+  SKYHUNT • <button class="versionBtn" id="versionBtn">v5.1.0</button>
   <div class="footerLinks">
     <button id="termsLink">Terms</button>
     <button id="privacyLink">Privacy</button>
@@ -1138,13 +1266,19 @@ footer,.footerLinks button{color:#748594!important}
 </footer>
 </div>
 
-<nav class="bottomNav" style="grid-template-columns:repeat(5,1fr)"><button class="active" data-view="spin"><i>✦</i>Discover</button><button data-view="world"><i>◎</i>Radar</button><button id="nearbyNavBtn"><i>⌖</i>Nearby</button><button data-view="hangar"><i>▱</i>Collection</button><button id="labsNavBtn"><i>◈</i>Labs</button></nav>
+<nav class="bottomNav" style="grid-template-columns:repeat(5,1fr)">
+  <button class="active" data-view="spin"><i>⌂</i>Home</button>
+  <button data-view="world"><i>◎</i>Radar</button>
+  <button id="nearbyNavBtn"><i>⌖</i>Nearby</button>
+  <button data-view="hangar"><i>▱</i>Collection</button>
+  <button id="labsNavBtn"><i>◈</i>Labs</button>
+</nav>
 
 
 <div class="firstRunGate" id="firstRunGate" aria-hidden="true">
   <div class="firstRunCard">
     <div class="firstRunMark">✦</div>
-    <div class="releaseReadyBadge">SKYHUNT v5.0.1 · LIVE AIRCRAFT DISCOVERY</div>
+    <div class="releaseReadyBadge">SKYHUNT v5.1.0 · LIVE AIRCRAFT DISCOVERY</div>
     <h2>Welcome to SKYHUNT.</h2>
     <p>Explore live aircraft using public and third-party aviation data. A few important things before you continue.</p>
 
@@ -1174,11 +1308,7 @@ footer,.footerLinks button{color:#748594!important}
   </div>
 </div>
 
-<div class="menuBackdrop" id="menuBackdrop">
-  <aside class="sideMenu">
-    <div class="menuTop"><strong>SKYHUNT</strong><button class="menuClose" id="menuClose">×</button></div>
-    <div class="menuLinks"><button class="menuLink" id="menuSpin">✦ Discover <span>→</span></button><button class="menuLink" id="menuHangar">▱ Collection <span id="menuHangarCount">0</span></button><button class="menuLink" id="menuAbove">⌖ Nearby <span>LIVE</span></button><button class="menuLink" id="menuSkyLens">◉ Sky Lens <span>LABS</span></button><button class="menuLink" id="menuAiFinder">✦ AI Finder <span>LABS</span></button><button class="menuLink" id="menuReleases">◈ Release notes <span>v5.0.1.1</span></button></div></aside>
-</div>
+
 
 <div class="aboveBackdrop" id="aboveBackdrop">
   <div class="aboveModal">
@@ -1266,14 +1396,15 @@ footer,.footerLinks button{color:#748594!important}
 
 <div class="modalBackdrop" id="releaseBackdrop">
   <div class="releaseModal">
-    <div class="releaseTop"><div><h2>SKYHUNT releases</h2><div class="releaseDate">Current version: v5.0.1.1</div></div><button class="releaseClose" id="releaseClose">×</button></div>
+    <div class="releaseTop"><div><h2>SKYHUNT releases</h2><div class="releaseDate">Current version: v5.1.0.1</div></div><button class="releaseClose" id="releaseClose">×</button></div>
 
-    <div class="releaseBlock"><h3>v5.0.1 — Calm UI Fix</h3><div class="releaseDate">12 August 2026</div><ul><li>Removed stale version labels across the interface.</li><li>Top product badge now correctly displays v5.0.1.</li><li>Rebalanced the bright redesign with a calmer blue-grey palette.</li><li>Reduced saturation, gradients, shadows and visual noise.</li><li>Simplified cards and navigation for easier reading on mobile.</li></ul></div>
-<div class="releaseBlock"><h3>v5.0.1.1 — Release-Ready Demo</h3><div class="releaseDate">11 August 2026</div><ul><li>Final major UX and copy overhaul before release testing.</li><li>New first-run Terms acceptance flow.</li><li>New Terms, Privacy, Data & Sources and Safety notices.</li><li>Dual live-data architecture retained: adsb.lol primary with Airplanes.live fallback where already implemented.</li><li>Clearer accuracy, permission and local-storage language.</li><li>Existing Hangar storage preserved.</li><li>Discover, Global Radar, Nearby, Live Tracking, Hangar, Flight ID, Sky Lens and AI Finder retained.</li></ul></div>
-<div class="releaseBlock"><h3>v5.0.1.1 — AI Finder</h3><div class="releaseDate">11 August 2026</div><ul><li>New natural-language live aircraft finder.</li><li>Understands common airline names, aircraft families, altitude and speed constraints, and superlatives such as highest, lowest and fastest.</li><li>Searches sampled live ADS-B data rather than inventing aircraft.</li><li>No AI API key required: query interpretation runs locally in the browser.</li><li>Open, follow or capture matched live aircraft.</li><li>Clearly reports when the current live sample contains no match.</li></ul></div>
-<div class="releaseBlock"><h3>v5.0.1.1 — Sky Lens</h3><div class="releaseDate">11 August 2026</div><ul><li>Introduced SKYHUNT LABS.</li><li>New experimental camera-based Sky Lens mode.</li><li>Uses camera, location and device orientation to estimate where nearby live aircraft are in the sky.</li><li>Live target labels show callsign, aircraft type, altitude and approximate distance.</li><li>Nearest/in-view target receives a highlighted treatment.</li><li>Open a target directly in the main live tracker.</li><li>Clearly labelled BETA because phone compass/orientation and ADS-B timing are approximate.</li></ul></div>
-<div class="releaseBlock"><h3>v5.0.1.1 — Radar Map Upgrade</h3><div class="releaseDate">11 August 2026</div><ul><li>Completely redesigned Global Radar map presentation.</li><li>New dark tactical basemap treatment.</li><li>Animated radar rings and sweep overlay.</li><li>Glowing aircraft target markers.</li><li>Floating live radar HUD with target count and scan/reset controls.</li><li>New aircraft preview bottom sheet when a target is tapped.</li><li>Open or capture an aircraft directly from the map.</li><li>Improved mobile map proportions and controls.</li></ul></div>
-<div class="releaseBlock"><h3>v5.0.1.1 — SKYHUNT</h3><div class="releaseDate">11 August 2026</div><ul><li>Complete rebrand from Flight Roulette to SKYHUNT.</li><li>New visual identity and design system.</li><li>New radar-inspired landing experience.</li><li>New Hunt / Radar / Hangar / Flight ID navigation language.</li><li>Redesigned collector cards, tracking UI and world radar.</li><li>All proven live-aircraft functionality retained.</li></ul></div>
+    <div class="releaseBlock"><h3>v5.1.0 — Home-First Navigation</h3><div class="releaseDate">12 August 2026</div><ul><li>Removed the sandwich menu entirely.</li><li>Home is now the single landing page for every visit.</li><li>All core product navigation is handled by the bottom tabs.</li><li>Bottom navigation is now Home, Radar, Nearby, Collection and Labs.</li><li>Experimental tools remain grouped under Labs.</li><li>Colour system moved darker for stronger readability and reduced glare.</li><li>No live-aircraft functionality was removed.</li></ul></div>
+<div class="releaseBlock"><h3>v5.1.0 — Calm UI Fix</h3><div class="releaseDate">12 August 2026</div><ul><li>Removed stale version labels across the interface.</li><li>Top product badge now correctly displays v5.1.0.</li><li>Rebalanced the bright redesign with a calmer blue-grey palette.</li><li>Reduced saturation, gradients, shadows and visual noise.</li><li>Simplified cards and navigation for easier reading on mobile.</li></ul></div>
+<div class="releaseBlock"><h3>v5.1.0.1 — Release-Ready Demo</h3><div class="releaseDate">11 August 2026</div><ul><li>Final major UX and copy overhaul before release testing.</li><li>New first-run Terms acceptance flow.</li><li>New Terms, Privacy, Data & Sources and Safety notices.</li><li>Dual live-data architecture retained: adsb.lol primary with Airplanes.live fallback where already implemented.</li><li>Clearer accuracy, permission and local-storage language.</li><li>Existing Hangar storage preserved.</li><li>Discover, Global Radar, Nearby, Live Tracking, Hangar, Flight ID, Sky Lens and AI Finder retained.</li></ul></div>
+<div class="releaseBlock"><h3>v5.1.0.1 — AI Finder</h3><div class="releaseDate">11 August 2026</div><ul><li>New natural-language live aircraft finder.</li><li>Understands common airline names, aircraft families, altitude and speed constraints, and superlatives such as highest, lowest and fastest.</li><li>Searches sampled live ADS-B data rather than inventing aircraft.</li><li>No AI API key required: query interpretation runs locally in the browser.</li><li>Open, follow or capture matched live aircraft.</li><li>Clearly reports when the current live sample contains no match.</li></ul></div>
+<div class="releaseBlock"><h3>v5.1.0.1 — Sky Lens</h3><div class="releaseDate">11 August 2026</div><ul><li>Introduced SKYHUNT LABS.</li><li>New experimental camera-based Sky Lens mode.</li><li>Uses camera, location and device orientation to estimate where nearby live aircraft are in the sky.</li><li>Live target labels show callsign, aircraft type, altitude and approximate distance.</li><li>Nearest/in-view target receives a highlighted treatment.</li><li>Open a target directly in the main live tracker.</li><li>Clearly labelled BETA because phone compass/orientation and ADS-B timing are approximate.</li></ul></div>
+<div class="releaseBlock"><h3>v5.1.0.1 — Radar Map Upgrade</h3><div class="releaseDate">11 August 2026</div><ul><li>Completely redesigned Global Radar map presentation.</li><li>New dark tactical basemap treatment.</li><li>Animated radar rings and sweep overlay.</li><li>Glowing aircraft target markers.</li><li>Floating live radar HUD with target count and scan/reset controls.</li><li>New aircraft preview bottom sheet when a target is tapped.</li><li>Open or capture an aircraft directly from the map.</li><li>Improved mobile map proportions and controls.</li></ul></div>
+<div class="releaseBlock"><h3>v5.1.0.1 — SKYHUNT</h3><div class="releaseDate">11 August 2026</div><ul><li>Complete rebrand from Flight Roulette to SKYHUNT.</li><li>New visual identity and design system.</li><li>New radar-inspired landing experience.</li><li>New Hunt / Radar / Hangar / Flight ID navigation language.</li><li>Redesigned collector cards, tracking UI and world radar.</li><li>All proven live-aircraft functionality retained.</li></ul></div>
     <div class="releaseBlock"><h3>v2.0.1 — Global Radar Fix</h3><p>Rate-conscious Live World scanner and mobile radar redesign.</p></div>
     <div class="releaseBlock"><h3>v2.0.0 — LIVE WORLD</h3><p>Introduced Global Radar, bottom navigation and Pilot Passport.</p></div>
     <div class="releaseBlock"><h3>v1.3.1 — Local Radar Fix</h3><p>Dual-feed local radar.</p></div>
@@ -1291,7 +1422,7 @@ const $=s=>document.querySelector(s);
 
 const spinBtn=$("#spinBtn"),spinAgain=$("#spinAgain"),scan=$("#scan"),errorBox=$("#error"),result=$("#result");
 const showMapBtn=$("#showMapBtn"),mapSection=$("#mapSection"),autoFollowBtn=$("#autoFollowBtn"),centreBtn=$("#centreBtn");
-const saveCardBtn=$("#saveCardBtn"),menuBtn=$("#menuBtn"),menuBackdrop=$("#menuBackdrop"),menuClose=$("#menuClose"),menuSpin=$("#menuSpin"),menuHangar=$("#menuHangar"),menuReleases=$("#menuReleases"),menuAbove=$("#menuAbove"),menuSkyLens=$("#menuSkyLens");
+const saveCardBtn=$("#saveCardBtn"),menuBackdrop=$("#menuBackdrop"),menuClose=$("#menuClose"),menuSpin=$("#menuSpin"),menuHangar=$("#menuHangar"),menuReleases=$("#menuReleases"),menuAbove=$("#menuAbove"),menuSkyLens=$("#menuSkyLens");
 const hangarBackdrop=$("#hangarBackdrop"),hangarClose=$("#hangarClose"),hangarGrid=$("#hangarGrid"),collectorToast=$("#collectorToast");
 const aboveBackdrop=$("#aboveBackdrop"),aboveClose=$("#aboveClose"),locateBtn=$("#locateBtn"),aboveStatus=$("#aboveStatus"),aboveList=$("#aboveList");
 const totalCards=$("#totalCards"),uniqueTypes=$("#uniqueTypes"),rareCards=$("#rareCards"),uniqueAircraft=$("#uniqueAircraft"),progressText=$("#progressText"),progressFill=$("#progressFill"),menuHangarCount=$("#menuHangarCount"),clearHangar=$("#clearHangar");
@@ -1759,7 +1890,7 @@ locateBtn.addEventListener("click",scanAboveMe);
 
 
 
-// ===== v5.0.1.1 SKY LENS =====
+// ===== v5.1.0.1 SKY LENS =====
 const skyLensBackdrop=$("#skyLensBackdrop"),skyLensVideo=$("#skyLensVideo"),skyLensClose=$("#skyLensClose");
 const skyLensStart=$("#skyLensStart"),lensStartBtn=$("#lensStartBtn"),lensUnsupported=$("#lensUnsupported");
 const skyLensTargets=$("#skyLensTargets"),skyLensHeading=$("#skyLensHeading"),lensStatus=$("#lensStatus");
@@ -1954,7 +2085,7 @@ window.addEventListener("resize",renderLensTargets);
 
 
 
-// ===== v5.0.1.1 — AI FINDER =====
+// ===== v5.1.0.1 — AI FINDER =====
 const aiFinderBackdrop=$("#aiFinderBackdrop"),aiMessages=$("#aiMessages"),aiInput=$("#aiInput");
 const aiSend=$("#aiSend"),aiClose=$("#aiClose"),menuAiFinder=$("#menuAiFinder");
 let aiLastMatches=[];
@@ -2225,17 +2356,11 @@ function closeHangar(){
   hangarBackdrop.classList.remove("show");
   hangarBackdrop.setAttribute("aria-hidden","true");
 }
-function openMenu(){
-  menuBackdrop.classList.add("show");
-  menuBackdrop.setAttribute("aria-hidden","false");
-}
-function closeMenu(){
-  menuBackdrop.classList.remove("show");
-  menuBackdrop.setAttribute("aria-hidden","true");
-}
+function openMenu(){}
+function closeMenu(){}
 
 saveCardBtn.addEventListener("click",saveCurrentCard);
-menuBtn.addEventListener("click",openMenu);
+
 menuClose.addEventListener("click",closeMenu);
 menuBackdrop.addEventListener("click",e=>{if(e.target===menuBackdrop)closeMenu()});
 menuSpin.addEventListener("click",()=>{closeMenu();showV2View("spin");});
@@ -2503,7 +2628,7 @@ $("#v2ClearHangar").addEventListener("click",()=>{
 menuHangar.addEventListener("click",()=>showV2View("hangar"));
 
 
-// ===== v5.0.1.1 — TERMS / PRIVACY / DATA / SAFETY =====
+// ===== v5.1.0.1 — TERMS / PRIVACY / DATA / SAFETY =====
 const firstRunGate=$("#firstRunGate"),acceptTermsBtn=$("#acceptTermsBtn"),readTermsBtn=$("#readTermsBtn");
 const legalBackdrop=$("#legalBackdrop"),legalClose=$("#legalClose"),legalTitle=$("#legalTitle"),legalContent=$("#legalContent");
 const termsLink=$("#termsLink"),privacyLink=$("#privacyLink"),sourcesLink=$("#sourcesLink"),safetyLink=$("#safetyLink");
