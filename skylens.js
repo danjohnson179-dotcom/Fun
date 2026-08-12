@@ -1,4 +1,4 @@
-/* SKYHUNT v5.3.2 — skylens.js */
+/* SKYHUNT v5.3.3 — skylens.js */
 // ===== v5.2.5 SKY LENS =====
 const skyLensBackdrop=$("#skyLensBackdrop"),skyLensVideo=$("#skyLensVideo"),skyLensClose=$("#skyLensClose");
 const skyLensStart=$("#skyLensStart"),lensStartBtn=$("#lensStartBtn"),lensUnsupported=$("#lensUnsupported");
@@ -194,6 +194,17 @@ async function startSkyLens(){
     lensStartBtn.textContent="START SKY LENS";
   }
 }
+
+function returnFromLabsToHome(){
+  try{
+    if(typeof showV2View==="function")showV2View("spin");
+  }catch(_){}
+  document.querySelectorAll(".bottomNav button[data-view]").forEach(btn=>{
+    btn.classList.toggle("active",btn.dataset.view==="spin");
+  });
+  try{window.scrollTo({top:0,behavior:"auto"})}catch(_){}
+}
+
 function openSkyLens(){
   skyLensBackdrop.classList.add("show");
   skyLensBackdrop.setAttribute("aria-hidden","false");
@@ -202,16 +213,30 @@ function openSkyLens(){
 function closeSkyLens(){
   lensActive=false;
   stopOrientation();
-  if(lensStream){lensStream.getTracks().forEach(t=>t.stop());lensStream=null}
+  if(lensStream){
+    lensStream.getTracks().forEach(t=>t.stop());
+    lensStream=null;
+  }
   skyLensVideo.srcObject=null;
   skyLensTargets.innerHTML="";
   lensAircraft=[];
   lensBest=null;
   skyLensBackdrop.classList.remove("show");
   skyLensBackdrop.setAttribute("aria-hidden","true");
+  skyLensStart.classList.remove("hidden");
+  returnFromLabsToHome();
 }
-skyLensClose.addEventListener("click",closeSkyLens);
+if(skyLensClose)skyLensClose.addEventListener("click",closeSkyLens);
 lensStartBtn.addEventListener("click",startSkyLens);
 lensRescanBtn.addEventListener("click",scanLensAircraft);
 lensOpenBestBtn.addEventListener("click",()=>{if(lensBest)openLensAircraft(lensBest)});
 window.addEventListener("resize",renderLensTargets);
+
+// iOS-safe fallback: catch the close action even if the direct listener is lost.
+document.addEventListener("click",event=>{
+  const button=event.target.closest?.("#skyLensClose");
+  if(!button)return;
+  event.preventDefault();
+  event.stopPropagation();
+  closeSkyLens();
+},true);
