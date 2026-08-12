@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050609">
-<title>SKYHUNT v1.1 — Live Aircraft Discovery</title>
+<title>SKYHUNT v1.2 — Live Aircraft Discovery</title>
 <meta name="description" content="Discover, track and collect real aircraft flying now with SKYHUNT.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <link rel="stylesheet" href="styles.css">
@@ -17,7 +17,7 @@
   <div class="brand">
     <div class="brandMark">✦</div>
     <div class="brandText"><strong>SKYHUNT</strong><small>LIVE AIRCRAFT DISCOVERY</small></div>
-    <span class="v2pill">v1.1</span>
+    <span class="v2pill">v1.2</span>
   </div>
   
 </header>
@@ -226,6 +226,61 @@
   <div class="nearbyPrivacy">Location is requested by your browser and used for the nearby-aircraft request. SKYHUNT does not intentionally save your personal coordinates to your Hangar.</div>
 </section>
 
+
+<section class="view" id="newsView">
+  <div class="newsHero">
+    <div>
+      <div class="eyebrow"><span class="livePulse"></span> LIVE AVIATION COVERAGE</div>
+      <h2>Skywire.</h2>
+      <p>The latest aviation stories from publishers around the world, discovered through the live GDELT news index.</p>
+    </div>
+    <div class="newsPulseCard">
+      <span class="newsPulseDot"></span>
+      <strong id="newsHeroCount">—</strong>
+      <small>STORIES LOADED</small>
+    </div>
+  </div>
+
+  <div class="newsToolbar">
+    <div class="newsCategories" id="newsCategories">
+      <button class="active" data-news-category="latest">Latest</button>
+      <button data-news-category="airlines">Airlines</button>
+      <button data-news-category="airports">Airports</button>
+      <button data-news-category="aircraft">Aircraft</button>
+      <button data-news-category="safety">Safety</button>
+    </div>
+
+    <div class="newsActions">
+      <label class="newsSearch">
+        <span>⌕</span>
+        <input id="newsSearchInput" type="search" placeholder="Search aviation news…" autocomplete="off">
+      </label>
+      <button class="newsRefresh" id="newsRefreshBtn">↻ REFRESH</button>
+    </div>
+  </div>
+
+  <div class="newsStatusBar">
+    <div>
+      <span class="radarDot liveNow"></span>
+      <span id="newsStatus">Ready to load the latest aviation coverage.</span>
+    </div>
+    <span class="newsSourceBadge">POWERED BY GDELT</span>
+  </div>
+
+  <div class="newsLead" id="newsLead"></div>
+  <div class="newsGrid" id="newsGrid"></div>
+
+  <div class="newsEmpty" id="newsEmpty" hidden>
+    <div class="newsEmptyIcon">◌</div>
+    <strong>No stories found.</strong>
+    <span>Try another category or search phrase.</span>
+  </div>
+
+  <div class="newsDisclosure">
+    SKYHUNT indexes article metadata supplied by GDELT and links to the original publisher. Headlines and imagery belong to their respective publishers. News results may be incomplete, duplicated or delayed.
+  </div>
+</section>
+
 <section class="view" id="collectionView">
   <div class="sectionHead"><div><h2>Collection</h2><p>Your captured aircraft and Flight ID.</p></div></div>
   <div class="collectionToolbar">
@@ -254,7 +309,7 @@
 </section>
 
 <footer>
-  SKYHUNT • <button class="versionBtn" id="versionBtn">v1.1</button>
+  SKYHUNT • <button class="versionBtn" id="versionBtn">v1.2</button>
   <div class="footerLinks">
     <button id="termsLink">Terms</button>
     <button id="privacyLink">Privacy</button>
@@ -264,13 +319,13 @@
 </footer>
 </div>
 
-<nav class="bottomNav" style="grid-template-columns:repeat(5,1fr)"><button class="active" data-view="spin"><i>⌂</i>Home</button><button data-view="world"><i>◎</i>Radar</button><button data-view="nearby"><i>⌖</i>Nearby</button><button data-view="collection"><i>▱</i>Collection</button><button id="labsNavBtn"><i>◈</i>Labs</button></nav>
+<nav class="bottomNav" style="grid-template-columns:repeat(6,1fr)"><button class="active" data-view="spin"><i>⌂</i>Home</button><button data-view="world"><i>◎</i>Radar</button><button data-view="nearby"><i>⌖</i>Nearby</button><button data-view="news"><i>▤</i>News</button><button data-view="collection"><i>▱</i>Collection</button><button id="labsNavBtn"><i>◈</i>Labs</button></nav>
 
 
 <div class="firstRunGate" id="firstRunGate" aria-hidden="true">
   <div class="firstRunCard">
     <div class="firstRunMark">✦</div>
-    <div class="releaseReadyBadge">SKYHUNT v1.1 · LIVE AIRCRAFT DISCOVERY</div>
+    <div class="releaseReadyBadge">SKYHUNT v1.2 · LIVE AIRCRAFT DISCOVERY</div>
     <h2>Welcome to SKYHUNT.</h2>
     <p>Explore live aircraft using public and third-party aviation data. A few important things before you continue.</p>
 
@@ -376,7 +431,24 @@
 
 <div class="modalBackdrop" id="releaseBackdrop">
   <div class="releaseModal">
-    <div class="releaseTop"><div><h2>SKYHUNT releases</h2><div class="releaseDate">Current version: v1.1</div></div><button class="releaseClose" id="releaseClose">×</button></div>
+    <div class="releaseTop"><div><h2>SKYHUNT releases</h2><div class="releaseDate">Current version: v1.2</div></div><button class="releaseClose" id="releaseClose">×</button></div>
+
+    <div class="releaseBlock">
+      <h3>v1.2 — Skywire Aviation News</h3>
+      <div class="releaseDate">12 August 2026</div>
+      <p>A new live aviation-news experience built directly into SKYHUNT.</p>
+      <ul>
+        <li>New Aviation News area accessible from the bottom navigation.</li>
+        <li>Live global aviation coverage indexed through GDELT.</li>
+        <li>Latest, Airlines, Airports, Aircraft and Safety categories.</li>
+        <li>Built-in aviation news search.</li>
+        <li>Publisher, country and publication-time metadata where available.</li>
+        <li>Article imagery where supplied by the news index.</li>
+        <li>Direct links to the original publisher.</li>
+        <li>Short-lived local caching to avoid unnecessary repeat API requests.</li>
+        <li>No news API key required.</li>
+      </ul>
+    </div>
 
     <div class="releaseBlock">
       <h3>v1.1 — Aurora Flight Deck</h3>
@@ -428,7 +500,8 @@
 <script src="skylens.js?v=5.3.3"></script>
 <script src="ai-finder.js?v=5.3.3"></script>
 <script src="collection.js?v=5.3.1"></script>
-<script src="radar.js?v=5.3.1"></script>
+<script src="news.js?v=1.2"></script>
+<script src="radar.js?v=1.2"></script>
 <script src="legal.js"></script>
 <script src="app.js?v=5.3.0"></script>
 </body>
