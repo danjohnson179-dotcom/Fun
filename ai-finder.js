@@ -65,18 +65,28 @@ function aiMatchScore(a,p){
   return score;
 }
 async function aiLiveSample(){
-  // Reuse an existing fresh Global Radar sample when available.
   if(Array.isArray(worldPlanes)&&worldPlanes.length>20)return worldPlanes;
+
   const sample=[...zones].sort(()=>Math.random()-.5).slice(0,5),all=[];
+
   for(let i=0;i<sample.length;i++){
-    const [name,lat,lon]=sample[i];let rows=[];
-    try{rows=(await scanAdsbLol(name,lat,lon)).slice(0,100)}
-    catch(e){await sleep(1100);try{rows=(await scanAirplanesLive(name,lat,lon)).slice(0,100)}catch(_){}}
-    rows.forEach(a=>all.push({...a,_zone:name,_worldSource:"Live ADS-B"}));
+    const [name,lat,lon]=sample[i];
+
+    try{
+      const rows=(await scanAirplanesLive(name,lat,lon)).slice(0,100);
+      rows.forEach(a=>all.push({...a,_zone:name,_worldSource:"Airplanes.live"}));
+    }catch(_){}
+
     if(i<sample.length-1)await sleep(1100);
   }
+
   const seen=new Set();
-  return all.filter(a=>{const k=(a.hex||"").toLowerCase();if(!k||seen.has(k))return false;seen.add(k);return true});
+  return all.filter(a=>{
+    const k=(a.hex||"").toLowerCase();
+    if(!k||seen.has(k))return false;
+    seen.add(k);
+    return true;
+  });
 }
 function aiResultCard(a,index){
   const call=(a.flight||"").trim()||a.r||a.hex||"UNKNOWN";
