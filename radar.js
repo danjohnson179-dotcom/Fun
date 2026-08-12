@@ -1,4 +1,4 @@
-/* SKYHUNT v5.2.1 — radar.js */
+/* SKYHUNT v5.2.4 — radar.js */
 // ===== v2.0.0 LIVE WORLD =====
 const worldView=$("#worldView"), homeView=$("#homeView"), nearbyView=$("#nearbyView"), hangarView=$("#hangarViewV2"), passportView=$("#passportView");
 const bottomBtns=[...document.querySelectorAll(".bottomNav button[data-view]")];
@@ -175,26 +175,6 @@ $("#heroWorldBtn").addEventListener("click",()=>{showV2View("world");setTimeout(
 $("#heroSpinMode").addEventListener("click",()=>document.querySelector("#spinBtn").scrollIntoView({behavior:"smooth",block:"center"}));
 $("#heroNearbyBtn").addEventListener("click",()=>{openAbove()});
 
-function renderHangarV2(){
-  const items=getHangar();
-  const grid=$("#v2HangarGrid"), empty=$("#v2HangarEmpty");
-  $("#v2CardCount").textContent=items.reduce((s,x)=>s+(x.discoveries||1),0);
-  $("#v2TypeCount").textContent=new Set(items.map(x=>x.type)).size;
-  $("#v2RareCount").textContent=items.filter(x=>x.rarity==="Rare"||x.rarity==="Ultra Rare").length;
-  if(!items.length){grid.innerHTML="";empty.style.display="block";return}
-  empty.style.display="none";
-  grid.innerHTML=items.map(card=>`
-    <article class="v2CollectCard ${safeText(card.rarityClass||"common")}">
-      <div class="foil"></div>
-      <div class="v2Rarity">${safeText(card.rarity||"Common")}</div>
-      <div class="cardPlane">✈</div>
-      <div class="v2Call">${safeText(card.callsign)}</div>
-      <div class="v2Type">${safeText(card.type)} ${card.description?"• "+safeText(card.description):""}</div>
-      <div class="v2Stats"><span>${safeText(card.altitude)}<small>CAPTURE ALT</small></span><span>${safeText(card.speed)}<small>SPEED</small></span></div>
-      <div class="v2Reg">${safeText(card.registration)} · ${safeText(card.hex)}</div>
-      ${(card.discoveries||1)>1?`<div class="v2Dup">×${card.discoveries}</div>`:""}
-    </article>`).join("");
-}
 function renderPassport(){
   const items=getHangar();
   const types=new Set(items.map(x=>x.type).filter(Boolean));
@@ -211,8 +191,4 @@ function renderPassport(){
   $("#passportProgress").style.width=`${Math.min(100,(total%5)/5*100)}%`;
   $("#passportNext").textContent=`${5-(total%5||0)} captures to next level`;
 }
-$("#v2ClearHangar").addEventListener("click",()=>{
- if(confirm("Clear every aircraft from your Hangar on this device?")){localStorage.removeItem(HANGAR_KEY);renderHangarV2();renderPassport();renderHangar()}
-});
-
 // Upgrade old navigation targets into v2 views
