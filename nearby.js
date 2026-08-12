@@ -1,4 +1,5 @@
-/* SKYHUNT v5.2.2 — nearby.js
+
+/* SKYHUNT v5.2.3 — nearby.js
    Full-page Nearby experience. No modal architecture. */
 
 let nearbyAircraft=[];
@@ -164,9 +165,79 @@ function renderNearbyMap(){
   setTimeout(()=>nearbyMap.invalidateSize(),50);
 }
 
+function nearbyValue(value,fallback="—"){
+  if(value===undefined||value===null||value==="")return fallback;
+  return String(value);
+}
+
+function nearbyCallsign(a){
+  const flight=nearbyValue(a?.flight,"").trim();
+  if(flight)return flight;
+  const reg=nearbyValue(a?.r,"").trim();
+  if(reg)return reg;
+  const hex=nearbyValue(a?.hex,"").trim();
+  return hex||"UNKNOWN";
+}
+
+function nearbyCardHtml(a,i){
+  try{
+    const call=nearbyCallsign(a);
+    const type=nearbyValue(a?.t,"Unknown type");
+    const reg=nearbyValue(a?.r,"");
+    const distance=Number.isFinite(Number(a?._distance))?Number(a._distance):null;
+    const bearing=Number.isFinite(Number(a?._bearing))?Number(a._bearing):null;
+    const distanceText=distance!==null?distance.toFixed(1):"—";
+    const bearingText=bearing!==null?`${Math.round(bearing)}° ${compassPoint(bearing)}`:"—";
+
+    return `<article class="nearbyAircraftCard">
+      <div class="nearbyAircraftMain">
+        <div class="nearbyCall">${nearbySafeText(call)}</div>
+        <div class="nearbyType">${nearbySafeText(type)} ${reg?`· ${nearbySafeText(reg)}`:""}</div>
+      </div>
+      <div class="nearbyDistance">${distanceText} <small>NM</small></div>
+      <div class="nearbyAircraftStats">
+        <span><b>${nearbySafeText(nearbyAltitude(a))}</b><small>ALTITUDE</small></span>
+        <span><b>${nearbySafeText(nearbySpeed(a))}</b><small>SPEED</small></span>
+        <span><b>${nearbySafeText(bearingText)}</b><small>BEARING</small></span>
+      </div>
+      <div class="nearbyAircraftActions">
+        <button data-near-open="${i}" class="nearbyAction primary">OPEN TARGET</button>
+        <button data-near-save="${i}" class="nearbyAction">＋ CAPTURE</button>
+      </div>
+    </article>`;
+  }catch(err){
+    console.warn("SKYHUNT Nearby: skipped malformed aircraft record",err,a);
+    return "";
+  }
+}
+
+function bindNearbyCardActions(){
+  nearbyResults.querySelectorAll("[data-near-open]").forEach(btn=>{
+    btn.addEventListener("click",()=>openNearbyAircraft(Number(btn.dataset.nearOpen)));
+  });
+
+  nearbyResults.querySelectorAll("[data-near-save]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const a=nearbyAircraft[Number(btn.dataset.nearSave)];
+      if(!a)return;
+      currentAircraft={...a,_zone:"Nearby",_source:a._localSource||"Live ADS-B"};
+      currentHex=nearbyValue(a.hex,"").trim().toLowerCase();
+      currentZone="Nearby";
+      currentSource=a._localSource||"Live ADS-B";
+      lastLat=Number(a.lat);
+      lastLon=Number(a.lon);
+      if(typeof saveCurrentCard==="function")saveCurrentCard();
+      btn.textContent="CAPTURED ✓";
+      btn.disabled=true;
+    });
+  });
+}
+
 function renderNearby(){
   nearbyCount.textContent=nearbyAircraft.length;
-  nearbyClosest.textContent=nearbyAircraft.length?`${nearbyAircraft[0]._distance.toFixed(1)} NM`:"—";
+  nearbyClosest.textContent=nearbyAircraft.length&&Number.isFinite(Number(nearbyAircraft[0]._distance))
+    ? `${Number(nearbyAircraft[0]._distance).toFixed(1)} NM`
+    : "—";
   nearbyFeed.textContent=nearbyLastSource||"—";
   nearbyResultsSub.textContent=nearbyAircraft.length
     ? `${nearbyAircraft.length} live aircraft sorted by distance.`
@@ -182,47 +253,22 @@ function renderNearby(){
     return;
   }
 
-  nearbyResults.innerHTML=nearbyAircraft.map((a,i)=>{
-    const call=(a.flight||"").trim()||a.r||a.hex||"UNKNOWN";
-    const bearing=a._bearing;
-    return `<article class="nearbyAircraftCard">
-      <div class="nearbyAircraftMain">
-        <div class="nearbyCall">${nearbySafeText(call)}</div>
-        <div class="nearbyType">${nearbySafeText(a.t||"Unknown type")} ${a.r?`· ${nearbySafeText(a.r)}`:""}</div>
-      </div>
-      <div class="nearbyDistance">${a._distance.toFixed(1)} <small>NM</small></div>
-      <div class="nearbyAircraftStats">
-        <span><b>${nearbySafeText(nearbyAltitude(a))}</b><small>ALTITUDE</small></span>
-        <span><b>${nearbySafeText(nearbySpeed(a))}</b><small>SPEED</small></span>
-        <span><b>${Math.round(bearing)}° ${compassPoint(bearing)}</b><small>BEARING</small></span>
-      </div>
-      <div class="nearbyAircraftActions">
-        <button data-near-open="${i}" class="nearbyAction primary">OPEN TARGET</button>
-        <button data-near-save="${i}" class="nearbyAction">＋ CAPTURE</button>
-      </div>
-    </article>`;
-  }).join("");
+  const cards=nearbyAircraft.map((a,i)=>nearbyCardHtml(a,i)).filter(Boolean).join("");
 
-  nearbyResults.querySelectorAll("[data-near-open]").forEach(btn=>{
-    btn.addEventListener("click",()=>openNearbyAircraft(Number(btn.dataset.nearOpen)));
-  });
+  nearbyResults.innerHTML=cards||`<div class="nearbyEmpty error">
+    <div class="nearbyEmptyIcon">!</div>
+    <strong>Aircraft were found but their details could not be displayed.</strong>
+    <span>Refresh the scan to try again.</span>
+  </div>`;
 
-  nearbyResults.querySelectorAll("[data-near-save]").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      const a=nearbyAircraft[Number(btn.dataset.nearSave)];
-      if(!a)return;
-      currentAircraft={...a,_zone:"Nearby",_source:a._localSource||"Live ADS-B"};
-      currentHex=(a.hex||"").trim().toLowerCase();
-      currentZone="Nearby";
-      currentSource=a._localSource||"Live ADS-B";
-      lastLat=Number(a.lat);
-      lastLon=Number(a.lon);
-      saveCurrentCard();
-      btn.textContent="CAPTURED ✓";
-    });
-  });
+  bindNearbyCardActions();
 
-  renderNearbyMap();
+  // Map rendering is deliberately last. A Leaflet/map issue must not prevent list results.
+  try{
+    renderNearbyMap();
+  }catch(err){
+    console.warn("SKYHUNT Nearby map render warning",err);
+  }
 }
 
 function openNearbyAircraft(index){
@@ -267,44 +313,45 @@ async function requestNearbyFeed(pos,radius){
 async function scanNearby(){
   if(nearbyScanning)return;
 
+  const hadResults=nearbyAircraft.length>0;
   nearbyScanning=true;
   nearbyScanBtn.disabled=true;
   nearbyRefreshBtn.disabled=true;
   nearbyScanBtn.textContent="SCANNING…";
-  nearbyAircraft=[];
-  nearbyLastSource=null;
-  nearbyCount.textContent="0";
-  nearbyClosest.textContent="—";
-  nearbyFeed.textContent="—";
-  nearbyResults.innerHTML=`<div class="nearbyEmpty">
-    <div class="nearbyLoadingRing"></div>
-    <strong>Finding your local traffic…</strong>
-    <span>Getting your position and checking the live aircraft feeds.</span>
-  </div>`;
+
+  if(!hadResults){
+    nearbyCount.textContent="0";
+    nearbyClosest.textContent="—";
+    nearbyFeed.textContent="—";
+    nearbyResults.innerHTML=`<div class="nearbyEmpty">
+      <div class="nearbyLoadingRing"></div>
+      <strong>Finding your local traffic…</strong>
+      <span>Getting your position and checking the live aircraft feeds.</span>
+    </div>`;
+  }else{
+    nearbyResultsSub.textContent="Refreshing live aircraft… current results remain visible.";
+  }
 
   try{
     setNearbyStatus("Getting your location…","scanning");
-    nearbyPosition=await getBrowserLocation();
+    const nextPosition=await getBrowserLocation();
+    const result=await requestNearbyFeed(nextPosition,nearbySelectedRadius);
 
-    const result=await requestNearbyFeed(nearbyPosition,nearbySelectedRadius);
-    nearbyLastSource=result.source;
-
-    nearbyAircraft=(result.aircraft||[])
+    const nextAircraft=(result.aircraft||[])
       .map(a=>({
         ...a,
-        _distance:distanceNm(
-          nearbyPosition.lat,nearbyPosition.lon,
-          Number(a.lat),Number(a.lon)
-        ),
-        _bearing:bearingDeg(
-          nearbyPosition.lat,nearbyPosition.lon,
-          Number(a.lat),Number(a.lon)
-        ),
+        _distance:distanceNm(nextPosition.lat,nextPosition.lon,Number(a.lat),Number(a.lon)),
+        _bearing:bearingDeg(nextPosition.lat,nextPosition.lon,Number(a.lat),Number(a.lon)),
         _localSource:result.source
       }))
       .filter(a=>Number.isFinite(a._distance)&&a._distance<=nearbySelectedRadius+1)
       .sort((a,b)=>a._distance-b._distance)
       .slice(0,40);
+
+    // Commit the new scan only after all processing succeeded.
+    nearbyPosition=nextPosition;
+    nearbyLastSource=result.source;
+    nearbyAircraft=nextAircraft;
 
     setNearbyStatus(
       nearbyAircraft.length
@@ -318,11 +365,16 @@ async function scanNearby(){
   }catch(err){
     const msg=friendlyLocalError(err);
     setNearbyStatus(msg,"idle");
-    nearbyResults.innerHTML=`<div class="nearbyEmpty error">
-      <div class="nearbyEmptyIcon">!</div>
-      <strong>Nearby scan could not complete.</strong>
-      <span>${nearbySafeText(msg)}</span>
-    </div>`;
+
+    if(hadResults&&nearbyAircraft.length){
+      nearbyResultsSub.textContent=`Refresh failed · showing previous results. ${msg}`;
+    }else{
+      nearbyResults.innerHTML=`<div class="nearbyEmpty error">
+        <div class="nearbyEmptyIcon">!</div>
+        <strong>Nearby scan could not complete.</strong>
+        <span>${nearbySafeText(msg)}</span>
+      </div>`;
+    }
   }finally{
     nearbyScanning=false;
     nearbyScanBtn.disabled=false;
