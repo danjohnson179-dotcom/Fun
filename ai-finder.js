@@ -1,5 +1,5 @@
-/* SKYHUNT v5.2.0 — ai-finder.js */
-// ===== v5.2.0 — AI FINDER =====
+/* SKYHUNT v5.2.5 — ai-finder.js */
+// ===== v5.2.5 — AI FINDER =====
 const aiFinderBackdrop=$("#aiFinderBackdrop"),aiMessages=$("#aiMessages"),aiInput=$("#aiInput");
 const aiSend=$("#aiSend"),aiClose=$("#aiClose");
 let aiLastMatches=[];
