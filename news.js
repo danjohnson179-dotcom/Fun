@@ -1,4 +1,4 @@
-/* SKYHUNT v1.2.3 — news.js
+/* SKYHUNT v1.2.4 — news.js
    Skywire aviation news.
    Google News RSS + rss2json JSONP/fetch + AllOrigins RSS fallback. */
 
@@ -29,6 +29,32 @@ const SKYHUNT_NEWS={
       const u=new URL(String(value||""));
       return /^https?:$/.test(u.protocol)?u.href:"";
     }catch(_){return ""}
+  },
+
+  extractImage(...values){
+    for(const value of values){
+      if(!value)continue;
+
+      if(typeof value==="object"){
+        const objectUrl=this.safeUrl(value.url||value.link||value.href||"");
+        if(objectUrl)return objectUrl;
+        continue;
+      }
+
+      const raw=String(value);
+
+      const direct=this.safeUrl(raw);
+      if(direct && /\.(?:jpe?g|png|webp|gif)(?:\?|$)/i.test(direct)){
+        return direct;
+      }
+
+      const img=raw.match(/<img[^>]+src=["']([^"']+)["']/i);
+      if(img){
+        const found=this.safeUrl(img[1].replace(/&amp;/g,"&"));
+        if(found)return found;
+      }
+    }
+    return "";
   },
 
   age(value){
@@ -97,7 +123,13 @@ const SKYHUNT_NEWS={
         domain:publisher||"Google News",
         sourcecountry:"",
         seendate:date,
-        socialimage:this.safeUrl(item.thumbnail||item.enclosure?.link||"")
+        socialimage:this.extractImage(
+          item.thumbnail,
+          item.enclosure,
+          item.image,
+          item.description,
+          item.content
+        )
       };
     });
 
@@ -200,6 +232,17 @@ const SKYHUNT_NEWS={
       const pubDate=text("pubDate");
       const sourceNode=item.querySelector("source");
       const publisher=sourceNode?.textContent?.trim()||"Google News";
+      const description=text("description");
+      const enclosure=item.querySelector("enclosure");
+      const mediaContent=item.getElementsByTagName("media:content")[0];
+      const mediaThumb=item.getElementsByTagName("media:thumbnail")[0];
+
+      const socialimage=this.extractImage(
+        enclosure?.getAttribute("url"),
+        mediaContent?.getAttribute("url"),
+        mediaThumb?.getAttribute("url"),
+        description
+      );
 
       return {
         title,
@@ -207,7 +250,7 @@ const SKYHUNT_NEWS={
         domain:publisher,
         sourcecountry:"",
         seendate:pubDate,
-        socialimage:""
+        socialimage
       };
     });
 
