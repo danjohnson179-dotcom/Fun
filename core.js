@@ -45,15 +45,15 @@ async function fetchJson(url,timeout=9000){
 }
 
 async function scanAdsbLol(name,lat,lon){
- scan.textContent=`Scanning live aircraft near ${name}…`;
- const j=await fetchJson(`https://api.adsb.lol/v2/point/${lat}/${lon}/250`);
- return (j.ac||[]).filter(validAircraft);
+ scan.textContent=`Scanning Airplanes.live near ${name}…`;
+ const j=await fetchJson(`https://api.airplanes.live/v2/point/${lat}/${lon}/250`,10000);
+ return (j.ac||j.aircraft||[]).filter(validAircraft);
 }
 
 async function scanAirplanesLive(name,lat,lon){
- scan.textContent=`Trying backup radar near ${name}…`;
- const j=await fetchJson(`https://api.airplanes.live/v2/point/${lat}/${lon}/250`);
- return (j.aircraft||j.ac||[]).filter(validAircraft);
+ scan.textContent=`Scanning Airplanes.live near ${name}…`;
+ const j=await fetchJson(`https://api.airplanes.live/v2/point/${lat}/${lon}/250`,10000);
+ return (j.ac||j.aircraft||[]).filter(validAircraft);
 }
 
 function stopTracking(){
@@ -74,7 +74,7 @@ async function findRealAircraft(){
  resetTrackingMap();
  spinBtn.disabled=true;spinAgain.disabled=true;spinBtn.classList.add("loading");
 
- let technicalErrors=[];
+ const technicalErrors=[];
  try{
    const shuffled=[...zones].sort(()=>Math.random()-.5).slice(0,8);
 
@@ -82,33 +82,26 @@ async function findRealAircraft(){
      const [name,lat,lon]=shuffled[i];
 
      try{
-       const list=await scanAdsbLol(name,lat,lon);
+       const list=await scanAirplanesLive(name,lat,lon);
        if(list.length){
-         renderAircraft(choose(list),name,"adsb.lol");
+         renderAircraft(choose(list),name,"Airplanes.live");
          return;
        }
-     }catch(e){technicalErrors.push(`adsb.lol: ${e.message}`)}
+     }catch(e){
+       technicalErrors.push(`${name}: ${e.message}`);
+     }
 
-     await sleep(1050);
-
-     try{
-       const list2=await scanAirplanesLive(name,lat,lon);
-       if(list2.length){
-         renderAircraft(choose(list2),name,"Airplanes.live");
-         return;
-       }
-     }catch(e){technicalErrors.push(`Airplanes.live: ${e.message}`)}
-
-     if(i<shuffled.length-1) await sleep(1050);
+     if(i<shuffled.length-1) await sleep(1100);
    }
 
-   if(technicalErrors.length>=4){
-     throw new Error("The live feeds are being blocked or rate-limited. "+technicalErrors.slice(-2).join(" | "));
+   if(technicalErrors.length){
+     throw new Error("Airplanes.live did not return a usable aircraft. "+technicalErrors.slice(-2).join(" | "));
    }
-   throw new Error("The live APIs returned zero usable aircraft in all scanned regions.");
+
+   throw new Error("Airplanes.live returned zero usable aircraft in all scanned regions.");
  }catch(e){
    showError("Couldn’t find a live aircraft: "+e.message);
-   scan.textContent="Live feed unavailable right now.";
+   scan.textContent="Airplanes.live unavailable right now.";
  }finally{
    spinBtn.disabled=false;spinAgain.disabled=false;spinBtn.classList.remove("loading");
  }
@@ -224,7 +217,7 @@ async function refreshTrackedAircraft(){
  trackingBusy=true;
 
  try{
-   const j=await fetchJson(`https://api.adsb.lol/v2/icao/${encodeURIComponent(currentHex)}`,8000);
+   const j=await fetchJson(`https://api.airplanes.live/v2/hex/${encodeURIComponent(currentHex)}`,8000);
    const list=(j.ac||[]).filter(validAircraft);
 
    if(!list.length){
@@ -234,8 +227,8 @@ async function refreshTrackedAircraft(){
    }
 
    const a=list[0];
-   currentSource="adsb.lol";
-   currentAircraft={...(currentAircraft||{}),...a,_zone:currentZone,_source:"adsb.lol"};
+   currentSource="Airplanes.live";
+   currentAircraft={...(currentAircraft||{}),...a,_zone:currentZone,_source:"Airplanes.live"};
    updateTelemetry(a);
    updateMapPoint(a,false);
    trackStatus.textContent="● TRACKING";
