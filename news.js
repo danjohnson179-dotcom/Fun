@@ -1,4 +1,4 @@
-/* SKYHUNT v1.2.4 — news.js
+/* SKYHUNT v1.2.5 — news.js
    Skywire aviation news.
    Google News RSS + rss2json JSONP/fetch + AllOrigins RSS fallback. */
 
@@ -328,6 +328,7 @@ const SKYHUNT_NEWS={
           this.render();
           this.loadedOnce=true;
           this.setStatus(`${this.articles.length} stories · cached`);
+          this.enrichImages();
           return;
         }
       }
@@ -340,6 +341,7 @@ const SKYHUNT_NEWS={
       this.render();
       this.loadedOnce=true;
       this.setStatus(`${this.articles.length} stories · ${result.source}`);
+      this.enrichImages();
 
     }catch(err){
       console.error("Skywire could not load news",err);
@@ -394,6 +396,82 @@ const SKYHUNT_NEWS={
         <div class="newsCardFoot"><span>${domain}</span><b>↗</b></div>
       </div>
     </a>`;
+  },
+
+  async fetchArticleImage(article){
+    if(article.socialimage)return article.socialimage;
+
+    const target=this.safeUrl(article.url);
+    if(!target)return "";
+
+    try{
+      const endpoint=new URL("https://api.microlink.io/");
+      endpoint.searchParams.set("url",target);
+      endpoint.searchParams.set("filter","image.url");
+
+      const ctl=new AbortController();
+      const timer=setTimeout(()=>ctl.abort(),9000);
+
+      try{
+        const response=await fetch(endpoint.href,{
+          signal:ctl.signal,
+          cache:"force-cache",
+          headers:{Accept:"application/json"}
+        });
+
+        if(!response.ok)return "";
+
+        const payload=await response.json();
+        const image=this.safeUrl(
+          payload?.data?.image?.url ||
+          payload?.data?.image ||
+          ""
+        );
+
+        return image;
+      }finally{
+        clearTimeout(timer);
+      }
+    }catch(err){
+      console.warn("Skywire image metadata unavailable",err);
+      return "";
+    }
+  },
+
+  async enrichImages(){
+    // Keep this deliberately small so the free metadata endpoint is not hammered.
+    const candidates=this.articles
+      .map((article,index)=>({article,index}))
+      .filter(({article})=>!article.socialimage)
+      .slice(0,8);
+
+    if(!candidates.length)return;
+
+    // Two at a time keeps mobile/network load restrained.
+    for(let i=0;i<candidates.length;i+=2){
+      const batch=candidates.slice(i,i+2);
+
+      const results=await Promise.all(
+        batch.map(async ({article,index})=>({
+          index,
+          image:await this.fetchArticleImage(article)
+        }))
+      );
+
+      let changed=false;
+
+      results.forEach(({index,image})=>{
+        if(image && this.articles[index] && !this.articles[index].socialimage){
+          this.articles[index].socialimage=image;
+          changed=true;
+        }
+      });
+
+      if(changed){
+        this.saveCache(this.articles);
+        this.render();
+      }
+    }
   },
 
   render(){
