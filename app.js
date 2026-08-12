@@ -1,5 +1,5 @@
-/* SKYHUNT v5.2.9 — app.js */
-// SKYHUNT v5.2.9 — APP BOOTSTRAP
+/* SKYHUNT v5.3.0 — app.js */
+// SKYHUNT v5.3.0 — APP BOOTSTRAP
 window.addEventListener("error", (event) => {
   console.error("SKYHUNT runtime error:", event.error || event.message);
 });
@@ -31,7 +31,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeRelease();clos
 
 
 
-// SKYHUNT v5.2.9 — PRODUCT NAVIGATION
+// SKYHUNT v5.3.0 — PRODUCT NAVIGATION
 const labsBackdrop=$("#labsBackdrop");
 const labsClose=$("#labsClose");
 const labsNavBtn=$("#labsNavBtn");
@@ -64,30 +64,30 @@ window.addEventListener("beforeunload",stopTracking);
 
 
 
-// ===== v5.2.9 — COLLECTION INTEGRATION FALLBACK =====
+// ===== v5.3.0 — COLLECTION INTEGRATION FALLBACK =====
 // This handler is deliberately independent of radar.js.
 // If another module fails, the Collection tab can still open.
 document.addEventListener("click",event=>{
   const target=event.target.closest ? event.target.closest("button") : null;
   if(!target)return;
 
-  if(target.matches('.bottomNav button[data-view="hangar"]')){
+  if(target.matches('.bottomNav button[data-view="collection"]')){
     event.preventDefault();
 
     const home=document.querySelector("#homeView");
     const world=document.querySelector("#worldView");
     const nearby=document.querySelector("#nearbyView");
-    const hangar=document.querySelector("#hangarViewV2");
+    const collection=document.querySelector("#collectionView");
     const passport=document.querySelector("#passportView");
 
-    [home,world,nearby,hangar,passport].forEach(view=>{
+    [home,world,nearby,collection,passport].forEach(view=>{
       if(view)view.classList.remove("activeView");
     });
 
-    if(hangar)hangar.classList.add("activeView");
+    if(collection)collection.classList.add("activeView");
 
     document.querySelectorAll(".bottomNav button[data-view]").forEach(btn=>{
-      btn.classList.toggle("active",btn.dataset.view==="hangar");
+      btn.classList.toggle("active",btn.dataset.view==="collection");
     });
 
     if(typeof window.renderHangarV2==="function"){
