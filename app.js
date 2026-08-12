@@ -1,5 +1,5 @@
-/* SKYHUNT v5.2.8 — app.js */
-// SKYHUNT v5.2.8 — APP BOOTSTRAP
+/* SKYHUNT v5.2.9 — app.js */
+// SKYHUNT v5.2.9 — APP BOOTSTRAP
 window.addEventListener("error", (event) => {
   console.error("SKYHUNT runtime error:", event.error || event.message);
 });
@@ -31,7 +31,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeRelease();clos
 
 
 
-// SKYHUNT v5.2.8 — PRODUCT NAVIGATION
+// SKYHUNT v5.2.9 — PRODUCT NAVIGATION
 const labsBackdrop=$("#labsBackdrop");
 const labsClose=$("#labsClose");
 const labsNavBtn=$("#labsNavBtn");
@@ -64,7 +64,7 @@ window.addEventListener("beforeunload",stopTracking);
 
 
 
-// ===== v5.2.8 — COLLECTION INTEGRATION FALLBACK =====
+// ===== v5.2.9 — COLLECTION INTEGRATION FALLBACK =====
 // This handler is deliberately independent of radar.js.
 // If another module fails, the Collection tab can still open.
 document.addEventListener("click",event=>{
