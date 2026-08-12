@@ -1,4 +1,4 @@
-/* SKYHUNT v5.3.0 — skylens.js */
+/* SKYHUNT v5.3.2 — skylens.js */
 // ===== v5.2.5 SKY LENS =====
 const skyLensBackdrop=$("#skyLensBackdrop"),skyLensVideo=$("#skyLensVideo"),skyLensClose=$("#skyLensClose");
 const skyLensStart=$("#skyLensStart"),lensStartBtn=$("#lensStartBtn"),lensUnsupported=$("#lensUnsupported");
@@ -7,6 +7,17 @@ const lensHelp=$("#lensHelp"),lensTargetCount=$("#lensTargetCount"),lensRescanBt
 
 let lensStream=null,lensPosition=null,lensHeading=0,lensPitch=0,lensAircraft=[],lensBest=null,lensActive=false;
 let lensOrientationHandler=null;
+
+function lensSafeText(value){
+  return String(value ?? "").replace(/[&<>"']/g,c=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  }[c]));
+}
+
 
 function normalizeDeg(x){return ((x%360)+360)%360}
 function shortestAngle(target,current){
@@ -84,7 +95,12 @@ async function scanLensAircraft(){
   }).sort((a,b)=>a._lensDistanceKm-b._lensDistanceKm).slice(0,18);
   lensTargetCount.textContent=`${lensAircraft.length} TARGET${lensAircraft.length===1?"":"S"}`;
   lensStatus.textContent=lensAircraft.length?`Tracking ${lensAircraft.length} nearby aircraft via ${result.source}.`:"No nearby tracked aircraft found.";
-  renderLensTargets();
+  try{
+    renderLensTargets();
+  }catch(err){
+    console.error("Sky Lens target renderer failed",err);
+    lensHelp.textContent=`Target overlay error: ${err.message||"unknown rendering error"}`;
+  }
 }
 function renderLensTargets(){
   if(!lensActive||!lensAircraft.length){
@@ -117,13 +133,23 @@ function renderLensTargets(){
   lensBest=candidates[0]?.a||lensAircraft[0]||null;
 
   skyLensTargets.innerHTML=candidates.slice(0,7).map((o,i)=>{
-    const a=o.a,call=(a.flight||"").trim()||a.r||a.hex||"UNKNOWN";
-    const alt=String(a.alt_baro).toLowerCase()==="ground"?"Ground":Number.isFinite(Number(a.alt_baro))?`${Math.round(Number(a.alt_baro)).toLocaleString("en-GB")} ft`:"Alt —";
-    return `<button class="lensTarget ${i===0?"best":""}" data-lens-index="${lensAircraft.indexOf(a)}" style="left:${Math.max(72,Math.min(w-72,o.x))}px;top:${Math.max(120,Math.min(h-155,o.y))}px">
-      <span class="lensArrow">⌃</span>
-      <div class="lensCall">${safeText(call)}</div>
-      <div class="lensMeta">${safeText(a.t||"Unknown type")} · ${safeText(alt)}<br>${a._lensDistanceKm.toFixed(1)} km · ${Math.round(a._lensBearing)}°</div>
-    </button>`;
+    try{
+      const a=o.a,call=(a.flight||"").trim()||a.r||a.hex||"UNKNOWN";
+      const alt=String(a.alt_baro).toLowerCase()==="ground"
+        ?"Ground"
+        :Number.isFinite(Number(a.alt_baro))
+          ?`${Math.round(Number(a.alt_baro)).toLocaleString("en-GB")} ft`
+          :"Alt —";
+
+      return `<button class="lensTarget ${i===0?"best":""}" data-lens-index="${lensAircraft.indexOf(a)}" style="left:${Math.max(72,Math.min(w-72,o.x))}px;top:${Math.max(120,Math.min(h-155,o.y))}px">
+        <span class="lensArrow">⌃</span>
+        <div class="lensCall">${lensSafeText(call)}</div>
+        <div class="lensMeta">${lensSafeText(a.t||"Unknown type")} · ${lensSafeText(alt)}<br>${Number(a._lensDistanceKm).toFixed(1)} km · ${Math.round(Number(a._lensBearing)||0)}°</div>
+      </button>`;
+    }catch(err){
+      console.warn("Sky Lens skipped an unreadable aircraft target",err);
+      return "";
+    }
   }).join("");
 
   skyLensTargets.querySelectorAll("[data-lens-index]").forEach(btn=>{
