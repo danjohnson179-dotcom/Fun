@@ -1,5 +1,6 @@
-/* SKYHUNT v1.2.2 — news.js
-   Live aviation news via the GDELT DOC 2.0 API. */
+/* SKYHUNT v1.2.3 — news.js
+   Skywire aviation news.
+   Google News RSS + rss2json JSONP/fetch + AllOrigins RSS fallback. */
 
 const SKYHUNT_NEWS={
   category:"latest",
@@ -10,11 +11,11 @@ const SKYHUNT_NEWS={
   CACHE_MS:10*60*1000,
 
   categories:{
-    latest:'(aviation OR airline OR airlines OR aircraft OR airport) sourcelang:english',
-    airlines:'(airline OR airlines OR "air carrier" OR "commercial aviation") sourcelang:english',
-    airports:'(airport OR airports OR "air traffic control" OR runway) sourcelang:english',
-    aircraft:'(aircraft OR airliner OR Boeing OR Airbus OR Embraer) sourcelang:english',
-    safety:'("aviation safety" OR "aircraft incident" OR "air accident" OR "emergency landing" OR "aircraft safety") sourcelang:english'
+    latest:"aviation OR airline OR aircraft OR airport",
+    airlines:'airline OR airlines OR "commercial aviation"',
+    airports:'airport OR airports OR runway OR "air traffic control"',
+    aircraft:"aircraft OR Boeing OR Airbus OR Embraer",
+    safety:'"aviation safety" OR "aircraft incident" OR "emergency landing"'
   },
 
   esc(value){
@@ -30,21 +31,10 @@ const SKYHUNT_NEWS={
     }catch(_){return ""}
   },
 
-  parseDate(value){
-    if(!value)return null;
-    const raw=String(value);
-    // GDELT commonly returns YYYYMMDDTHHMMSSZ.
-    const m=raw.match(/^(\d{4})(\d{2})(\d{2})T?(\d{2})(\d{2})(\d{2})/);
-    if(m){
-      return new Date(Date.UTC(+m[1],+m[2]-1,+m[3],+m[4],+m[5],+m[6]));
-    }
-    const d=new Date(raw);
-    return Number.isNaN(d.getTime())?null:d;
-  },
-
   age(value){
-    const d=this.parseDate(value);
-    if(!d)return "RECENT";
+    if(!value)return "RECENT";
+    const d=new Date(value);
+    if(Number.isNaN(d.getTime()))return "RECENT";
     const seconds=Math.max(0,Math.floor((Date.now()-d.getTime())/1000));
     if(seconds<60)return "JUST NOW";
     if(seconds<3600)return `${Math.floor(seconds/60)}M AGO`;
@@ -52,19 +42,30 @@ const SKYHUNT_NEWS={
     return `${Math.floor(seconds/86400)}D AGO`;
   },
 
-  domainLabel(article){
-    const domain=String(article.domain||"").replace(/^www\./,"");
-    if(domain)return domain;
-    try{return new URL(article.url).hostname.replace(/^www\./,"")}catch(_){return "Publisher"}
+  currentSearch(){
+    if(this.query.trim()){
+      return `${this.query.trim().replace(/\s+/g," ").slice(0,80)} aviation`;
+    }
+    return this.categories[this.category]||this.categories.latest;
   },
 
-  cacheKey(query){
-    return "skyhuntNews:"+btoa(unescape(encodeURIComponent(query))).slice(0,120);
+  googleFeedUrl(){
+    const params=new URLSearchParams({
+      q:this.currentSearch(),
+      hl:"en-GB",
+      gl:"GB",
+      ceid:"GB:en"
+    });
+    return `https://news.google.com/rss/search?${params.toString()}`;
   },
 
-  readCache(query){
+  cacheKey(){
+    return "skyhuntNewsV123:"+encodeURIComponent(`${this.category}|${this.query}`).slice(0,150);
+  },
+
+  readCache(){
     try{
-      const raw=sessionStorage.getItem(this.cacheKey(query));
+      const raw=sessionStorage.getItem(this.cacheKey());
       if(!raw)return null;
       const parsed=JSON.parse(raw);
       if(!parsed||Date.now()-parsed.saved>this.CACHE_MS)return null;
@@ -72,234 +73,241 @@ const SKYHUNT_NEWS={
     }catch(_){return null}
   },
 
-  saveCache(query,articles){
+  saveCache(articles){
     try{
-      sessionStorage.setItem(this.cacheKey(query),JSON.stringify({saved:Date.now(),articles}));
+      sessionStorage.setItem(this.cacheKey(),JSON.stringify({
+        saved:Date.now(),
+        articles
+      }));
     }catch(_){}
   },
 
-  buildQuery(){
-    if(this.query.trim()){
-      const clean=this.query.trim().replace(/[()"]/g," ").replace(/\s+/g," ").slice(0,80);
-      return `("${clean}") (aviation OR airline OR aircraft OR airport) sourcelang:english`;
-    }
-    return this.categories[this.category]||this.categories.latest;
-  },
+  normaliseRss2Json(items){
+    const rows=(Array.isArray(items)?items:[]).map(item=>{
+      const title=String(item.title||"").trim();
+      const url=this.safeUrl(item.link||item.url||"");
+      const date=item.pubDate||item.publishedAt||"";
+      let publisher="";
+      const match=title.match(/\s-\s([^-]{2,80})$/);
+      if(match)publisher=match[1].trim();
 
-  apiUrl(query,{maxrecords=24,timespan="1d"}={}){
-    const params=new URLSearchParams({
-      query,
-      mode:"artlist",
-      maxrecords:String(maxrecords),
-      timespan,
-      sort:"datedesc",
-      format:"json"
+      return {
+        title,
+        url,
+        domain:publisher||"Google News",
+        sourcecountry:"",
+        seendate:date,
+        socialimage:this.safeUrl(item.thumbnail||item.enclosure?.link||"")
+      };
     });
-    return `https://api.gdeltproject.org/api/v2/doc/doc?${params.toString()}`;
+
+    return this.cleanArticles(rows);
   },
 
-  jsonpAttempt(query,{maxrecords=24,timespan="1d",timeout=18000}={}){
+  cleanArticles(rows){
+    const seen=new Set();
+    return (Array.isArray(rows)?rows:[]).filter(row=>{
+      if(!row||!row.title||!row.url)return false;
+      const url=this.safeUrl(row.url);
+      if(!url)return false;
+      row.url=url;
+      const key=String(row.title).toLowerCase().replace(/\W/g,"").slice(0,120);
+      if(!key||seen.has(key))return false;
+      seen.add(key);
+      return true;
+    }).slice(0,40);
+  },
+
+  rss2jsonJsonp(feedUrl,timeout=12000){
     return new Promise((resolve,reject)=>{
-      const callbackName=`__skyhuntGdelt_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+      const callback=`__skyhunt_rss_${Date.now()}_${Math.random().toString(36).slice(2)}`;
       const script=document.createElement("script");
-      let finished=false;
+      let done=false;
 
       const cleanup=()=>{
-        try{delete window[callbackName]}catch(_){window[callbackName]=undefined}
-        if(script.parentNode)script.parentNode.removeChild(script);
+        clearTimeout(timer);
+        try{delete window[callback]}catch(_){window[callback]=undefined}
+        script.remove();
       };
 
       const timer=setTimeout(()=>{
-        if(finished)return;
-        finished=true;
+        if(done)return;
+        done=true;
         cleanup();
-        reject(new Error("JSONP timeout"));
+        reject(new Error("rss2json JSONP timeout"));
       },timeout);
 
-      window[callbackName]=(data)=>{
-        if(finished)return;
-        finished=true;
-        clearTimeout(timer);
+      window[callback]=(data)=>{
+        if(done)return;
+        done=true;
         cleanup();
 
-        const rows=Array.isArray(data?.articles)?data.articles:
-                   Array.isArray(data?.items)?data.items:[];
+        if(!data||data.status!=="ok"){
+          reject(new Error(data?.message||"rss2json JSONP failed"));
+          return;
+        }
 
-        resolve(this.cleanArticles(rows));
+        resolve(this.normaliseRss2Json(data.items));
       };
 
       script.onerror=()=>{
-        if(finished)return;
-        finished=true;
-        clearTimeout(timer);
+        if(done)return;
+        done=true;
         cleanup();
-        reject(new Error("JSONP load failed"));
+        reject(new Error("rss2json JSONP network error"));
       };
 
-      const params=new URLSearchParams({
-        query,
-        mode:"artlist",
-        maxrecords:String(maxrecords),
-        timespan,
-        sort:"datedesc",
-        format:"jsonp",
-        callback:callbackName
-      });
-
-      script.src=`https://api.gdeltproject.org/api/v2/doc/doc?${params.toString()}`;
+      const endpoint=new URL("https://api.rss2json.com/v1/api.json");
+      endpoint.searchParams.set("rss_url",feedUrl);
+      endpoint.searchParams.set("callback",callback);
+      script.src=endpoint.href;
       script.async=true;
       document.head.appendChild(script);
     });
   },
 
-  async fetchAttempt(query,{maxrecords=18,timespan="1d",timeout=18000}={}){
+  async rss2jsonFetch(feedUrl,timeout=12000){
     const ctl=new AbortController();
     const timer=setTimeout(()=>ctl.abort(),timeout);
 
     try{
-      const response=await fetch(this.apiUrl(query,{maxrecords,timespan}),{
+      const endpoint=new URL("https://api.rss2json.com/v1/api.json");
+      endpoint.searchParams.set("rss_url",feedUrl);
+
+      const response=await fetch(endpoint.href,{
         signal:ctl.signal,
         cache:"no-store",
         headers:{Accept:"application/json"}
       });
 
-      if(!response.ok){
-        throw new Error(`News service returned HTTP ${response.status}`);
-      }
-
+      if(!response.ok)throw new Error(`rss2json HTTP ${response.status}`);
       const data=await response.json();
-      const rows=Array.isArray(data?.articles)?data.articles:
-                 Array.isArray(data?.items)?data.items:[];
-
-      return this.cleanArticles(rows);
+      if(!data||data.status!=="ok")throw new Error(data?.message||"rss2json failed");
+      return this.normaliseRss2Json(data.items);
     }finally{
       clearTimeout(timer);
     }
   },
 
-  async requestNews(query,options={}){
-    // JSONP is primary because it is more reliable on iOS static-hosted pages.
-    try{
-      return await this.jsonpAttempt(query,options);
-    }catch(jsonpError){
-      console.warn("SKYHUNT News JSONP failed:",jsonpError);
+  parseRssXml(xml){
+    const doc=new DOMParser().parseFromString(xml,"application/xml");
+    if(doc.querySelector("parsererror"))throw new Error("RSS XML parse failed");
 
-      // Fall back to fetch if script transport fails.
-      return await this.fetchAttempt(query,{
-        maxrecords:Math.min(options.maxrecords||18,18),
-        timespan:options.timespan||"1d",
-        timeout:18000
+    const rows=[...doc.querySelectorAll("item")].map(item=>{
+      const text=(tag)=>item.querySelector(tag)?.textContent?.trim()||"";
+      const title=text("title");
+      const url=this.safeUrl(text("link"));
+      const pubDate=text("pubDate");
+      const sourceNode=item.querySelector("source");
+      const publisher=sourceNode?.textContent?.trim()||"Google News";
+
+      return {
+        title,
+        url,
+        domain:publisher,
+        sourcecountry:"",
+        seendate:pubDate,
+        socialimage:""
+      };
+    });
+
+    return this.cleanArticles(rows);
+  },
+
+  async allOriginsFetch(feedUrl,timeout=14000){
+    const ctl=new AbortController();
+    const timer=setTimeout(()=>ctl.abort(),timeout);
+
+    try{
+      const proxy=`https://api.allorigins.win/raw?url=${encodeURIComponent(feedUrl)}`;
+      const response=await fetch(proxy,{
+        signal:ctl.signal,
+        cache:"no-store"
       });
+
+      if(!response.ok)throw new Error(`AllOrigins HTTP ${response.status}`);
+      const xml=await response.text();
+      return this.parseRssXml(xml);
+    }finally{
+      clearTimeout(timer);
     }
   },
 
-  fallbackQuery(){
-    const category=this.category;
-    if(this.query.trim()){
-      const clean=this.query.trim().replace(/[()"]/g," ").replace(/\s+/g," ").slice(0,60);
-      return `${clean} aviation sourcelang:english`;
+  async loadFeed(){
+    const feedUrl=this.googleFeedUrl();
+    const errors=[];
+
+    // 1. JSONP: best chance on Safari because it avoids CORS entirely.
+    try{
+      const rows=await this.rss2jsonJsonp(feedUrl,12000);
+      if(rows.length)return {rows,source:"Google News · JSONP"};
+      errors.push("JSONP returned no stories");
+    }catch(e){
+      console.warn("Skywire JSONP failed",e);
+      errors.push(String(e.message||e));
     }
 
-    const simple={
-      latest:"aviation sourcelang:english",
-      airlines:"airline sourcelang:english",
-      airports:"airport sourcelang:english",
-      aircraft:"aircraft sourcelang:english",
-      safety:'"aviation safety" sourcelang:english'
-    };
+    // 2. Direct JSON conversion.
+    try{
+      const rows=await this.rss2jsonFetch(feedUrl,12000);
+      if(rows.length)return {rows,source:"Google News · RSS"};
+      errors.push("rss2json returned no stories");
+    }catch(e){
+      console.warn("Skywire rss2json fetch failed",e);
+      errors.push(String(e.message||e));
+    }
 
-    return simple[category]||simple.latest;
+    // 3. Raw RSS through an independent CORS proxy.
+    try{
+      const rows=await this.allOriginsFetch(feedUrl,14000);
+      if(rows.length)return {rows,source:"Google News · fallback"};
+      errors.push("RSS fallback returned no stories");
+    }catch(e){
+      console.warn("Skywire AllOrigins fallback failed",e);
+      errors.push(String(e.message||e));
+    }
+
+    throw new Error(errors.join(" | "));
   },
 
   async fetchArticles(force=false){
     if(this.loading)return;
-
     this.loading=true;
     this.setLoading(true);
 
-    const query=this.buildQuery();
     const hadArticles=this.articles.length>0;
 
     try{
       if(!force){
-        const cached=this.readCache(query);
-        if(cached){
+        const cached=this.readCache();
+        if(cached?.length){
           this.articles=this.cleanArticles(cached);
           this.render();
-          this.setStatus(`${this.articles.length} stories · cached moments ago`);
           this.loadedOnce=true;
+          this.setStatus(`${this.articles.length} stories · cached`);
           return;
         }
       }
 
-      // Keep existing stories visible while refreshing.
-      if(!hadArticles){
-        this.setStatus("Scanning the latest aviation coverage…");
-      }else{
-        this.setStatus("Refreshing aviation coverage…");
-      }
+      this.setStatus(hadArticles?"Refreshing aviation coverage…":"Loading aviation news…");
 
-      let articles=[];
-      let sourceNote="";
-
-      // Attempt 1: focused query, smaller result set, recent window.
-      try{
-        articles=await this.requestNews(query,{
-          maxrecords:24,
-          timespan:"1d",
-          timeout:18000
-        });
-        sourceNote="live";
-      }catch(firstError){
-        console.warn("SKYHUNT News primary request failed:",firstError);
-
-        // Attempt 2: much simpler GDELT query. Complex OR expressions can be slower.
-        this.setStatus("Trying a lighter aviation news search…");
-
-        try{
-          articles=await this.requestNews(this.fallbackQuery(),{
-            maxrecords:18,
-            timespan:"3d",
-            timeout:20000
-          });
-          sourceNote="live · fallback search";
-        }catch(secondError){
-          console.warn("SKYHUNT News fallback request failed:",secondError);
-          throw secondError;
-        }
-      }
-
-      // A successful empty result should not look like a network failure.
-      this.articles=articles;
-      this.saveCache(query,articles);
+      const result=await this.loadFeed();
+      this.articles=result.rows;
+      this.saveCache(this.articles);
       this.render();
       this.loadedOnce=true;
-
-      this.setStatus(
-        articles.length
-          ? `${articles.length} ${sourceNote} stories · newest first`
-          : "Live news search completed · no matching stories found"
-      );
+      this.setStatus(`${this.articles.length} stories · ${result.source}`);
 
     }catch(err){
-      console.error("SKYHUNT News:",err);
-
-      const timeout=/abort/i.test(String(err?.name||err?.message));
-      const message=timeout
-        ?"The aviation news index is taking too long to respond."
-        :"Aviation news is temporarily unavailable.";
-
+      console.error("Skywire could not load news",err);
       this.setStatus(
         hadArticles
-          ? `${message} Showing your previously loaded stories.`
-          : `${message} Tap refresh to try again.`,
+          ?"Live refresh failed · showing your previously loaded stories."
+          :"All live news sources are temporarily unavailable. Tap refresh to retry.",
         true
       );
 
-      // Never wipe a working feed just because refresh failed.
-      if(!hadArticles){
-        this.renderEmpty(true);
-      }
+      if(!hadArticles)this.renderEmpty(true);
 
     }finally{
       this.loading=false;
@@ -307,15 +315,8 @@ const SKYHUNT_NEWS={
     }
   },
 
-  cleanArticles(rows){
-    const seen=new Set();
-    return rows.filter(row=>{
-      if(!row||!row.title||!row.url)return false;
-      const key=String(row.title).toLowerCase().replace(/\W/g,"").slice(0,100);
-      if(!key||seen.has(key))return false;
-      seen.add(key);
-      return !!this.safeUrl(row.url);
-    }).slice(0,40);
+  domainLabel(article){
+    return String(article.domain||"Google News").replace(/^www\./,"");
   },
 
   articleCard(article,index,lead=false){
@@ -323,20 +324,19 @@ const SKYHUNT_NEWS={
     const url=this.safeUrl(article.url);
     const image=this.safeUrl(article.socialimage||article.image||"");
     const domain=this.esc(this.domainLabel(article));
-    const country=this.esc(article.sourcecountry||article.country||"");
     const age=this.esc(this.age(article.seendate||article.date));
-    const meta=[domain,country,age].filter(Boolean).join(" · ");
+    const meta=[domain,age].filter(Boolean).join(" · ");
 
     if(lead){
       return `<a class="newsLeadCard" href="${url}" target="_blank" rel="noopener noreferrer">
         <div class="newsLeadImage ${image?"":"noImage"}" ${image?`style="background-image:linear-gradient(180deg,transparent,rgba(7,13,18,.62)),url('${this.esc(image)}')"`:""}>
           ${image?"":'<div class="newsImageFallback">✈</div>'}
-          <span class="newsBreaking">${this.age(article.seendate).includes("M AGO")||this.age(article.seendate).includes("H AGO")?"LATEST":"SKYWIRE"}</span>
+          <span class="newsBreaking">LATEST</span>
         </div>
         <div class="newsLeadCopy">
           <div class="newsMeta">${meta}</div>
           <h3>${title}</h3>
-          <span class="newsRead">READ ORIGINAL STORY <b>↗</b></span>
+          <span class="newsRead">READ STORY <b>↗</b></span>
         </div>
       </a>`;
     }
@@ -378,22 +378,27 @@ const SKYHUNT_NEWS={
     const lead=document.querySelector("#newsLead");
     const grid=document.querySelector("#newsGrid");
     const empty=document.querySelector("#newsEmpty");
+    const count=document.querySelector("#newsHeroCount");
+
     if(lead)lead.innerHTML="";
     if(grid)grid.innerHTML="";
+    if(count)count.textContent="0";
+
     if(empty){
       empty.hidden=false;
       const strong=empty.querySelector("strong");
       const span=empty.querySelector("span");
       if(strong)strong.textContent=error?"News feed unavailable.":"No stories found.";
-      if(span)span.textContent=error?"The external news index may be slow. Tap refresh to retry.":"Try another category or search phrase.";
+      if(span)span.textContent=error
+        ?"Skywire tried all three feed routes. Tap refresh to try again."
+        :"Try another category or search phrase.";
     }
   },
 
   setStatus(text,error=false){
     const el=document.querySelector("#newsStatus");
     if(el)el.textContent=text;
-    const bar=document.querySelector(".newsStatusBar");
-    if(bar)bar.classList.toggle("error",!!error);
+    document.querySelector(".newsStatusBar")?.classList.toggle("error",!!error);
   },
 
   setLoading(loading){
@@ -412,27 +417,38 @@ const SKYHUNT_NEWS={
   init(){
     document.querySelectorAll("[data-news-category]").forEach(btn=>{
       btn.addEventListener("click",()=>{
-        this.category=btn.dataset.newsCategory;
+        this.category=btn.dataset.newsCategory||"latest";
         this.query="";
+
         const input=document.querySelector("#newsSearchInput");
         if(input)input.value="";
-        document.querySelectorAll("[data-news-category]").forEach(b=>b.classList.toggle("active",b===btn));
-        this.fetchArticles(false);
+
+        document.querySelectorAll("[data-news-category]").forEach(b=>{
+          b.classList.toggle("active",b===btn);
+        });
+
+        this.fetchArticles(true);
       });
     });
 
-    document.querySelector("#newsRefreshBtn")?.addEventListener("click",()=>this.fetchArticles(true));
+    document.querySelector("#newsRefreshBtn")?.addEventListener("click",()=>{
+      this.fetchArticles(true);
+    });
 
     const input=document.querySelector("#newsSearchInput");
     if(input){
       let timer=null;
+
       input.addEventListener("input",()=>{
         clearTimeout(timer);
         timer=setTimeout(()=>{
           this.query=input.value.trim();
-          if(this.query.length>=2||this.query.length===0)this.fetchArticles(false);
-        },550);
+          if(this.query.length>=2||this.query.length===0){
+            this.fetchArticles(true);
+          }
+        },650);
       });
+
       input.addEventListener("keydown",e=>{
         if(e.key==="Enter"){
           e.preventDefault();
