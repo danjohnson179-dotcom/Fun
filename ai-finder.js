@@ -1,4 +1,4 @@
-/* SKYHUNT v5.2.5 — ai-finder.js */
+/* SKYHUNT v5.2.9 — ai-finder.js */
 // ===== v5.2.5 — AI FINDER =====
 const aiFinderBackdrop=$("#aiFinderBackdrop"),aiMessages=$("#aiMessages"),aiInput=$("#aiInput");
 const aiSend=$("#aiSend"),aiClose=$("#aiClose");
@@ -119,7 +119,9 @@ function aiSave(i,btn){
   const a=aiLastMatches[i];if(!a)return;
   currentAircraft={...a,_zone:a._zone||"AI Finder",_source:a._worldSource||"Live ADS-B"};
   currentHex=(a.hex||"").trim().toLowerCase();currentZone=a._zone||"AI Finder";currentSource=a._worldSource||"Live ADS-B";
-  lastLat=Number(a.lat);lastLon=Number(a.lon);saveCurrentCard();btn.textContent="CAPTURED ✓";
+  lastLat=Number(a.lat);lastLon=Number(a.lon);
+  const ok=window.SKYHUNT_HANGAR?.captureAircraft(a,{zone:a._zone||"AI Finder",source:a._worldSource||"Live ADS-B"});
+  btn.textContent=ok?"CAPTURED ✓":"CAPTURE FAILED";
 }
 function openAiFinder(){aiFinderBackdrop.classList.add("show");setTimeout(()=>aiInput.focus(),150)}
 function closeAiFinder(){aiFinderBackdrop.classList.remove("show")}
