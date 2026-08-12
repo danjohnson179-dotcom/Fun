@@ -1,4 +1,4 @@
-/* SKYHUNT v5.2.4 — radar.js */
+/* SKYHUNT v5.2.5 — radar.js */
 // ===== v2.0.0 LIVE WORLD =====
 const worldView=$("#worldView"), homeView=$("#homeView"), nearbyView=$("#nearbyView"), hangarView=$("#hangarViewV2"), passportView=$("#passportView");
 const bottomBtns=[...document.querySelectorAll(".bottomNav button[data-view]")];
@@ -173,8 +173,6 @@ $("#worldRecenterBtn").addEventListener("click",()=>{
 $("#worldScanBtn").addEventListener("click",scanWorldRadar);
 $("#heroWorldBtn").addEventListener("click",()=>{showV2View("world");setTimeout(scanWorldRadar,200)});
 $("#heroSpinMode").addEventListener("click",()=>document.querySelector("#spinBtn").scrollIntoView({behavior:"smooth",block:"center"}));
-$("#heroNearbyBtn").addEventListener("click",()=>{openAbove()});
-
 function renderPassport(){
   const items=getHangar();
   const types=new Set(items.map(x=>x.type).filter(Boolean));
