@@ -1,12 +1,12 @@
-/* SKYHUNT v5.2.1 — core.js */
+/* SKYHUNT v5.2.4 — core.js */
 const $=s=>document.querySelector(s);
 
 const spinBtn=$("#spinBtn"),spinAgain=$("#spinAgain"),scan=$("#scan"),errorBox=$("#error"),result=$("#result");
 const showMapBtn=$("#showMapBtn"),mapSection=$("#mapSection"),autoFollowBtn=$("#autoFollowBtn"),centreBtn=$("#centreBtn");
 const saveCardBtn=$("#saveCardBtn");
-const hangarBackdrop=$("#hangarBackdrop"),hangarClose=$("#hangarClose"),hangarGrid=$("#hangarGrid"),collectorToast=$("#collectorToast");
+const collectorToast=$("#collectorToast");
 const nearbyScanBtn=$("#nearbyScanBtn"),nearbyStatus=$("#nearbyStatus"),nearbyRadarDot=$("#nearbyRadarDot"),nearbyResults=$("#nearbyResults"),nearbyRefreshBtn=$("#nearbyRefreshBtn"),nearbyCount=$("#nearbyCount"),nearbyClosest=$("#nearbyClosest"),nearbyFeed=$("#nearbyFeed"),nearbyResultsSub=$("#nearbyResultsSub");
-const totalCards=$("#totalCards"),uniqueTypes=$("#uniqueTypes"),rareCards=$("#rareCards"),uniqueAircraft=$("#uniqueAircraft"),progressText=$("#progressText"),progressFill=$("#progressFill"),clearHangar=$("#clearHangar");
+
 const mapMeta=$("#mapMeta"),trackStatus=$("#trackStatus"),versionBtn=$("#versionBtn"),releaseBackdrop=$("#releaseBackdrop"),releaseClose=$("#releaseClose");
 
 let lastLat=null,lastLon=null,currentHex=null,currentZone=null,currentSource=null,currentAircraft=null;
