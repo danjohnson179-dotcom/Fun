@@ -277,7 +277,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
   .nearPlane{flex-direction:column}
 }
 
-/* v5.1.0.1 â RADAR MAP UPGRADE */
+/* v5.1.4.1 â RADAR MAP UPGRADE */
 .worldWrap{
   height:min(64vh,620px)!important;
   min-height:460px!important;
@@ -466,7 +466,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
 }
 
 
-/* v5.1.0.1 â SKY LENS */
+/* v5.1.4.1 â SKY LENS */
 .labsBadge{
   display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border-radius:999px;
   background:rgba(200,255,82,.08);border:1px solid rgba(200,255,82,.15);
@@ -572,7 +572,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
 }
 
 
-/* v5.1.0.1 â SKYHUNT AI FINDER */
+/* v5.1.4.1 â SKYHUNT AI FINDER */
 .aiFinderBackdrop{display:none;position:fixed;inset:0;z-index:9750;background:rgba(3,6,9,.92);backdrop-filter:blur(18px);padding:10px}
 .aiFinderBackdrop.show{display:flex;align-items:center;justify-content:center}
 .aiFinderApp{width:min(760px,100%);height:min(880px,calc(100vh - 20px));display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg,#0b1119,#070b10);box-shadow:0 35px 110px rgba(0,0,0,.55)}
@@ -599,7 +599,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
 
 
 /* ======================================================
-   SKYHUNT v5.1.0.1 â LIVE AIRCRAFT DISCOVERY
+   SKYHUNT v5.1.4.1 â LIVE AIRCRAFT DISCOVERY
    ====================================================== */
 :root{
   --launch-lime:#d6ff63;
@@ -707,7 +707,7 @@ body{
 }
 
 
-/* SKYHUNT v5.1.0 â NEW PRODUCT SYSTEM */
+/* SKYHUNT v5.1.4 â NEW PRODUCT SYSTEM */
 :root{--v5-bg:#f4f8fb;--v5-surface:#fff;--v5-ink:#10202e;--v5-muted:#6e8090;--v5-line:rgba(16,32,46,.09);--v5-blue:#54c7ff;--v5-cyan:#6de5ff;--v5-mint:#b9ffcb;--v5-lime:#d9ff75;--v5-violet:#a99cff;--v5-pink:#ff9bcf;--v5-shadow:0 24px 70px rgba(58,85,105,.13)}
 html{background:var(--v5-bg)}body{color:var(--v5-ink)!important;background:radial-gradient(circle at 8% -4%,rgba(84,199,255,.28),transparent 30rem),radial-gradient(circle at 96% 18%,rgba(169,156,255,.20),transparent 30rem),radial-gradient(circle at 45% 100%,rgba(185,255,203,.24),transparent 28rem),linear-gradient(180deg,#f8fbfd,#f3f8fb 55%,#f7fafc)!important}
 body::before{opacity:.25!important;background-image:radial-gradient(rgba(70,113,143,.16) .7px,transparent .7px)!important;background-size:26px 26px!important}.shell{width:min(1180px,calc(100% - 22px))!important}
@@ -728,7 +728,7 @@ body::before{opacity:.25!important;background-image:radial-gradient(rgba(70,113,
 @media(max-width:850px){.modeGrid{grid-template-columns:1fr 1fr!important}.mode.primary{grid-column:1/-1!important}}@media(max-width:520px){.modeGrid{grid-template-columns:1fr!important}.mode.primary{grid-column:auto!important}.heroRadar{min-height:235px!important}.v5HubGrid{grid-template-columns:1fr}}
 
 
-/* SKYHUNT v5.1.0 â CALM UI PATCH */
+/* SKYHUNT v5.1.4 â CALM UI PATCH */
 :root{
   --calm-bg:#eef3f7;
   --calm-surface:#ffffff;
@@ -935,129 +935,38 @@ footer,.footerLinks button{color:#748594!important}
 }
 
 
-/* SKYHUNT v5.1.0 â HOME-FIRST DARKER UI */
-:root{
-  --v51-bg:#18222b;
-  --v51-bg2:#202d37;
-  --v51-surface:#26343f;
-  --v51-surface2:#2c3b47;
-  --v51-ink:#f4f7f9;
-  --v51-muted:#a9b6c0;
-  --v51-line:rgba(255,255,255,.08);
-  --v51-blue:#78c6e6;
-  --v51-green:#a8d8b6;
-  --v51-violet:#aaa9d8;
-}
-html{background:var(--v51-bg)!important}
+/* SKYHUNT v5.1.4 â EMERGENCY RECOVERY
+   Menu DOM intentionally retained but permanently hidden to preserve legacy JS hooks. */
+.topActions{display:none!important}
+.menuBackdrop{display:none!important}
+.menuBackdrop.show{display:none!important}
+
+/* Darker comfortable palette */
 body{
   background:
-    radial-gradient(circle at 8% -8%,rgba(120,198,230,.11),transparent 30rem),
-    radial-gradient(circle at 100% 18%,rgba(170,169,216,.08),transparent 28rem),
-    linear-gradient(180deg,var(--v51-bg2),var(--v51-bg) 58%,#151e26)!important;
-  color:var(--v51-ink)!important;
+    radial-gradient(circle at 8% -8%,rgba(120,198,230,.10),transparent 30rem),
+    radial-gradient(circle at 100% 18%,rgba(170,169,216,.07),transparent 28rem),
+    linear-gradient(180deg,#202d37,#18222b 58%,#151e26)!important;
+  color:#f4f7f9!important;
 }
-body::before{
-  opacity:.10!important;
-  background-image:radial-gradient(rgba(255,255,255,.12) .65px,transparent .65px)!important;
-}
-.topbar{
-  background:rgba(24,34,43,.90)!important;
-  border-bottom:1px solid var(--v51-line)!important;
-}
-.brandText strong{color:var(--v51-ink)!important}
-.brandText small,.v2pill{color:#9aabb7!important}
+.topbar{background:rgba(24,34,43,.91)!important;border-bottom:1px solid rgba(255,255,255,.07)!important}
+.brandText strong{color:#f4f7f9!important}.brandText small,.v2pill{color:#9eafbb!important}
 .v2pill{background:rgba(255,255,255,.055)!important}
-.heroV2 h1,.callsign,.where,.value,.sectionHead h2,.passport h2,.v2Call,.aiTitle,.aiResultCall{
-  color:var(--v51-ink)!important;
-}
-.heroV2 p,.ident,.whereSub,.small,.sectionHead p,.passportNext,.v2Type,.v2Reg,.v2Rarity{
-  color:var(--v51-muted)!important;
-}
-.gradient{
-  background:linear-gradient(90deg,#8ed4ef,#b7b7ea 58%,#e1a9c8)!important;
-  -webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;
-}
-.eyebrow,.metaChip{
-  background:rgba(255,255,255,.045)!important;
-  color:#b3c0c9!important;
-  border-color:var(--v51-line)!important;
-}
-.heroRadar{
-  background:
-    radial-gradient(circle at 50% 50%,rgba(120,198,230,.10),transparent 18%),
-    radial-gradient(circle at 50% 50%,transparent 0 28%,rgba(120,198,230,.10) 28.4% 28.8%,transparent 29.2% 42%,rgba(120,198,230,.05) 42.4% 42.8%,transparent 43.2%),
-    linear-gradient(145deg,#263641,#1c2933)!important;
-  border-color:var(--v51-line)!important;
-  box-shadow:0 18px 48px rgba(0,0,0,.14)!important;
-}
-.heroRadarLabel{color:#91a4b1!important}
-.mode,.heroCard,.card,.mapSection,.summaryBox,.passport,.worldIntro,.worldStatusBar,.worldTip,
-.v2CollectCard,.sideMenu,.hangarModal,.aboveModal,.releaseModal,.legalModal,.lensStartCard,.aiFinderApp,
-.v5HubCard{
-  background:var(--v51-surface)!important;
-  border-color:var(--v51-line)!important;
-  color:var(--v51-ink)!important;
-  box-shadow:0 10px 28px rgba(0,0,0,.10)!important;
-}
-.mode.primary{
-  background:linear-gradient(145deg,#2a3c48,#24343f)!important;
-}
-.mode h3,.v5HubCard h3{color:var(--v51-ink)!important}
-.mode p,.v5HubCard p{color:var(--v51-muted)!important}
-.mode .go,.action,.trackBtn,.menuLink,.menuClose,.hangarClose,.aboveClose,.releaseClose,.legalClose,.aiClose,
-.sheetBtn,.readTermsBtn{
-  background:rgba(255,255,255,.05)!important;
-  color:var(--v51-ink)!important;
-  border-color:var(--v51-line)!important;
-}
-.globe{
-  background:
-    radial-gradient(circle at 33% 26%,rgba(255,255,255,.92) 0,transparent 7%),
-    radial-gradient(circle at 50% 55%,#a8d9e9 0%,#7cb8d0 38%,#8b8fbe 68%,#c38eac 100%)!important;
-  color:#17303d!important;
-  box-shadow:0 22px 65px rgba(0,0,0,.18),inset 0 0 0 8px rgba(255,255,255,.14)!important;
-}
-.label{color:#99aab6!important}
-.badge{background:rgba(168,216,182,.12)!important;color:#bfe6cb!important;border-color:rgba(168,216,182,.15)!important}
-.action.primary,.saveCardBtn,.locateBtn,.worldScanPrimary,.aiSend,.lensStartBtn,.lensBtn.primary,.sheetBtn.primary{
-  background:linear-gradient(135deg,#a9d3b5,#8bc8df)!important;color:#18313f!important;
-}
-.worldWrap{
-  background:#1f2c35!important;
-  border-color:var(--v51-line)!important;
-  box-shadow:0 12px 34px rgba(0,0,0,.12)!important;
-}
-.worldWrap .leaflet-tile-pane{
-  filter:saturate(.62) brightness(.72) contrast(1.02)!important;
-}
-.radarChip,.radarAction,.worldLegend,.mapHint,.aircraftSheet{
-  background:rgba(31,44,53,.90)!important;color:var(--v51-ink)!important;border-color:var(--v51-line)!important;
-}
-.radarPlane{background:#78b8d0!important;color:#142c39!important}
-.bottomNav{
-  background:rgba(30,42,51,.96)!important;
-  border-color:var(--v51-line)!important;
-  box-shadow:0 12px 34px rgba(0,0,0,.18)!important;
-}
-.bottomNav button{color:#97a8b4!important}
-.bottomNav button.active{
-  background:rgba(255,255,255,.075)!important;color:#f5f8fa!important;
-}
-.firstRunGate{
-  background:
-    radial-gradient(circle at 50% 10%,rgba(120,198,230,.12),transparent 28rem),
-    var(--v51-bg)!important;
-}
-.firstRunCard{
-  background:var(--v51-surface)!important;color:var(--v51-ink)!important;border-color:var(--v51-line)!important;
-}
-.firstRunCard>p,.consentRow div{color:var(--v51-muted)!important}
-.consentRow b{color:var(--v51-ink)!important}
-.consentRow{background:rgba(255,255,255,.035)!important;border-color:var(--v51-line)!important}
-.aiMessages{background:#1d2831!important}
-.aiBubble.bot{background:#2a3944!important;color:#eef3f6!important}
-.aiBubble.user{background:#9acbdc!important;color:#18313f!important}
-.aiInput{background:#202d37!important;color:#f4f7f9!important;border-color:var(--v51-line)!important}
+.heroV2 h1,.callsign,.where,.value,.sectionHead h2,.passport h2,.v2Call,.aiTitle,.aiResultCall{color:#f4f7f9!important}
+.heroV2 p,.ident,.whereSub,.small,.sectionHead p,.passportNext,.v2Type,.v2Reg,.v2Rarity{color:#a9b6c0!important}
+.gradient{background:linear-gradient(90deg,#8ed4ef,#b7b7ea 58%,#dda9c6)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important}
+.eyebrow,.metaChip{background:rgba(255,255,255,.045)!important;color:#b3c0c9!important;border-color:rgba(255,255,255,.08)!important}
+.heroRadar{background:radial-gradient(circle at 50% 50%,rgba(120,198,230,.10),transparent 18%),radial-gradient(circle at 50% 50%,transparent 0 28%,rgba(120,198,230,.10) 28.4% 28.8%,transparent 29.2% 42%,rgba(120,198,230,.05) 42.4% 42.8%,transparent 43.2%),linear-gradient(145deg,#263641,#1c2933)!important;border-color:rgba(255,255,255,.08)!important;box-shadow:0 18px 48px rgba(0,0,0,.14)!important}
+.mode,.heroCard,.card,.mapSection,.summaryBox,.passport,.worldIntro,.worldStatusBar,.worldTip,.v2CollectCard,.hangarModal,.aboveModal,.releaseModal,.legalModal,.lensStartCard,.aiFinderApp,.v5HubCard{background:#26343f!important;border-color:rgba(255,255,255,.08)!important;color:#f4f7f9!important;box-shadow:0 10px 28px rgba(0,0,0,.10)!important}
+.mode.primary{background:linear-gradient(145deg,#2a3c48,#24343f)!important}
+.mode h3,.v5HubCard h3{color:#f4f7f9!important}.mode p,.v5HubCard p{color:#a9b6c0!important}
+.action,.trackBtn,.hangarClose,.aboveClose,.releaseClose,.legalClose,.aiClose,.sheetBtn,.readTermsBtn{background:rgba(255,255,255,.05)!important;color:#f4f7f9!important;border-color:rgba(255,255,255,.08)!important}
+.action.primary,.saveCardBtn,.locateBtn,.worldScanPrimary,.aiSend,.lensStartBtn,.lensBtn.primary,.sheetBtn.primary{background:linear-gradient(135deg,#a9d3b5,#8bc8df)!important;color:#18313f!important}
+.bottomNav{background:rgba(30,42,51,.97)!important;border-color:rgba(255,255,255,.08)!important;box-shadow:0 12px 34px rgba(0,0,0,.18)!important}
+.bottomNav button{color:#97a8b4!important}.bottomNav button.active{background:rgba(255,255,255,.075)!important;color:#f5f8fa!important}
+.firstRunGate{background:radial-gradient(circle at 50% 10%,rgba(120,198,230,.12),transparent 28rem),#18222b!important}
+.firstRunCard{background:#26343f!important;color:#f4f7f9!important;border-color:rgba(255,255,255,.08)!important}
+.firstRunCard>p,.consentRow div{color:#a9b6c0!important}.consentRow b{color:#f4f7f9!important}.consentRow{background:rgba(255,255,255,.035)!important;border-color:rgba(255,255,255,.08)!important}
+.aiMessages{background:#1d2831!important}.aiBubble.bot{background:#2a3944!important;color:#eef3f6!important}.aiBubble.user{background:#9acbdc!important;color:#18313f!important}.aiInput{background:#202d37!important;color:#f4f7f9!important;border-color:rgba(255,255,255,.08)!important}
 .skyLensStart{background:#18222b!important}
-footer,.footerLinks button{color:#93a4b0!important}
-.versionBtn{color:#84cae6!important}
+footer,.footerLinks button{color:#93a4b0!important}.versionBtn{color:#84cae6!important}
