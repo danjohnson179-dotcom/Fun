@@ -70,23 +70,15 @@ async function localFeedRequest(feed,pos,radius){
   const lat=Number(pos.lat).toFixed(5);
   const lon=Number(pos.lon).toFixed(5);
 
-  if(feed==="adsb.lol"){
-    const j=await fetchJson(`https://api.adsb.lol/v2/point/${lat}/${lon}/${radius}`,10000);
-    return {
-      source:"adsb.lol",
-      aircraft:(j.ac||j.aircraft||[]).filter(validAircraft)
-    };
-  }
+  const j=await fetchJson(
+    `https://api.airplanes.live/v2/point/${lat}/${lon}/${radius}`,
+    10000
+  );
 
-  if(feed==="Airplanes.live"){
-    const j=await fetchJson(`https://api.airplanes.live/v2/point/${lat}/${lon}/${radius}`,10000);
-    return {
-      source:"Airplanes.live",
-      aircraft:(j.aircraft||j.ac||[]).filter(validAircraft)
-    };
-  }
-
-  throw new Error("Unknown aircraft feed.");
+  return {
+    source:"Airplanes.live",
+    aircraft:(j.ac||j.aircraft||[]).filter(validAircraft)
+  };
 }
 
 function friendlyLocalError(err){
@@ -279,34 +271,8 @@ function openNearbyAircraft(index){
 }
 
 async function requestNearbyFeed(pos,radius){
-  // Primary feed first. Only fall back if the request fails or returns no usable aircraft.
-  let primaryError=null;
-  try{
-    setNearbyStatus(`Scanning ${radius} NM via adsb.lol…`,"scanning");
-    const primary=await localFeedRequest("adsb.lol",pos,radius);
-    if(primary.aircraft.length)return primary;
-  }catch(err){
-    primaryError=err;
-  }
-
-  // Public fallback is deliberately spaced.
-  await sleep(1100);
-
-  try{
-    setNearbyStatus(`Trying backup live feed for ${radius} NM…`,"scanning");
-    const fallback=await localFeedRequest("Airplanes.live",pos,radius);
-    if(fallback.aircraft.length)return fallback;
-
-    // A successful zero-result is still a valid response.
-    if(!primaryError)return fallback;
-  }catch(err){
-    if(primaryError){
-      throw new Error(`${friendlyLocalError(primaryError)} Backup feed: ${friendlyLocalError(err)}`);
-    }
-    throw err;
-  }
-
-  return {source:"adsb.lol",aircraft:[]};
+  setNearbyStatus(`Scanning ${radius} NM via Airplanes.live…`,"scanning");
+  return localFeedRequest("Airplanes.live",pos,radius);
 }
 
 async function scanNearby(){
