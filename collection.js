@@ -1,6 +1,7 @@
-/* SKYHUNT v5.3.0 — collection.js */
+/* SKYHUNT v5.3.1 — collection.js */
 const COLLECTION_KEY="skyhuntCollectionV1";
 const LEGACY_COLLECTION_KEYS=["flightRouletteHangarV1","skyhuntHangar_STAGING_v4_1"];
+const COLLECTION_MIGRATION_KEY="skyhuntCollectionMigrationV1";
 let selectedCollectionAircraft=null,selectedCollectionMeta={};
 
 function collectionSafe(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
@@ -13,8 +14,26 @@ function collectionRarity(type,desc=""){
  return{name:"Common",cls:"common"};
 }
 function migrateLegacyCollection(){
- if(localStorage.getItem(COLLECTION_KEY))return;
- for(const key of LEGACY_COLLECTION_KEYS){try{const raw=localStorage.getItem(key);if(!raw)continue;const parsed=JSON.parse(raw);if(Array.isArray(parsed)){localStorage.setItem(COLLECTION_KEY,JSON.stringify(parsed));return}}catch(_){}}
+ // Migration is deliberately one-time. Clearing Collection must never resurrect old Hangar cards.
+ if(localStorage.getItem(COLLECTION_MIGRATION_KEY)==="done")return;
+
+ try{
+   if(!localStorage.getItem(COLLECTION_KEY)){
+     for(const key of LEGACY_COLLECTION_KEYS){
+       try{
+         const raw=localStorage.getItem(key);
+         if(!raw)continue;
+         const parsed=JSON.parse(raw);
+         if(Array.isArray(parsed)&&parsed.length){
+           localStorage.setItem(COLLECTION_KEY,JSON.stringify(parsed));
+           break;
+         }
+       }catch(_){}
+     }
+   }
+ }finally{
+   localStorage.setItem(COLLECTION_MIGRATION_KEY,"done");
+ }
 }
 function readCollection(){migrateLegacyCollection();try{const p=JSON.parse(localStorage.getItem(COLLECTION_KEY)||"[]");return Array.isArray(p)?p.filter(x=>x&&typeof x==="object"):[]}catch(e){return[]}}
 function writeCollection(items){try{localStorage.setItem(COLLECTION_KEY,JSON.stringify(items));return true}catch(e){collectionToast("Could not save on this device");return false}}
@@ -46,7 +65,33 @@ function renderCollection(){
  if(!items.length){grid.innerHTML="";empty.style.display="block";empty.innerHTML="<strong>Your Collection is empty.</strong><br>Capture a live aircraft and it will appear here.";return}
  empty.style.display="none";grid.innerHTML=items.map(item=>{const rarity=collectionRarity(item.type,item.description||""),d=new Date(item.firstSaved||Date.now()),date=Number.isNaN(d.getTime())?"Unknown date":d.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"});return`<article class="v2CollectCard ${collectionSafe(item.rarityClass||rarity.cls)}"><div class="foil"></div><div class="v2Rarity">${collectionSafe(item.rarity||rarity.name)}</div><div class="cardPlane">✈</div><div class="v2Call">${collectionSafe(item.callsign||"UNKNOWN")}</div><div class="v2Type">${collectionSafe(item.type||"Unknown")}</div><div class="v2Stats"><span>${collectionSafe(item.altitude||"Not available")}<small>CAPTURE ALT</small></span><span>${collectionSafe(item.speed||"Not available")}<small>SPEED</small></span></div><div class="v2Reg">${collectionSafe(item.registration||"Unknown")} · ${collectionSafe(item.hex||"Unknown")}</div><div class="v2Reg">Captured near ${collectionSafe(item.zone||"Unknown area")} · ${collectionSafe(date)}</div>${(Number(item.discoveries)||1)>1?`<div class="v2Dup">×${Number(item.discoveries)||1}</div>`:""}</article>`}).join("");
 }
-function clearCollection(){if(!confirm("Clear every aircraft from your Collection on this device?"))return;localStorage.removeItem(COLLECTION_KEY);renderCollection();collectionToast("Collection cleared")}
-window.SKYHUNT_COLLECTION={select:selectCollectionAircraft,capture:captureAircraft,captureSelected:captureSelectedAircraft,render:renderCollection,get:readCollection};
+function clearCollection(){
+ if(!confirm("Clear every aircraft from your Collection on this device?"))return;
+
+ try{
+   localStorage.removeItem(COLLECTION_KEY);
+
+   // Remove historical Hangar stores too, otherwise old cards can be imported again.
+   for(const key of LEGACY_COLLECTION_KEYS){
+     localStorage.removeItem(key);
+   }
+
+   // Explicitly mark migration complete so an empty Collection stays empty.
+   localStorage.setItem(COLLECTION_MIGRATION_KEY,"done");
+ }catch(e){
+   console.warn("Collection clear encountered a storage error",e);
+ }
+
+ selectedCollectionAircraft=null;
+ selectedCollectionMeta={};
+ renderCollection();
+
+ if(typeof renderPassport==="function"){
+   try{renderPassport()}catch(e){console.warn("Flight ID refresh failed",e)}
+ }
+
+ collectionToast("Collection cleared");
+}
+window.SKYHUNT_COLLECTION={select:selectCollectionAircraft,capture:captureAircraft,captureSelected:captureSelectedAircraft,render:renderCollection,get:readCollection,clear:clearCollection};
 document.addEventListener("click",e=>{const b=e.target.closest?.("button");if(!b)return;if(b.id==="captureBtn"){e.preventDefault();e.stopPropagation();captureSelectedAircraft()}else if(b.id==="clearCollection"){e.preventDefault();clearCollection()}},true);
 migrateLegacyCollection();renderCollection();
