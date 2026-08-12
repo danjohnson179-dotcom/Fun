@@ -1105,5 +1105,754 @@ footer,.footerLinks button{color:#93a4b0!important}.versionBtn{color:#84cae6!imp
   .collectionToolbar{align-items:flex-start}
 }
 
+/* ==========================================================
+   SKYHUNT v1.1 â AURORA FLIGHT DECK
+   VISUAL-ONLY OVERRIDE. NO FUNCTIONALITY.
+   ========================================================== */
 
+:root{
+  --sky-bg:#0b1219;
+  --sky-bg-2:#101b24;
+  --sky-panel:#14212b;
+  --sky-panel-2:#192935;
+  --sky-panel-soft:rgba(24,39,50,.82);
+  --sky-line:rgba(213,236,248,.09);
+  --sky-line-strong:rgba(213,236,248,.15);
+  --sky-text:#f5f9fb;
+  --sky-muted:#91a4b2;
+  --sky-muted-2:#6e8493;
+  --sky-blue:#79c9e8;
+  --sky-blue-2:#a5e4f4;
+  --sky-mint:#9ed7b1;
+  --sky-violet:#aaa9d9;
+  --sky-warm:#efc98f;
+  --sky-danger:#f39ab4;
+  --sky-shadow:0 24px 70px rgba(0,0,0,.28);
+  --sky-shadow-soft:0 12px 34px rgba(0,0,0,.16);
+}
 
+html{
+  background:#0b1219!important;
+  color-scheme:dark;
+}
+
+body{
+  color:var(--sky-text)!important;
+  background:
+    radial-gradient(60rem 34rem at 6% -8%,rgba(121,201,232,.14),transparent 62%),
+    radial-gradient(44rem 36rem at 100% 10%,rgba(170,169,217,.10),transparent 65%),
+    radial-gradient(38rem 28rem at 54% 102%,rgba(158,215,177,.075),transparent 66%),
+    linear-gradient(180deg,#101a23 0%,#0b131a 48%,#091017 100%)!important;
+  min-height:100vh;
+}
+
+body::before{
+  opacity:.12!important;
+  background-image:
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px)!important;
+  background-size:34px 34px!important;
+  mask-image:linear-gradient(to bottom,black,transparent 80%);
+}
+
+.shell{
+  width:min(1180px,calc(100% - 24px))!important;
+}
+
+.topbar{
+  height:76px!important;
+  background:linear-gradient(180deg,rgba(11,18,25,.96),rgba(11,18,25,.80))!important;
+  border-bottom:1px solid var(--sky-line)!important;
+  backdrop-filter:blur(24px) saturate(1.2)!important;
+  -webkit-backdrop-filter:blur(24px) saturate(1.2)!important;
+}
+
+.brandMark{
+  background:linear-gradient(145deg,#9ed7b1,#80c9e3)!important;
+  color:#0d2430!important;
+  box-shadow:0 10px 30px rgba(121,201,232,.17)!important;
+}
+
+.brandText strong{
+  color:var(--sky-text)!important;
+  letter-spacing:-.02em;
+}
+.brandText small,.v2pill{
+  color:#8ea1af!important;
+}
+.v2pill{
+  background:rgba(255,255,255,.045)!important;
+  border:1px solid var(--sky-line)!important;
+}
+
+.heroV2{
+  padding:66px 0 30px!important;
+}
+.heroGrid{
+  gap:34px!important;
+  align-items:center!important;
+}
+.heroV2 h1{
+  color:var(--sky-text)!important;
+  font-size:clamp(58px,9.2vw,112px)!important;
+  line-height:.88!important;
+  letter-spacing:-.07em!important;
+  max-width:760px;
+}
+.gradient{
+  background:linear-gradient(100deg,#a4dfef 0%,#91c9e3 30%,#b4b2df 64%,#d4acc5 100%)!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  color:transparent!important;
+}
+.heroV2 p{
+  color:#9aadb9!important;
+  font-size:16px!important;
+  line-height:1.62!important;
+  max-width:580px!important;
+}
+.eyebrow{
+  color:#a5dceb!important;
+  background:rgba(121,201,232,.065)!important;
+  border:1px solid rgba(121,201,232,.12)!important;
+  letter-spacing:.12em!important;
+}
+.livePulse{
+  background:#86d6a2!important;
+  box-shadow:0 0 0 5px rgba(134,214,162,.08),0 0 16px rgba(134,214,162,.25)!important;
+}
+.heroMeta{
+  gap:7px!important;
+}
+.metaChip,.releaseReadyBadge{
+  color:#94a8b5!important;
+  background:rgba(255,255,255,.035)!important;
+  border:1px solid var(--sky-line)!important;
+  backdrop-filter:blur(12px);
+}
+
+.heroRadar{
+  min-height:350px!important;
+  border-radius:30px!important;
+  border:1px solid rgba(167,220,240,.12)!important;
+  background:
+    radial-gradient(circle at 50% 50%,rgba(121,201,232,.12),transparent 18%),
+    radial-gradient(circle at 50% 50%,transparent 0 25%,rgba(121,201,232,.10) 25.3% 25.7%,transparent 26% 40%,rgba(121,201,232,.06) 40.3% 40.7%,transparent 41%),
+    radial-gradient(circle at 15% 12%,rgba(170,169,217,.10),transparent 44%),
+    linear-gradient(145deg,#172833,#0d1821)!important;
+  box-shadow:0 30px 90px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.035)!important;
+  overflow:hidden;
+}
+.heroRadar::before{
+  opacity:.82!important;
+  background:conic-gradient(from 0deg at 50% 50%,transparent 0 322deg,rgba(121,201,232,.02) 325deg,rgba(121,201,232,.18) 357deg,transparent 360deg)!important;
+}
+.heroRadar::after{
+  content:"";
+  position:absolute;
+  inset:15%;
+  border:1px solid rgba(121,201,232,.06);
+  border-radius:50%;
+  pointer-events:none;
+}
+.centreDot{
+  background:#91d5a8!important;
+  box-shadow:0 0 0 8px rgba(145,213,168,.07),0 0 28px rgba(145,213,168,.22)!important;
+}
+.blip{
+  color:#a8e0f1!important;
+  filter:drop-shadow(0 0 7px rgba(121,201,232,.36))!important;
+}
+.heroRadarLabel{
+  color:#7f98a8!important;
+  letter-spacing:.13em!important;
+}
+
+.modeGrid{
+  grid-template-columns:1.35fr 1fr 1fr!important;
+  gap:12px!important;
+  margin:8px 0 52px!important;
+}
+.mode{
+  min-height:172px!important;
+  padding:20px!important;
+  border-radius:24px!important;
+  color:var(--sky-text)!important;
+  background:
+    linear-gradient(180deg,rgba(27,43,54,.92),rgba(18,31,41,.96))!important;
+  border:1px solid var(--sky-line)!important;
+  box-shadow:var(--sky-shadow-soft)!important;
+  backdrop-filter:blur(15px)!important;
+  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease!important;
+}
+.mode.primary{
+  background:
+    radial-gradient(20rem 14rem at 100% 0%,rgba(121,201,232,.12),transparent 65%),
+    linear-gradient(145deg,#1b303c,#13222c)!important;
+  border-color:rgba(121,201,232,.15)!important;
+}
+.mode:hover{
+  transform:translateY(-2px)!important;
+  border-color:rgba(167,220,240,.18)!important;
+  box-shadow:0 18px 45px rgba(0,0,0,.20)!important;
+}
+.mode:active{
+  transform:scale(.985)!important;
+}
+.modeIcon{
+  color:#a8dcee!important;
+}
+.mode h3{
+  color:var(--sky-text)!important;
+  font-size:23px!important;
+  letter-spacing:-.04em!important;
+}
+.mode p{
+  color:#8fa3b0!important;
+  line-height:1.5!important;
+}
+.mode .go{
+  background:rgba(255,255,255,.04)!important;
+  border:1px solid var(--sky-line)!important;
+  color:#aec0ca!important;
+}
+
+.globe{
+  background:
+    radial-gradient(circle at 32% 25%,rgba(255,255,255,.88) 0,transparent 6%),
+    radial-gradient(circle at 50% 55%,#b5dfe9 0%,#78b9cf 35%,#8e92bd 66%,#b7839f 100%)!important;
+  box-shadow:0 30px 85px rgba(0,0,0,.22),inset 0 0 0 9px rgba(255,255,255,.13)!important;
+  border-color:rgba(255,255,255,.10)!important;
+  color:#102834!important;
+}
+.globe:active{
+  transform:scale(.975)!important;
+}
+
+.sectionHead{
+  margin-top:20px!important;
+  margin-bottom:14px!important;
+}
+.sectionHead h2{
+  color:var(--sky-text)!important;
+  font-size:clamp(32px,6vw,52px)!important;
+  letter-spacing:-.055em!important;
+}
+.sectionHead p{
+  color:var(--sky-muted)!important;
+}
+
+.heroCard,.card,.mapSection,.summaryBox,.passport,.worldIntro,.worldStatusBar,.worldTip,
+.v2CollectCard,.releaseModal,.legalModal,.lensStartCard,.aiFinderApp,.v5HubCard,
+.nearbyControlCard,.nearbyStat,.nearbyAircraftCard,.collectionToolbar{
+  color:var(--sky-text)!important;
+  background:
+    linear-gradient(180deg,rgba(24,39,50,.94),rgba(17,29,38,.97))!important;
+  border:1px solid var(--sky-line)!important;
+  box-shadow:var(--sky-shadow-soft)!important;
+}
+
+.callsign,.where,.value,.passport h2,.v2Call,.aiTitle,.aiResultCall,
+.nearbyControlCopy strong,.nearbyCall,.nearbyStat b,.nearbyResultsHead h3,.collectionToolbar strong{
+  color:var(--sky-text)!important;
+}
+.ident,.whereSub,.small,.passportNext,.v2Type,.v2Reg,.v2Rarity,
+.aiSub,.aiNotice,.nearbyControlCopy p,.nearbyResultsHead p,.nearbyType,.collectionToolbar span{
+  color:var(--sky-muted)!important;
+}
+
+.badge{
+  color:#bde5ca!important;
+  background:rgba(158,215,177,.08)!important;
+  border:1px solid rgba(158,215,177,.14)!important;
+}
+.label{
+  color:#78909f!important;
+}
+
+.action,.trackBtn,.sheetBtn,.nearbyRefreshBtn,.nearbyAction,.collectionFlightIdBtn,
+.menuLink,.menuClose,.hangarClose,.aboveClose,.releaseClose,.legalClose,.aiClose,.readTermsBtn{
+  background:rgba(255,255,255,.045)!important;
+  color:#e9f1f5!important;
+  border:1px solid var(--sky-line)!important;
+  transition:transform .15s ease,background .15s ease,border-color .15s ease!important;
+}
+.action:active,.trackBtn:active,.sheetBtn:active,.nearbyAction:active,.collectionFlightIdBtn:active{
+  transform:scale(.975)!important;
+}
+.action.primary,#captureBtn,.locateBtn,.worldScanPrimary,.aiSend,.lensStartBtn,.lensBtn.primary,
+.sheetBtn.primary,.nearbyScanBtn,.nearbyAction.primary,.acceptBtn{
+  background:linear-gradient(135deg,#a8d8b7,#82c6df)!important;
+  color:#112b38!important;
+  border:0!important;
+  box-shadow:0 10px 28px rgba(121,201,232,.11)!important;
+  font-weight:950!important;
+}
+
+.worldWrap{
+  min-height:430px!important;
+  border-radius:28px!important;
+  border:1px solid var(--sky-line)!important;
+  background:#0d1820!important;
+  box-shadow:var(--sky-shadow)!important;
+}
+.worldWrap .leaflet-tile-pane,
+.nearbyMapCard .leaflet-tile-pane{
+  filter:saturate(.64) brightness(.62) contrast(1.08) hue-rotate(-4deg)!important;
+}
+.worldWrap::before{
+  opacity:.32!important;
+}
+.worldWrap::after{
+  opacity:.16!important;
+}
+.radarChip,.radarAction,.worldLegend,.mapHint,.aircraftSheet,.nearbyMapHint{
+  background:rgba(16,27,36,.88)!important;
+  color:var(--sky-text)!important;
+  border:1px solid var(--sky-line)!important;
+  backdrop-filter:blur(16px) saturate(1.15)!important;
+}
+.radarChip.live{
+  color:#a7dfba!important;
+}
+.radarPlane,.nearbyPlaneMarker{
+  background:linear-gradient(135deg,#9bd5e7,#73b6ce)!important;
+  color:#102631!important;
+  box-shadow:0 0 0 4px rgba(121,201,232,.09),0 6px 18px rgba(0,0,0,.25)!important;
+}
+.leaflet-control-zoom a{
+  background:rgba(17,29,38,.92)!important;
+  color:#eaf4f8!important;
+  border-color:var(--sky-line)!important;
+}
+.leaflet-control-attribution{
+  background:rgba(9,16,23,.74)!important;
+  color:#718895!important;
+}
+.leaflet-control-attribution a{
+  color:#84c8e1!important;
+}
+.sheetStat,.v2Stats span,.nearbyAircraftStats span{
+  background:rgba(255,255,255,.035)!important;
+  border:1px solid rgba(255,255,255,.025)!important;
+}
+.sheetType,.sheetStat span,.v2Stats small,.nearbyAircraftStats small{
+  color:#8398a5!important;
+}
+
+.nearbyControlCard{
+  border-radius:26px!important;
+  padding:20px!important;
+}
+.nearbyRadius button{
+  background:rgba(255,255,255,.035)!important;
+  color:#91a5b2!important;
+  border:1px solid var(--sky-line)!important;
+}
+.nearbyRadius button.active{
+  background:rgba(121,201,232,.11)!important;
+  color:#c8edf7!important;
+  border-color:rgba(121,201,232,.20)!important;
+}
+.nearbyMapCard{
+  border-radius:26px!important;
+  border:1px solid var(--sky-line)!important;
+  background:#0d1820!important;
+  box-shadow:var(--sky-shadow-soft)!important;
+}
+.nearbyAircraftCard{
+  border-radius:20px!important;
+  transition:transform .16s ease,border-color .16s ease!important;
+}
+.nearbyAircraftCard:hover{
+  transform:translateY(-2px);
+  border-color:rgba(121,201,232,.16)!important;
+}
+.nearbyDistance{
+  color:#a9dcea!important;
+}
+.nearbyEmpty{
+  background:rgba(255,255,255,.018)!important;
+  border-color:rgba(255,255,255,.09)!important;
+}
+.nearbyEmpty strong{
+  color:var(--sky-text)!important;
+}
+
+.v2CollectCard{
+  position:relative;
+  overflow:hidden!important;
+  border-radius:25px!important;
+  background:
+    radial-gradient(22rem 15rem at 110% -10%,rgba(121,201,232,.10),transparent 62%),
+    linear-gradient(145deg,#1b2d38,#13222c)!important;
+  box-shadow:0 16px 42px rgba(0,0,0,.16)!important;
+  transition:transform .2s ease,border-color .2s ease!important;
+}
+.v2CollectCard:hover{
+  transform:translateY(-3px);
+}
+.v2CollectCard.rare{
+  background:
+    radial-gradient(24rem 16rem at 100% 0%,rgba(170,169,217,.15),transparent 60%),
+    linear-gradient(145deg,#202b3b,#191e31)!important;
+  border-color:rgba(170,169,217,.16)!important;
+}
+.v2CollectCard.ultra{
+  background:
+    radial-gradient(22rem 15rem at 90% 0%,rgba(239,201,143,.17),transparent 60%),
+    radial-gradient(20rem 14rem at 0% 100%,rgba(170,169,217,.10),transparent 65%),
+    linear-gradient(145deg,#28271f,#181d25)!important;
+  border-color:rgba(239,201,143,.20)!important;
+}
+.v2CollectCard.ultra::after{
+  content:"";
+  position:absolute;
+  inset:-80%;
+  background:linear-gradient(110deg,transparent 44%,rgba(255,255,255,.06) 50%,transparent 56%);
+  transform:translateX(-45%) rotate(9deg);
+  animation:skyFoil 7s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes skyFoil{
+  0%,65%{transform:translateX(-48%) rotate(9deg)}
+  90%,100%{transform:translateX(48%) rotate(9deg)}
+}
+.v2Rarity{
+  letter-spacing:.12em!important;
+}
+.v2Dup{
+  background:rgba(121,201,232,.10)!important;
+  color:#bfe9f4!important;
+  border:1px solid rgba(121,201,232,.14)!important;
+}
+
+.passport{
+  border-radius:28px!important;
+  overflow:hidden;
+  background:
+    radial-gradient(30rem 20rem at 100% 0%,rgba(170,169,217,.11),transparent 62%),
+    radial-gradient(28rem 18rem at 0% 100%,rgba(121,201,232,.09),transparent 62%),
+    linear-gradient(145deg,#1a2a35,#111e27)!important;
+}
+.passportLogo{
+  filter:drop-shadow(0 5px 15px rgba(121,201,232,.15));
+}
+.passportLevel{
+  color:#a6d9e9!important;
+}
+.passportStats div{
+  background:rgba(255,255,255,.035)!important;
+  border:1px solid rgba(255,255,255,.025)!important;
+}
+.passportStats b{
+  color:var(--sky-text)!important;
+}
+.passportStats span{
+  color:#7d919f!important;
+}
+.passportBar{
+  background:rgba(255,255,255,.055)!important;
+}
+.passportFill{
+  background:linear-gradient(90deg,#9ed7b1,#79c9e8,#aaa9d9)!important;
+}
+
+.v5HubCard{
+  border-radius:24px!important;
+  background:
+    radial-gradient(18rem 12rem at 105% 0%,rgba(121,201,232,.075),transparent 64%),
+    linear-gradient(180deg,#1a2a35,#12202a)!important;
+  transition:transform .18s ease,border-color .18s ease!important;
+}
+.v5HubCard:hover{
+  transform:translateY(-2px);
+  border-color:rgba(121,201,232,.16)!important;
+}
+.v5HubCard .hubTag{
+  background:rgba(121,201,232,.07)!important;
+  color:#9bd9ec!important;
+  border:1px solid rgba(121,201,232,.10)!important;
+}
+
+.bottomNav{
+  left:50%!important;
+  right:auto!important;
+  bottom:max(12px,env(safe-area-inset-bottom))!important;
+  transform:translateX(-50%)!important;
+  width:min(720px,calc(100% - 24px))!important;
+  min-height:68px!important;
+  padding:7px!important;
+  border-radius:23px!important;
+  background:rgba(16,27,36,.90)!important;
+  border:1px solid rgba(213,236,248,.10)!important;
+  box-shadow:0 20px 60px rgba(0,0,0,.34)!important;
+  backdrop-filter:blur(24px) saturate(1.2)!important;
+  -webkit-backdrop-filter:blur(24px) saturate(1.2)!important;
+}
+.bottomNav button{
+  color:#718794!important;
+  border-radius:17px!important;
+  transition:background .18s ease,color .18s ease,transform .14s ease!important;
+}
+.bottomNav button:active{
+  transform:scale(.96)!important;
+}
+.bottomNav button.active{
+  background:linear-gradient(180deg,rgba(121,201,232,.11),rgba(121,201,232,.055))!important;
+  color:#e9f7fb!important;
+  box-shadow:inset 0 0 0 1px rgba(121,201,232,.10)!important;
+}
+.bottomNav button.active i{
+  color:#a4e0ef!important;
+}
+
+.modalBackdrop,.legalBackdrop,.aiFinderBackdrop{
+  background:rgba(3,8,12,.70)!important;
+  backdrop-filter:blur(22px) saturate(1.15)!important;
+  -webkit-backdrop-filter:blur(22px) saturate(1.15)!important;
+}
+.releaseModal,.legalModal,.aiFinderApp{
+  border-radius:28px!important;
+  background:
+    linear-gradient(180deg,rgba(24,39,50,.98),rgba(13,23,31,.99))!important;
+  border:1px solid var(--sky-line-strong)!important;
+  box-shadow:0 35px 110px rgba(0,0,0,.44)!important;
+}
+.releaseTop h2,.legalTop h2{
+  color:var(--sky-text)!important;
+}
+.releaseDate,.legalTop p,.legalSection p,.legalSection li{
+  color:var(--sky-muted)!important;
+}
+.releaseBlock{
+  border-color:var(--sky-line)!important;
+}
+.releaseBlock h3,.legalSection h3{
+  color:var(--sky-text)!important;
+}
+
+.firstRunGate{
+  background:
+    radial-gradient(42rem 30rem at 50% 0%,rgba(121,201,232,.13),transparent 66%),
+    linear-gradient(180deg,#111c25,#0b1219)!important;
+}
+.firstRunCard{
+  background:
+    radial-gradient(22rem 15rem at 100% 0%,rgba(170,169,217,.07),transparent 65%),
+    linear-gradient(180deg,#192934,#111e27)!important;
+  color:var(--sky-text)!important;
+  border:1px solid var(--sky-line-strong)!important;
+  border-radius:30px!important;
+  box-shadow:0 35px 100px rgba(0,0,0,.34)!important;
+}
+.firstRunMark{
+  background:linear-gradient(145deg,#9ed7b1,#7fc5df)!important;
+  color:#102733!important;
+}
+.firstRunCard>p,.consentRow div{
+  color:#95a8b4!important;
+}
+.consentRow{
+  background:rgba(255,255,255,.03)!important;
+  border:1px solid var(--sky-line)!important;
+}
+.consentRow b{
+  color:var(--sky-text)!important;
+}
+
+.aiFinderBackdrop{
+  padding:12px!important;
+}
+.aiHead,.aiComposer{
+  background:rgba(19,32,42,.95)!important;
+  border-color:var(--sky-line)!important;
+}
+.aiMessages{
+  background:
+    radial-gradient(28rem 22rem at 100% 0%,rgba(121,201,232,.055),transparent 65%),
+    linear-gradient(180deg,#101c25,#0d171f)!important;
+}
+.aiBubble.bot{
+  background:#1a2a35!important;
+  color:#dfe9ee!important;
+  border:1px solid var(--sky-line)!important;
+}
+.aiBubble.user{
+  background:linear-gradient(135deg,#a6d5b4,#88c9df)!important;
+  color:#112a36!important;
+}
+.aiExample{
+  background:rgba(255,255,255,.035)!important;
+  color:#9fb0ba!important;
+  border:1px solid var(--sky-line)!important;
+}
+.aiInput{
+  background:#0f1b24!important;
+  color:var(--sky-text)!important;
+  border:1px solid var(--sky-line)!important;
+}
+.aiResult{
+  background:#182934!important;
+  border:1px solid rgba(121,201,232,.10)!important;
+  box-shadow:0 12px 30px rgba(0,0,0,.12)!important;
+}
+.aiResultStats div{
+  background:rgba(255,255,255,.035)!important;
+}
+
+.skyLensShade{
+  background:
+    linear-gradient(180deg,rgba(4,9,13,.46),transparent 24%,transparent 70%,rgba(4,9,13,.70))!important;
+}
+.skyLensGrid{
+  opacity:.16!important;
+}
+.skyLensTop,.skyLensBottom{
+  backdrop-filter:blur(2px);
+}
+.skyLensHeading{
+  background:rgba(9,17,23,.54)!important;
+  border:1px solid rgba(255,255,255,.10)!important;
+  box-shadow:0 10px 28px rgba(0,0,0,.16)!important;
+}
+.skyLensCompass{
+  background:rgba(8,15,21,.56)!important;
+  border-color:rgba(255,255,255,.10)!important;
+}
+.lensTarget{
+  background:rgba(10,19,26,.78)!important;
+  border:1px solid rgba(153,216,238,.24)!important;
+  box-shadow:0 12px 34px rgba(0,0,0,.28)!important;
+  backdrop-filter:blur(12px)!important;
+}
+.lensTarget.best{
+  border-color:rgba(165,228,244,.50)!important;
+  box-shadow:0 0 0 3px rgba(121,201,232,.08),0 12px 34px rgba(0,0,0,.30)!important;
+}
+.lensCall{
+  color:#f4fbfd!important;
+}
+.lensMeta{
+  color:#a6bac5!important;
+}
+.skyLensCrosshair:before,.skyLensCrosshair:after{
+  background:rgba(165,228,244,.56)!important;
+}
+.skyLensStart{
+  background:
+    radial-gradient(34rem 24rem at 50% 12%,rgba(121,201,232,.13),transparent 67%),
+    #0b1219!important;
+}
+.lensStartCard{
+  border-radius:30px!important;
+}
+.labsBadge{
+  color:#b6dfc3!important;
+  background:rgba(158,215,177,.07)!important;
+  border-color:rgba(158,215,177,.13)!important;
+}
+
+.source,.privacyNote,.nearbyPrivacy{
+  color:#708694!important;
+}
+.source a{
+  color:#89cde5!important;
+}
+footer{
+  color:#718793!important;
+  padding-bottom:105px!important;
+}
+.versionBtn,.footerLinks button{
+  color:#86c7df!important;
+}
+
+button{
+  -webkit-tap-highlight-color:transparent;
+}
+button:focus-visible{
+  outline:2px solid rgba(121,201,232,.60)!important;
+  outline-offset:3px!important;
+}
+
+/* subtle page-entry polish */
+.view.activeView{
+  animation:skyPageIn .28s ease both;
+}
+@keyframes skyPageIn{
+  from{opacity:.7;transform:translateY(5px)}
+  to{opacity:1;transform:none}
+}
+
+@media(max-width:850px){
+  .heroGrid{
+    gap:20px!important;
+  }
+  .modeGrid{
+    grid-template-columns:1fr 1fr!important;
+  }
+  .mode.primary{
+    grid-column:1/-1!important;
+  }
+}
+
+@media(max-width:520px){
+  .shell{
+    width:min(100% - 18px,1180px)!important;
+  }
+  .topbar{
+    height:68px!important;
+  }
+  .heroV2{
+    padding:34px 0 22px!important;
+  }
+  .heroV2 h1{
+    font-size:clamp(54px,16vw,78px)!important;
+  }
+  .heroV2 p{
+    font-size:14px!important;
+  }
+  .heroRadar{
+    min-height:245px!important;
+    border-radius:24px!important;
+  }
+  .modeGrid{
+    grid-template-columns:1fr!important;
+    gap:9px!important;
+    margin-bottom:34px!important;
+  }
+  .mode.primary{
+    grid-column:auto!important;
+  }
+  .mode{
+    min-height:136px!important;
+    border-radius:20px!important;
+  }
+  .worldWrap{
+    min-height:510px!important;
+    border-radius:22px!important;
+  }
+  .nearbyMapCard{
+    height:320px!important;
+    border-radius:22px!important;
+  }
+  .bottomNav{
+    width:calc(100% - 14px)!important;
+    bottom:max(7px,env(safe-area-inset-bottom))!important;
+    border-radius:20px!important;
+    min-height:64px!important;
+    padding:6px!important;
+  }
+  .bottomNav button{
+    font-size:8px!important;
+  }
+  .bottomNav button i{
+    font-size:18px!important;
+  }
+  .v2CollectCard{
+    border-radius:21px!important;
+  }
+  .releaseModal,.legalModal,.firstRunCard{
+    border-radius:24px!important;
+  }
+}
