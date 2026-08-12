@@ -1,9 +1,9 @@
-/* SKYHUNT v5.2.9 — core.js */
+/* SKYHUNT v5.3.0 — core.js */
 const $=s=>document.querySelector(s);
 
 const spinBtn=$("#spinBtn"),spinAgain=$("#spinAgain"),scan=$("#scan"),errorBox=$("#error"),result=$("#result");
 const showMapBtn=$("#showMapBtn"),mapSection=$("#mapSection"),autoFollowBtn=$("#autoFollowBtn"),centreBtn=$("#centreBtn");
-const saveCardBtn=$("#saveCardBtn");
+const captureBtn=$("#captureBtn");
 const collectorToast=$("#collectorToast");
 const nearbyScanBtn=$("#nearbyScanBtn"),nearbyStatus=$("#nearbyStatus"),nearbyRadarDot=$("#nearbyRadarDot"),nearbyResults=$("#nearbyResults"),nearbyRefreshBtn=$("#nearbyRefreshBtn"),nearbyCount=$("#nearbyCount"),nearbyClosest=$("#nearbyClosest"),nearbyFeed=$("#nearbyFeed"),nearbyResultsSub=$("#nearbyResultsSub");
 
@@ -120,8 +120,9 @@ function renderAircraft(a,zone,source){
  currentZone=zone;
  currentSource=source;
  currentAircraft={...a, _zone:zone, _source:source};
- saveCardBtn.classList.remove("saved");
- saveCardBtn.textContent="🃏 SAVE COLLECTOR CARD TO HANGAR";
+ if(window.SKYHUNT_COLLECTION)window.SKYHUNT_COLLECTION.select(currentAircraft,{zone,source,hex:currentHex});
+ captureBtn.classList.remove("saved");
+ captureBtn.textContent="＋ CAPTURE TO COLLECTION";
 
  $("#callsign").textContent=flight||a.r||a.hex||"UNKNOWN";
  $("#ident").textContent=flight?`Callsign ${flight} • ${source}`:a.r?`Registration ${a.r} • ${source}`:`ICAO ${a.hex||"unknown"} • ${source}`;
