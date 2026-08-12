@@ -17,7 +17,7 @@
       <span class="brandMark">✦</span>
       <div><strong>System Diagnostics</strong><small>SKYHUNT · LIVE SERVICE HEALTH</small></div>
     </div>
-    <span class="build">DIAG v1.0</span>
+    <span class="build">DIAG v1.1</span>
   </header>
 
   <section class="diagHero">
@@ -34,9 +34,23 @@
   </section>
 
   <section class="controls">
-    <button id="runAll" class="primary">RUN FULL DIAGNOSTIC</button>
+    <button id="runAircraftOnly" class="primary">TEST AIRPLANES.LIVE ONCE</button>
+    <button id="runAll">RUN FULL DIAGNOSTIC</button>
     <button id="copyReport">COPY FULL REPORT</button>
     <button id="clearResults">CLEAR</button>
+  </section>
+
+  <section class="apiIsolate">
+    <div>
+      <span class="eyebrow">ISOLATED AIRCRAFT TEST</span>
+      <h3>One request. No scan loop.</h3>
+      <p>This test makes exactly one Airplanes.live point request. Use it after leaving SKYHUNT idle for 15–30 minutes if you suspect temporary throttling or an IP block.</p>
+    </div>
+    <div class="apiIsolateMeta">
+      <div><span>LAST AIRCRAFT REQUEST</span><b id="lastAircraftRequest">NEVER</b></div>
+      <div><span>COOLDOWN</span><b id="cooldownState">READY</b></div>
+      <a id="openApiDirect" href="https://api.airplanes.live/v2/point/51.4700/-0.4543/100" target="_blank" rel="noopener">OPEN API DIRECTLY ↗</a>
+    </div>
   </section>
 
   <section class="summaryGrid">
@@ -48,7 +62,7 @@
 
   <section class="notice">
     <b>How to use this</b>
-    <span>Tap Run Full Diagnostic once. It may ask for location, camera and motion permissions because those are real SKYHUNT dependencies. Camera access is immediately stopped after the test. Airplanes.live requests are deliberately spaced to respect its public rate limit.</span>
+    <span>Tap Run Full Diagnostic once. It may ask for location, camera and motion permissions because those are real SKYHUNT dependencies. Camera access is immediately stopped after the test. Airplanes.live is tested conservatively. The isolated test makes exactly one request; the full suite reuses that result rather than repeatedly hammering the provider.</span>
   </section>
 
   <div class="sectionTitle"><span>01</span><div><h2>Browser & deployment</h2><p>Checks whether the website itself and its deployed feature files are healthy.</p></div></div>
