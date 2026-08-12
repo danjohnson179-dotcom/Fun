@@ -277,7 +277,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
   .nearPlane{flex-direction:column}
 }
 
-/* v5.1.4.1 â RADAR MAP UPGRADE */
+/* v5.1.4.1 — RADAR MAP UPGRADE */
 .worldWrap{
   height:min(64vh,620px)!important;
   min-height:460px!important;
@@ -466,7 +466,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
 }
 
 
-/* v5.1.4.1 â SKY LENS */
+/* v5.1.4.1 — SKY LENS */
 .labsBadge{
   display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border-radius:999px;
   background:rgba(200,255,82,.08);border:1px solid rgba(200,255,82,.15);
@@ -572,7 +572,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
 }
 
 
-/* v5.1.4.1 â SKYHUNT AI FINDER */
+/* v5.1.4.1 — SKYHUNT AI FINDER */
 .aiFinderBackdrop{display:none;position:fixed;inset:0;z-index:9750;background:rgba(3,6,9,.92);backdrop-filter:blur(18px);padding:10px}
 .aiFinderBackdrop.show{display:flex;align-items:center;justify-content:center}
 .aiFinderApp{width:min(760px,100%);height:min(880px,calc(100vh - 20px));display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg,#0b1119,#070b10);box-shadow:0 35px 110px rgba(0,0,0,.55)}
@@ -599,7 +599,7 @@ footer{text-align:center;color:#556578;font-size:9px;padding:34px}
 
 
 /* ======================================================
-   SKYHUNT v5.1.4.1 â LIVE AIRCRAFT DISCOVERY
+   SKYHUNT v5.1.4.1 — LIVE AIRCRAFT DISCOVERY
    ====================================================== */
 :root{
   --launch-lime:#d6ff63;
@@ -707,7 +707,7 @@ body{
 }
 
 
-/* SKYHUNT v5.1.4 â NEW PRODUCT SYSTEM */
+/* SKYHUNT v5.1.4 — NEW PRODUCT SYSTEM */
 :root{--v5-bg:#f4f8fb;--v5-surface:#fff;--v5-ink:#10202e;--v5-muted:#6e8090;--v5-line:rgba(16,32,46,.09);--v5-blue:#54c7ff;--v5-cyan:#6de5ff;--v5-mint:#b9ffcb;--v5-lime:#d9ff75;--v5-violet:#a99cff;--v5-pink:#ff9bcf;--v5-shadow:0 24px 70px rgba(58,85,105,.13)}
 html{background:var(--v5-bg)}body{color:var(--v5-ink)!important;background:radial-gradient(circle at 8% -4%,rgba(84,199,255,.28),transparent 30rem),radial-gradient(circle at 96% 18%,rgba(169,156,255,.20),transparent 30rem),radial-gradient(circle at 45% 100%,rgba(185,255,203,.24),transparent 28rem),linear-gradient(180deg,#f8fbfd,#f3f8fb 55%,#f7fafc)!important}
 body::before{opacity:.25!important;background-image:radial-gradient(rgba(70,113,143,.16) .7px,transparent .7px)!important;background-size:26px 26px!important}.shell{width:min(1180px,calc(100% - 22px))!important}
@@ -728,7 +728,7 @@ body::before{opacity:.25!important;background-image:radial-gradient(rgba(70,113,
 @media(max-width:850px){.modeGrid{grid-template-columns:1fr 1fr!important}.mode.primary{grid-column:1/-1!important}}@media(max-width:520px){.modeGrid{grid-template-columns:1fr!important}.mode.primary{grid-column:auto!important}.heroRadar{min-height:235px!important}.v5HubGrid{grid-template-columns:1fr}}
 
 
-/* SKYHUNT v5.1.4 â CALM UI PATCH */
+/* SKYHUNT v5.1.4 — CALM UI PATCH */
 :root{
   --calm-bg:#eef3f7;
   --calm-surface:#ffffff;
@@ -935,7 +935,7 @@ footer,.footerLinks button{color:#748594!important}
 }
 
 
-/* SKYHUNT v5.1.4 â EMERGENCY RECOVERY
+/* SKYHUNT v5.1.4 — EMERGENCY RECOVERY
    Menu DOM intentionally retained but permanently hidden to preserve legacy JS hooks. */
 .topActions{display:none!important}
 .menuBackdrop{display:none!important}
@@ -972,7 +972,7 @@ body{
 footer,.footerLinks button{color:#93a4b0!important}.versionBtn{color:#84cae6!important}
 
 
-/* v5.2.5 â Nearby full-page rebuild */
+/* v5.2.5 — Nearby full-page rebuild */
 .nearbyPageHead{padding-bottom:10px!important}
 .nearbyControlCard{
   display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;
@@ -1083,7 +1083,7 @@ footer,.footerLinks button{color:#93a4b0!important}.versionBtn{color:#84cae6!imp
 }
 
 
-/* v5.2.5 â Collection toolbar */
+/* v5.2.5 — Collection toolbar */
 .collectionToolbar{
   display:flex;align-items:center;justify-content:space-between;gap:14px;
   margin-bottom:12px;padding:15px 16px;border-radius:19px;
@@ -1106,7 +1106,7 @@ footer,.footerLinks button{color:#93a4b0!important}.versionBtn{color:#84cae6!imp
 }
 
 /* ==========================================================
-   SKYHUNT v1.1 â AURORA FLIGHT DECK
+   SKYHUNT v1.1 — AURORA FLIGHT DECK
    VISUAL-ONLY OVERRIDE. NO FUNCTIONALITY.
    ========================================================== */
 
@@ -1855,4 +1855,356 @@ button:focus-visible{
   .releaseModal,.legalModal,.firstRunCard{
     border-radius:24px!important;
   }
+}
+
+/* ==========================================================
+   SKYHUNT v1.2 — SKYWIRE AVIATION NEWS
+   ========================================================== */
+.newsHero{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:22px;
+  align-items:end;
+  padding:54px 0 20px;
+}
+.newsHero h2{
+  margin:10px 0 7px;
+  color:var(--sky-text);
+  font-size:clamp(58px,9vw,104px);
+  line-height:.9;
+  letter-spacing:-.07em;
+}
+.newsHero p{
+  max-width:620px;
+  margin:0;
+  color:var(--sky-muted);
+  font-size:14px;
+  line-height:1.6;
+}
+.newsPulseCard{
+  min-width:142px;
+  padding:16px 18px;
+  border-radius:22px;
+  border:1px solid var(--sky-line);
+  background:linear-gradient(180deg,rgba(25,41,52,.94),rgba(17,29,38,.96));
+  box-shadow:var(--sky-shadow-soft);
+}
+.newsPulseDot{
+  display:block;
+  width:7px;height:7px;border-radius:50%;
+  margin-bottom:12px;
+  background:#86d6a2;
+  box-shadow:0 0 0 5px rgba(134,214,162,.07),0 0 18px rgba(134,214,162,.20);
+}
+.newsPulseCard strong{
+  display:block;
+  color:var(--sky-text);
+  font-size:30px;
+  letter-spacing:-.05em;
+}
+.newsPulseCard small{
+  display:block;
+  margin-top:3px;
+  color:#718895;
+  font-size:7px;
+  font-weight:950;
+  letter-spacing:.1em;
+}
+.newsToolbar{
+  position:sticky;
+  top:76px;
+  z-index:30;
+  display:grid;
+  gap:10px;
+  padding:12px 0;
+  background:linear-gradient(180deg,rgba(11,18,25,.97) 70%,rgba(11,18,25,0));
+  backdrop-filter:blur(14px);
+}
+.newsCategories{
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  padding-bottom:2px;
+  scrollbar-width:none;
+}
+.newsCategories::-webkit-scrollbar{display:none}
+.newsCategories button{
+  flex:0 0 auto;
+  min-height:38px;
+  padding:0 14px;
+  border-radius:999px;
+  border:1px solid var(--sky-line);
+  background:rgba(255,255,255,.035);
+  color:#8297a4;
+  font-size:8px;
+  font-weight:950;
+  letter-spacing:.04em;
+}
+.newsCategories button.active{
+  color:#102936;
+  border-color:transparent;
+  background:linear-gradient(135deg,#a6d8b5,#83c6df);
+}
+.newsActions{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:8px;
+}
+.newsSearch{
+  min-height:46px;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:0 13px;
+  border-radius:14px;
+  border:1px solid var(--sky-line);
+  background:rgba(255,255,255,.035);
+}
+.newsSearch span{
+  color:#78909f;
+  font-size:19px;
+}
+.newsSearch input{
+  width:100%;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:var(--sky-text);
+  font:inherit;
+  font-size:11px;
+}
+.newsSearch input::placeholder{color:#667c8a}
+.newsRefresh{
+  min-height:46px;
+  padding:0 14px;
+  border-radius:14px;
+  border:1px solid var(--sky-line);
+  background:rgba(255,255,255,.04);
+  color:#dce8ed;
+  font-size:8px;
+  font-weight:950;
+}
+.newsRefresh:disabled{opacity:.55}
+.newsStatusBar{
+  min-height:42px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin:4px 0 12px;
+  padding:0 12px;
+  border-radius:14px;
+  border:1px solid var(--sky-line);
+  background:rgba(255,255,255,.025);
+  color:#8499a6;
+  font-size:8px;
+}
+.newsStatusBar>div{display:flex;align-items:center;gap:8px}
+.newsStatusBar.error{border-color:rgba(243,154,180,.18);color:#e8a7ba}
+.newsSourceBadge{
+  color:#7faabd;
+  font-size:7px;
+  font-weight:950;
+  letter-spacing:.08em;
+}
+.newsLead{
+  margin-top:10px;
+}
+.newsLeadCard{
+  display:grid;
+  grid-template-columns:minmax(0,1.35fr) minmax(280px,.85fr);
+  min-height:380px;
+  overflow:hidden;
+  border-radius:28px;
+  border:1px solid var(--sky-line);
+  background:linear-gradient(145deg,#1a2b36,#111e27);
+  color:inherit;
+  text-decoration:none;
+  box-shadow:var(--sky-shadow);
+  transition:transform .2s ease,border-color .2s ease;
+}
+.newsLeadCard:hover{transform:translateY(-2px);border-color:rgba(121,201,232,.17)}
+.newsLeadImage{
+  position:relative;
+  min-height:380px;
+  background-size:cover;
+  background-position:center;
+}
+.newsLeadImage.noImage{
+  display:grid;
+  place-items:center;
+  background:
+    radial-gradient(circle at 50% 45%,rgba(121,201,232,.16),transparent 30%),
+    linear-gradient(145deg,#1a3442,#101e28);
+}
+.newsImageFallback{
+  font-size:64px;
+  color:#8ac9df;
+  filter:drop-shadow(0 10px 25px rgba(0,0,0,.25));
+}
+.newsBreaking{
+  position:absolute;
+  left:14px;top:14px;
+  padding:7px 9px;
+  border-radius:999px;
+  background:rgba(10,19,26,.74);
+  border:1px solid rgba(255,255,255,.10);
+  color:#c9ecf5;
+  font-size:7px;
+  font-weight:950;
+  letter-spacing:.09em;
+  backdrop-filter:blur(12px);
+}
+.newsLeadCopy{
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  padding:26px;
+}
+.newsMeta{
+  color:#78909e;
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.newsLeadCopy h3{
+  margin:10px 0 22px;
+  color:var(--sky-text);
+  font-size:clamp(26px,4vw,40px);
+  line-height:1.05;
+  letter-spacing:-.045em;
+}
+.newsRead{
+  color:#9bd6e8;
+  font-size:8px;
+  font-weight:950;
+  letter-spacing:.06em;
+}
+.newsRead b{font-size:12px;margin-left:4px}
+.newsGrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:11px;
+  margin-top:11px;
+}
+.newsCard{
+  min-width:0;
+  overflow:hidden;
+  border-radius:21px;
+  border:1px solid var(--sky-line);
+  background:linear-gradient(180deg,#192a35,#111e27);
+  color:inherit;
+  text-decoration:none;
+  box-shadow:0 10px 28px rgba(0,0,0,.11);
+  transition:transform .18s ease,border-color .18s ease;
+}
+.newsCard:hover{transform:translateY(-3px);border-color:rgba(121,201,232,.16)}
+.newsCard:active{transform:scale(.985)}
+.newsCardImage{
+  height:150px;
+  background-size:cover;
+  background-position:center;
+  border-bottom:1px solid var(--sky-line);
+}
+.newsCardImage.noImage{
+  display:grid;
+  place-items:center;
+  background:
+    radial-gradient(circle at 50% 45%,rgba(121,201,232,.12),transparent 32%),
+    #12232d;
+}
+.newsCardImage.noImage span{
+  color:#73b8d0;
+  font-size:30px;
+}
+.newsCardBody{
+  min-height:175px;
+  display:flex;
+  flex-direction:column;
+  padding:14px;
+}
+.newsCardBody h4{
+  margin:8px 0 18px;
+  color:#edf5f8;
+  font-size:16px;
+  line-height:1.22;
+  letter-spacing:-.028em;
+}
+.newsCardFoot{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-top:auto;
+  padding-top:10px;
+  border-top:1px solid rgba(255,255,255,.055);
+  color:#728996;
+  font-size:8px;
+}
+.newsCardFoot span{
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+.newsCardFoot b{color:#93d2e7}
+.newsEmpty{
+  min-height:260px;
+  margin-top:12px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  border-radius:24px;
+  border:1px dashed rgba(255,255,255,.10);
+  background:rgba(255,255,255,.018);
+}
+.newsEmpty[hidden]{display:none}
+.newsEmptyIcon{
+  margin-bottom:9px;
+  color:#7bc0d8;
+  font-size:34px;
+}
+.newsEmpty strong{color:#edf5f8;font-size:17px}
+.newsEmpty span{margin-top:5px;color:#758b98;font-size:9px}
+.newsDisclosure{
+  margin:18px 4px 0;
+  color:#647b89;
+  font-size:8px;
+  line-height:1.5;
+}
+.newsLoading .newsPulseDot{
+  animation:newsPulse 1s ease-in-out infinite;
+}
+@keyframes newsPulse{
+  0%,100%{opacity:.4;transform:scale(.85)}
+  50%{opacity:1;transform:scale(1.05)}
+}
+@media(max-width:900px){
+  .newsGrid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:680px){
+  .newsHero{grid-template-columns:1fr;align-items:start;padding-top:34px}
+  .newsPulseCard{display:none}
+  .newsLeadCard{grid-template-columns:1fr;min-height:0}
+  .newsLeadImage{min-height:230px}
+  .newsLeadCopy{padding:20px}
+  .newsGrid{grid-template-columns:1fr}
+  .newsCard{display:grid;grid-template-columns:118px 1fr}
+  .newsCardImage{height:100%;min-height:150px;border-bottom:0;border-right:1px solid var(--sky-line)}
+  .newsCardBody{min-height:150px}
+}
+@media(max-width:520px){
+  .newsToolbar{top:68px}
+  .newsHero h2{font-size:64px}
+  .newsActions{grid-template-columns:1fr auto}
+  .newsSearch{min-width:0}
+  .newsRefresh{padding:0 10px}
+  .newsStatusBar{align-items:flex-start;padding:10px 11px;flex-direction:column}
+  .newsLeadCard{border-radius:23px}
+  .newsCard{grid-template-columns:104px 1fr;border-radius:18px}
+  .newsCardBody h4{font-size:14px}
+  .bottomNav button{font-size:7px!important}
+  .bottomNav button i{font-size:17px!important}
 }
