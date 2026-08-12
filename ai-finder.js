@@ -1,4 +1,4 @@
-/* SKYHUNT v5.3.0 — ai-finder.js */
+/* SKYHUNT v5.3.3 — ai-finder.js */
 // ===== v5.2.5 — AI FINDER =====
 const aiFinderBackdrop=$("#aiFinderBackdrop"),aiMessages=$("#aiMessages"),aiInput=$("#aiInput");
 const aiSend=$("#aiSend"),aiClose=$("#aiClose");
@@ -123,9 +123,37 @@ function aiSave(i,btn){
   const ok=window.SKYHUNT_COLLECTION?.capture(a,{zone:a._zone||"AI Finder",source:a._worldSource||"Live ADS-B"});
   btn.textContent=ok?"CAPTURED ✓":"CAPTURE FAILED";
 }
-function openAiFinder(){aiFinderBackdrop.classList.add("show");setTimeout(()=>aiInput.focus(),150)}
-function closeAiFinder(){aiFinderBackdrop.classList.remove("show")}
+
+function returnFromLabsToHome(){
+  try{
+    if(typeof showV2View==="function")showV2View("spin");
+  }catch(_){}
+  document.querySelectorAll(".bottomNav button[data-view]").forEach(btn=>{
+    btn.classList.toggle("active",btn.dataset.view==="spin");
+  });
+  try{window.scrollTo({top:0,behavior:"auto"})}catch(_){}
+}
+
+function openAiFinder(){
+  aiFinderBackdrop.classList.add("show");
+  aiFinderBackdrop.setAttribute("aria-hidden","false");
+  setTimeout(()=>aiInput.focus(),150);
+}
+function closeAiFinder(){
+  aiFinderBackdrop.classList.remove("show");
+  aiFinderBackdrop.setAttribute("aria-hidden","true");
+  returnFromLabsToHome();
+}
 function aiSubmit(){const q=aiInput.value.trim();if(!q)return;aiAddBubble(q,"user");aiInput.value="";aiSearch(q)}
-aiClose.addEventListener("click",closeAiFinder);aiSend.addEventListener("click",aiSubmit);
+if(aiClose)aiClose.addEventListener("click",closeAiFinder);aiSend.addEventListener("click",aiSubmit);
 aiInput.addEventListener("keydown",e=>{if(e.key==="Enter")aiSubmit()});
 document.querySelectorAll(".aiExample").forEach(b=>b.addEventListener("click",()=>{aiInput.value=b.textContent;aiSubmit()}));
+
+// iOS-safe fallback for AI Finder exit.
+document.addEventListener("click",event=>{
+  const button=event.target.closest?.("#aiClose");
+  if(!button)return;
+  event.preventDefault();
+  event.stopPropagation();
+  closeAiFinder();
+},true);
