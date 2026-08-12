@@ -1,5 +1,5 @@
-/* SKYHUNT v5.2.5 — app.js */
-// SKYHUNT v5.2.5 — APP BOOTSTRAP
+/* SKYHUNT v5.2.8 — app.js */
+// SKYHUNT v5.2.8 — APP BOOTSTRAP
 window.addEventListener("error", (event) => {
   console.error("SKYHUNT runtime error:", event.error || event.message);
 });
@@ -31,7 +31,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeRelease();clos
 
 
 
-// SKYHUNT v5.2.5 — PRODUCT NAVIGATION
+// SKYHUNT v5.2.8 — PRODUCT NAVIGATION
 const labsBackdrop=$("#labsBackdrop");
 const labsClose=$("#labsClose");
 const labsNavBtn=$("#labsNavBtn");
@@ -61,3 +61,41 @@ const heroNearby=$("#heroNearbyBtn");
 if(heroNearby)heroNearby.addEventListener("click",()=>showV2View("nearby"));
 
 window.addEventListener("beforeunload",stopTracking);
+
+
+
+// ===== v5.2.8 — COLLECTION INTEGRATION FALLBACK =====
+// This handler is deliberately independent of radar.js.
+// If another module fails, the Collection tab can still open.
+document.addEventListener("click",event=>{
+  const target=event.target.closest ? event.target.closest("button") : null;
+  if(!target)return;
+
+  if(target.matches('.bottomNav button[data-view="hangar"]')){
+    event.preventDefault();
+
+    const home=document.querySelector("#homeView");
+    const world=document.querySelector("#worldView");
+    const nearby=document.querySelector("#nearbyView");
+    const hangar=document.querySelector("#hangarViewV2");
+    const passport=document.querySelector("#passportView");
+
+    [home,world,nearby,hangar,passport].forEach(view=>{
+      if(view)view.classList.remove("activeView");
+    });
+
+    if(hangar)hangar.classList.add("activeView");
+
+    document.querySelectorAll(".bottomNav button[data-view]").forEach(btn=>{
+      btn.classList.toggle("active",btn.dataset.view==="hangar");
+    });
+
+    if(typeof window.renderHangarV2==="function"){
+      try{window.renderHangarV2()}catch(err){console.error("Collection render failed:",err)}
+    }else if(typeof renderHangarV2==="function"){
+      try{renderHangarV2()}catch(err){console.error("Collection render failed:",err)}
+    }
+
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+},true);
