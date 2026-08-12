@@ -1,14 +1,14 @@
-/* SKYHUNT v5.2.9 — radar.js */
+/* SKYHUNT v5.3.0 — radar.js */
 // ===== v2.0.0 LIVE WORLD =====
-const worldView=$("#worldView"), homeView=$("#homeView"), nearbyView=$("#nearbyView"), hangarView=$("#hangarViewV2"), passportView=$("#passportView");
+const worldView=$("#worldView"), homeView=$("#homeView"), nearbyView=$("#nearbyView"), collectionView=$("#collectionView"), passportView=$("#passportView");
 const bottomBtns=[...document.querySelectorAll(".bottomNav button[data-view]")];
 const worldStatus=$("#worldStatus"), worldMapEl=$("#worldMap"), worldCount=$("#worldCount");
 let worldMap=null, worldLayer=null, worldPlanes=[], worldBusy=false;
 let selectedWorldAircraft=null;
 
 function showV2View(name){
-  [homeView,worldView,nearbyView,hangarView,passportView].forEach(v=>v&&v.classList.remove("activeView"));
-  const target={spin:homeView,world:worldView,nearby:nearbyView,hangar:hangarView,passport:passportView}[name]||homeView;
+  [homeView,worldView,nearbyView,collectionView,passportView].forEach(v=>v&&v.classList.remove("activeView"));
+  const target={spin:homeView,world:worldView,nearby:nearbyView,collection:collectionView,passport:passportView}[name]||homeView;
   target.classList.add("activeView");
   bottomBtns.forEach(b=>b.classList.toggle("active",b.dataset.view===name));
   if(name==="world"){ setTimeout(()=>{initWorldMap();worldMap.invalidateSize()},80); }
@@ -162,7 +162,7 @@ $("#sheetCaptureBtn").addEventListener("click",()=>{
   currentZone=a._zone||"Live World";
   currentSource=a._worldSource||"Live ADS-B";
   lastLat=Number(a.lat);lastLon=Number(a.lon);
-  const ok=window.SKYHUNT_HANGAR?.captureAircraft(a,{zone:a._zone||"Live World",source:a._worldSource||"Live ADS-B"});
+  const ok=window.SKYHUNT_COLLECTION?.capture(a,{zone:a._zone||"Live World",source:a._worldSource||"Live ADS-B"});
   $("#sheetCaptureBtn").textContent=ok?"CAPTURED ✓":"CAPTURE FAILED";
 });
 $("#worldHudScanBtn").addEventListener("click",scanWorldRadar);
