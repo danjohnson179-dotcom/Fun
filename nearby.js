@@ -1,4 +1,4 @@
-/* SKYHUNT v5.2.1 — nearby.js
+/* SKYHUNT v5.2.2 — nearby.js
    Full-page Nearby experience. No modal architecture. */
 
 let nearbyAircraft=[];
@@ -8,6 +8,15 @@ let nearbyMap=null;
 let nearbyLayer=null;
 let nearbyUserMarker=null;
 let nearbyScanning=false;
+
+function nearbySafeText(value){
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
 let nearbyLastSource=null;
 
 function distanceNm(lat1,lon1,lat2,lon2){
@@ -178,13 +187,13 @@ function renderNearby(){
     const bearing=a._bearing;
     return `<article class="nearbyAircraftCard">
       <div class="nearbyAircraftMain">
-        <div class="nearbyCall">${safeText(call)}</div>
-        <div class="nearbyType">${safeText(a.t||"Unknown type")} ${a.r?`· ${safeText(a.r)}`:""}</div>
+        <div class="nearbyCall">${nearbySafeText(call)}</div>
+        <div class="nearbyType">${nearbySafeText(a.t||"Unknown type")} ${a.r?`· ${nearbySafeText(a.r)}`:""}</div>
       </div>
       <div class="nearbyDistance">${a._distance.toFixed(1)} <small>NM</small></div>
       <div class="nearbyAircraftStats">
-        <span><b>${safeText(nearbyAltitude(a))}</b><small>ALTITUDE</small></span>
-        <span><b>${safeText(nearbySpeed(a))}</b><small>SPEED</small></span>
+        <span><b>${nearbySafeText(nearbyAltitude(a))}</b><small>ALTITUDE</small></span>
+        <span><b>${nearbySafeText(nearbySpeed(a))}</b><small>SPEED</small></span>
         <span><b>${Math.round(bearing)}° ${compassPoint(bearing)}</b><small>BEARING</small></span>
       </div>
       <div class="nearbyAircraftActions">
@@ -312,7 +321,7 @@ async function scanNearby(){
     nearbyResults.innerHTML=`<div class="nearbyEmpty error">
       <div class="nearbyEmptyIcon">!</div>
       <strong>Nearby scan could not complete.</strong>
-      <span>${safeText(msg)}</span>
+      <span>${nearbySafeText(msg)}</span>
     </div>`;
   }finally{
     nearbyScanning=false;
