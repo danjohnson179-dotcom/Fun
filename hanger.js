@@ -1,4 +1,4 @@
-/* SKYHUNT v5.2.7 — hangar.js
+/* SKYHUNT v5.2.8 — hangar.js
    Targeted iPhone/event-binding recovery.
    Hangar actions use delegated document clicks so re-rendered buttons stay functional. */
 
