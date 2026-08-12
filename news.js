@@ -1,4 +1,4 @@
-/* SKYHUNT v1.2.1 — news.js
+/* SKYHUNT v1.2.2 — news.js
    Live aviation news via the GDELT DOC 2.0 API. */
 
 const SKYHUNT_NEWS={
@@ -98,7 +98,61 @@ const SKYHUNT_NEWS={
     return `https://api.gdeltproject.org/api/v2/doc/doc?${params.toString()}`;
   },
 
-  async fetchAttempt(query,{maxrecords=24,timespan="1d",timeout=22000}={}){
+  jsonpAttempt(query,{maxrecords=24,timespan="1d",timeout=18000}={}){
+    return new Promise((resolve,reject)=>{
+      const callbackName=`__skyhuntGdelt_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+      const script=document.createElement("script");
+      let finished=false;
+
+      const cleanup=()=>{
+        try{delete window[callbackName]}catch(_){window[callbackName]=undefined}
+        if(script.parentNode)script.parentNode.removeChild(script);
+      };
+
+      const timer=setTimeout(()=>{
+        if(finished)return;
+        finished=true;
+        cleanup();
+        reject(new Error("JSONP timeout"));
+      },timeout);
+
+      window[callbackName]=(data)=>{
+        if(finished)return;
+        finished=true;
+        clearTimeout(timer);
+        cleanup();
+
+        const rows=Array.isArray(data?.articles)?data.articles:
+                   Array.isArray(data?.items)?data.items:[];
+
+        resolve(this.cleanArticles(rows));
+      };
+
+      script.onerror=()=>{
+        if(finished)return;
+        finished=true;
+        clearTimeout(timer);
+        cleanup();
+        reject(new Error("JSONP load failed"));
+      };
+
+      const params=new URLSearchParams({
+        query,
+        mode:"artlist",
+        maxrecords:String(maxrecords),
+        timespan,
+        sort:"datedesc",
+        format:"jsonp",
+        callback:callbackName
+      });
+
+      script.src=`https://api.gdeltproject.org/api/v2/doc/doc?${params.toString()}`;
+      script.async=true;
+      document.head.appendChild(script);
+    });
+  },
+
+  async fetchAttempt(query,{maxrecords=18,timespan="1d",timeout=18000}={}){
     const ctl=new AbortController();
     const timer=setTimeout(()=>ctl.abort(),timeout);
 
@@ -120,6 +174,22 @@ const SKYHUNT_NEWS={
       return this.cleanArticles(rows);
     }finally{
       clearTimeout(timer);
+    }
+  },
+
+  async requestNews(query,options={}){
+    // JSONP is primary because it is more reliable on iOS static-hosted pages.
+    try{
+      return await this.jsonpAttempt(query,options);
+    }catch(jsonpError){
+      console.warn("SKYHUNT News JSONP failed:",jsonpError);
+
+      // Fall back to fetch if script transport fails.
+      return await this.fetchAttempt(query,{
+        maxrecords:Math.min(options.maxrecords||18,18),
+        timespan:options.timespan||"1d",
+        timeout:18000
+      });
     }
   },
 
@@ -174,23 +244,23 @@ const SKYHUNT_NEWS={
 
       // Attempt 1: focused query, smaller result set, recent window.
       try{
-        articles=await this.fetchAttempt(query,{
+        articles=await this.requestNews(query,{
           maxrecords:24,
           timespan:"1d",
-          timeout:22000
+          timeout:18000
         });
         sourceNote="live";
       }catch(firstError){
         console.warn("SKYHUNT News primary request failed:",firstError);
 
         // Attempt 2: much simpler GDELT query. Complex OR expressions can be slower.
-        this.setStatus("News index is responding slowly · trying a lighter search…");
+        this.setStatus("Trying a lighter aviation news search…");
 
         try{
-          articles=await this.fetchAttempt(this.fallbackQuery(),{
+          articles=await this.requestNews(this.fallbackQuery(),{
             maxrecords:18,
             timespan:"3d",
-            timeout:28000
+            timeout:20000
           });
           sourceNote="live · fallback search";
         }catch(secondError){
