@@ -1,4 +1,4 @@
-/* SKYHUNT v5.2.4 — hangar.js
+/* SKYHUNT v5.2.5 — hangar.js
    Collection is the Hangar. No legacy Hangar modal is used. */
 
 const HANGAR_KEY="flightRouletteHangarV1";
