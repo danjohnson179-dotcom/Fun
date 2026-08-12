@@ -1,4 +1,4 @@
-/* SKYHUNT v5.2.5 — legal.js */
+/* SKYHUNT v5.3.0 — legal.js */
 // ===== v5.2.5 — TERMS / PRIVACY / DATA / SAFETY =====
 const firstRunGate=$("#firstRunGate"),acceptTermsBtn=$("#acceptTermsBtn"),readTermsBtn=$("#readTermsBtn");
 const legalBackdrop=$("#legalBackdrop"),legalClose=$("#legalClose"),legalTitle=$("#legalTitle"),legalContent=$("#legalContent");
