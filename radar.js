@@ -1,4 +1,4 @@
-/* SKYHUNT v5.3.0 — radar.js */
+/* SKYHUNT v5.3.1 — radar.js */
 // ===== v2.0.0 LIVE WORLD =====
 const worldView=$("#worldView"), homeView=$("#homeView"), nearbyView=$("#nearbyView"), collectionView=$("#collectionView"), passportView=$("#passportView");
 const bottomBtns=[...document.querySelectorAll(".bottomNav button[data-view]")];
@@ -174,7 +174,9 @@ $("#worldScanBtn").addEventListener("click",scanWorldRadar);
 $("#heroWorldBtn").addEventListener("click",()=>{showV2View("world");setTimeout(scanWorldRadar,200)});
 $("#heroSpinMode").addEventListener("click",()=>document.querySelector("#spinBtn").scrollIntoView({behavior:"smooth",block:"center"}));
 function renderPassport(){
-  const items=getHangar();
+  const items=(window.SKYHUNT_COLLECTION && typeof window.SKYHUNT_COLLECTION.get==="function")
+    ? window.SKYHUNT_COLLECTION.get()
+    : [];
   const types=new Set(items.map(x=>x.type).filter(Boolean));
   const total=items.reduce((s,x)=>s+(x.discoveries||1),0);
   const rare=items.filter(x=>x.rarity==="Rare"||x.rarity==="Ultra Rare").length;
@@ -187,6 +189,9 @@ function renderPassport(){
   $("#passportTypes").textContent=types.size;
   $("#passportRare").textContent=rare;
   $("#passportProgress").style.width=`${Math.min(100,(total%5)/5*100)}%`;
-  $("#passportNext").textContent=`${5-(total%5||0)} captures to next level`;
+  const intoLevel=total%5;
+  $("#passportNext").textContent=intoLevel===0 && total>0
+    ? "5 captures to next level"
+    : `${5-intoLevel} captures to next level`;
 }
 // Upgrade old navigation targets into v2 views
