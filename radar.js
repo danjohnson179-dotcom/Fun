@@ -1,4 +1,4 @@
-/* SKYHUNT v5.2.5 — radar.js */
+/* SKYHUNT v5.2.9 — radar.js */
 // ===== v2.0.0 LIVE WORLD =====
 const worldView=$("#worldView"), homeView=$("#homeView"), nearbyView=$("#nearbyView"), hangarView=$("#hangarViewV2"), passportView=$("#passportView");
 const bottomBtns=[...document.querySelectorAll(".bottomNav button[data-view]")];
@@ -162,8 +162,8 @@ $("#sheetCaptureBtn").addEventListener("click",()=>{
   currentZone=a._zone||"Live World";
   currentSource=a._worldSource||"Live ADS-B";
   lastLat=Number(a.lat);lastLon=Number(a.lon);
-  saveCurrentCard();
-  $("#sheetCaptureBtn").textContent="CAPTURED ✓";
+  const ok=window.SKYHUNT_HANGAR?.captureAircraft(a,{zone:a._zone||"Live World",source:a._worldSource||"Live ADS-B"});
+  $("#sheetCaptureBtn").textContent=ok?"CAPTURED ✓":"CAPTURE FAILED";
 });
 $("#worldHudScanBtn").addEventListener("click",scanWorldRadar);
 $("#worldRecenterBtn").addEventListener("click",()=>{
