@@ -73,8 +73,8 @@ async function aiLiveSample(){
     const [name,lat,lon]=sample[i];
 
     try{
-      const rows=(await scanAirplanesLive(name,lat,lon)).slice(0,100);
-      rows.forEach(a=>all.push({...a,_zone:name,_worldSource:"Airplanes.live"}));
+      const rows=(await scanAircraft(name,lat,lon)).slice(0,100);
+      rows.forEach(a=>all.push({...a,_zone:name,_worldSource:window.SKYHUNT_AIRCRAFT_API.source}));
     }catch(_){}
 
     if(i<sample.length-1)await sleep(1100);
