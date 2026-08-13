@@ -47,7 +47,7 @@ async function scanWorldRadar(){
   worldStatus.textContent="STARTING RADAR SWEEP";
   worldCount.textContent="0";
 
-  // Airplanes.live only. Requests are deliberately spaced to respect the public rate limit.
+  // Aircraft requests are centrally queued by aircraft-api.js to respect the provider rate limit.
   const sample=[...zones].sort(()=>Math.random()-.5).slice(0,5);
   const errors=[];
 
@@ -57,12 +57,12 @@ async function scanWorldRadar(){
       worldStatus.textContent=`${i+1}/${sample.length} • ${name.toUpperCase()}`;
 
       let aircraft=[];
-      const source="Airplanes.live";
+      const source=window.SKYHUNT_AIRCRAFT_API.source;
 
       try{
-        aircraft=(await scanAirplanesLive(name,lat,lon)).slice(0,60);
+        aircraft=(await scanAircraft(name,lat,lon)).slice(0,60);
       }catch(err){
-        errors.push(`Airplanes.live ${name}: ${friendlyLocalError(err)}`);
+        errors.push(`adsb.fi ${name}: ${friendlyLocalError(err)}`);
       }
 
       aircraft.forEach(a=>worldPlanes.push({...a,_zone:name,_worldSource:source}));
