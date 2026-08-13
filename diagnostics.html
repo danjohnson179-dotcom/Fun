@@ -3,92 +3,873 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#050609">
+<meta name="theme-color" content="#071018">
 <title>SKYHUNT Diagnostics</title>
-<meta name="description" content="SKYHUNT live-system diagnostics.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <style>
-:root{--bg:#060b11;--panel:#0d151d;--panel2:#101c26;--text:#f3f7f9;--line:rgba(255,255,255,.09);--good:#76d6a5;--warn:#efc56f;--bad:#ff8195;--blue:#89d8ed}*{box-sizing:border-box}html{background:var(--bg);color-scheme:dark}body{margin:0;background:radial-gradient(60rem 36rem at 50% -10%,rgba(87,174,220,.12),transparent 65%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,a{-webkit-tap-highlight-color:transparent}.diagShell{width:min(1050px,calc(100% - 24px));margin:auto;padding-bottom:70px}.diagTop{height:74px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;border-bottom:1px solid var(--line)}.back{color:#9ab0bb;text-decoration:none;font-size:11px;font-weight:800}.brand{display:flex;align-items:center;gap:10px}.brandMark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:#dff8ff;color:#07131a}.brand strong{display:block;font-size:14px}.brand small{display:block;margin-top:3px;color:#70828d;font-size:7px;letter-spacing:.12em}.build{justify-self:end;color:#70828d;font-size:8px;font-weight:900}.diagHero{display:grid;grid-template-columns:1.5fr .5fr;gap:18px;align-items:end;padding:54px 0 28px}.eyebrow{font-size:8px;font-weight:900;letter-spacing:.16em;color:#81cadd}.diagHero h1{font-size:clamp(52px,8vw,88px);line-height:.9;letter-spacing:-.065em;margin:12px 0 16px}.diagHero p{max-width:700px;color:#8ea0aa;line-height:1.6;font-size:13px;margin:0}.heroStatus{min-height:160px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,var(--panel2),var(--panel));padding:20px;display:flex;flex-direction:column;justify-content:flex-end}.heroStatus span{font-size:7px;font-weight:900;color:#70838e;letter-spacing:.14em}.heroStatus strong{font-size:26px;margin:7px 0 4px}.heroStatus small{color:#879aa4;line-height:1.4}.controls{display:flex;gap:8px;flex-wrap:wrap;padding:0 0 14px}.controls button{min-height:46px;border-radius:12px;border:1px solid var(--line);padding:0 15px;background:#101b24;color:#dce8ed;font-weight:850;font-size:9px}.controls .primary{background:#b5eaf5;color:#06151c;border:0}.apiIsolate{display:grid;grid-template-columns:1.4fr .6fr;gap:16px;margin:0 0 20px;padding:18px;border:1px solid rgba(137,216,237,.16);background:rgba(137,216,237,.035);border-radius:18px}.apiIsolate h3{margin:7px 0 6px;font-size:22px}.apiIsolate p{margin:0;color:#8fa3ad;font-size:10px;line-height:1.55}.apiIsolateMeta{display:grid;grid-template-columns:1fr 1fr;gap:8px}.apiIsolateMeta>div{border:1px solid var(--line);background:#0a141c;border-radius:12px;padding:11px}.apiIsolateMeta span{display:block;color:#6f838e;font-size:6px;font-weight:900}.apiIsolateMeta b{display:block;margin-top:5px;font-size:11px}.apiIsolateMeta a{grid-column:1/-1;min-height:40px;border:1px solid var(--line);border-radius:11px;display:flex;align-items:center;justify-content:center;color:#b7d8e2;text-decoration:none;font-size:8px;font-weight:900}.summaryGrid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:18px;overflow:hidden}.summaryGrid article{padding:18px;border-right:1px solid var(--line)}.summaryGrid span{display:block;color:#718590;font-size:7px;font-weight:900}.summaryGrid b{display:block;font-size:28px;margin-top:5px}.notice{margin:14px 0 42px;padding:16px;border:1px solid rgba(137,216,237,.13);background:rgba(137,216,237,.035);border-radius:16px}.notice b{display:block;font-size:11px}.notice span{display:block;color:#8fa3ad;font-size:10px;line-height:1.55;margin-top:5px}.sectionTitle{display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px}.sectionTitle>span{width:28px;height:28px;border-radius:9px;border:1px solid var(--line);display:grid;place-items:center;color:#7ec7da;font-size:8px;font-weight:900}.sectionTitle h2{font-size:25px;margin:0}.sectionTitle p{color:#718590;font-size:9px;margin:4px 0 0}.testGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.testCard{min-height:142px;border:1px solid var(--line);background:linear-gradient(180deg,#0e1922,#0a131b);border-radius:17px;padding:15px;position:relative}.testTop{display:flex;justify-content:space-between;gap:8px}.testName{font-size:12px;font-weight:800}.badge{font-size:7px;font-weight:950;padding:5px 7px;border-radius:999px;border:1px solid var(--line)}.pass .badge{color:var(--good)}.warn .badge{color:var(--warn)}.fail .badge{color:var(--bad)}.running .badge{color:var(--blue)}.testMessage{font-size:11px;line-height:1.5;color:#d0dbe0;margin-top:16px}.testDetail{font-size:9px;line-height:1.55;color:#788b96;margin-top:7px;white-space:pre-wrap;word-break:break-word}.testTime{position:absolute;right:14px;bottom:11px;color:#586b76;font-size:7px}.reportBox{border:1px solid var(--line);border-radius:18px;background:#050a0f;overflow:auto}.reportBox pre{margin:0;padding:16px;white-space:pre-wrap;word-break:break-word;font-size:9px;line-height:1.5;color:#9fb0b9}footer{text-align:center;color:#536773;font-size:8px;margin-top:42px}@media(max-width:700px){.diagHero,.apiIsolate{grid-template-columns:1fr}.testGrid{grid-template-columns:1fr}.summaryGrid{grid-template-columns:1fr 1fr}.diagHero h1{font-size:58px}.controls button{flex:1}.controls .primary{flex-basis:100%}}
+
+:root{
+  --bg:#071018;
+  --panel:#0d1821;
+  --panel2:#101e29;
+  --line:rgba(255,255,255,.09);
+  --text:#f2f7f9;
+  --muted:#91a3ad;
+  --soft:#657985;
+  --cyan:#a9e7f4;
+  --good:#76d7a5;
+  --warn:#f0c66c;
+  --bad:#ff8799;
+}
+*{box-sizing:border-box}
+html{background:var(--bg);color-scheme:dark}
+body{
+  margin:0;
+  background:
+    radial-gradient(650px 340px at 50% -120px,rgba(78,180,215,.14),transparent 70%),
+    var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;
+}
+button,a{font:inherit;-webkit-tap-highlight-color:transparent}
+.page{width:min(980px,calc(100% - 28px));margin:0 auto;padding-bottom:70px}
+.topbar{
+  height:82px;display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--line);gap:14px;
+}
+.back{
+  display:inline-flex;align-items:center;gap:7px;text-decoration:none;color:#9bb0ba;
+  font-size:11px;font-weight:800;white-space:nowrap;
+}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.brandMark{
+  width:43px;height:43px;border-radius:13px;background:var(--cyan);color:#071219;
+  display:grid;place-items:center;font-size:19px;font-weight:900;flex:0 0 auto;
+}
+.brandText strong{display:block;font-size:17px;letter-spacing:-.02em}
+.brandText small{display:block;color:#6f838f;font-size:8px;letter-spacing:.16em;margin-top:3px}
+.version{color:#6f838f;font-size:9px;font-weight:900;white-space:nowrap}
+
+.hero{padding:46px 0 24px}
+.eyebrow{display:block;color:#8ad6e8;font-size:9px;font-weight:900;letter-spacing:.18em}
+.hero h1{font-size:clamp(46px,7vw,76px);line-height:.92;letter-spacing:-.055em;margin:14px 0 16px}
+.hero p{max-width:690px;color:var(--muted);font-size:13px;line-height:1.65;margin:0}
+
+.statusCard{
+  margin-top:25px;padding:20px;border:1px solid var(--line);border-radius:20px;
+  background:linear-gradient(180deg,var(--panel2),var(--panel));
+}
+.statusCard span{display:block;color:#728690;font-size:8px;font-weight:900;letter-spacing:.15em}
+.statusCard strong{display:block;font-size:30px;margin-top:7px}
+.statusCard strong[data-state="pass"]{color:var(--good)}
+.statusCard strong[data-state="warn"]{color:var(--warn)}
+.statusCard strong[data-state="fail"]{color:var(--bad)}
+.statusCard small{display:block;color:#879aa5;font-size:11px;margin-top:4px}
+
+.controls{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px;margin:14px 0}
+.controls button{
+  min-height:52px;border-radius:14px;border:1px solid var(--line);background:#101c25;
+  color:#e2edf1;font-size:9px;font-weight:900;letter-spacing:.04em;padding:0 12px;
+}
+.controls button.primary{background:var(--cyan);color:#06131a;border-color:transparent}
+.controls button:disabled{opacity:.55}
+
+.isolate{
+  display:grid;grid-template-columns:1.35fr .65fr;gap:14px;
+  border:1px solid rgba(169,231,244,.15);border-radius:18px;
+  background:rgba(169,231,244,.035);padding:18px;margin-bottom:14px;
+}
+.isolate h3{margin:6px 0;font-size:21px}
+.isolate p{margin:0;color:#8599a4;font-size:10px;line-height:1.55}
+.isolateMeta{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.isolateMeta>div{padding:10px;border:1px solid var(--line);border-radius:11px;background:#09131b}
+.isolateMeta span{display:block;color:#627681;font-size:6px;font-weight:900;letter-spacing:.12em}
+.isolateMeta b{display:block;margin-top:5px;font-size:11px}
+.isolateMeta a{
+  grid-column:1/-1;display:flex;align-items:center;justify-content:center;min-height:39px;
+  border:1px solid var(--line);border-radius:11px;color:#b8dce5;text-decoration:none;
+  font-size:8px;font-weight:900;
+}
+
+.counts{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:17px;overflow:hidden}
+.counts div{padding:15px;border-right:1px solid var(--line)}
+.counts div:last-child{border-right:0}
+.counts span{display:block;color:#6a7f8a;font-size:7px;font-weight:900;letter-spacing:.12em}
+.counts b{display:block;font-size:24px;margin-top:4px}
+
+.sectionHead{display:flex;align-items:flex-start;gap:12px;margin:36px 0 11px}
+.sectionNo{
+  width:28px;height:28px;border-radius:8px;border:1px solid var(--line);
+  display:grid;place-items:center;color:#87cfe0;font-size:8px;font-weight:900;flex:0 0 auto;
+}
+.sectionHead h2{margin:0;font-size:22px;letter-spacing:-.035em}
+.sectionHead p{margin:3px 0 0;color:#71848f;font-size:9px;line-height:1.45}
+
+.testGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.testCard{
+  min-height:137px;border-radius:16px;border:1px solid var(--line);
+  background:linear-gradient(180deg,#0e1a23,#0a141c);padding:14px;position:relative;
+}
+.testCard.pass{border-color:rgba(118,215,165,.22)}
+.testCard.warn{border-color:rgba(240,198,108,.22)}
+.testCard.fail{border-color:rgba(255,135,153,.24)}
+.testHead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.testHead strong{font-size:11px}
+.statusBadge{
+  border:1px solid var(--line);border-radius:999px;padding:5px 7px;
+  color:#80949e;font-size:7px;font-weight:900;white-space:nowrap;
+}
+.pass .statusBadge{color:var(--good)}
+.warn .statusBadge{color:var(--warn)}
+.fail .statusBadge{color:var(--bad)}
+.running .statusBadge{color:#88d5e8}
+.testMessage{font-size:10px;color:#d1dde2;line-height:1.5;margin-top:15px;padding-right:8px}
+.testDetail{
+  border:0;background:transparent;padding:0;margin:6px 0 20px;color:#728792;
+  font:8px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;word-break:break-word;
+}
+.testTime{position:absolute;bottom:10px;right:12px;color:#526772;font-size:7px}
+
+.report{border:1px solid var(--line);border-radius:16px;background:#050a0e;overflow:auto}
+.report pre{margin:0;padding:15px;color:#9eb0b9;font:9px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;word-break:break-word}
+footer{text-align:center;color:#536974;font-size:8px;margin-top:38px}
+
+@media(max-width:700px){
+  .page{width:min(100% - 24px,700px)}
+  .topbar{height:72px}
+  .brandText small{display:none}
+  .brandText strong{font-size:14px}
+  .brandMark{width:38px;height:38px;border-radius:11px}
+  .version{font-size:8px}
+  .hero{padding-top:31px}
+  .hero h1{font-size:52px}
+  .hero p{font-size:12px}
+  .controls{grid-template-columns:1fr 1fr 1fr}
+  .controls .primary{grid-column:1/-1}
+  .isolate{grid-template-columns:1fr}
+  .testGrid{grid-template-columns:1fr}
+  .counts{grid-template-columns:1fr 1fr}
+  .counts div:nth-child(2){border-right:0}
+  .counts div:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .topbar .back{font-size:0}
+  .topbar .back::before{content:"<";font-size:17px}
+}
+
 </style>
 </head>
 <body>
-<main class="diagShell">
-  <header class="diagTop">
-    <a class="back" href="index.html">â SKYHUNT</a>
-    <div class="brand"><span class="brandMark">â¦</span><div><strong>System Diagnostics</strong><small>SKYHUNT Â· LIVE SERVICE HEALTH</small></div></div>
-    <span class="build">DIAG v1.1</span>
+<main class="page">
+  <header class="topbar">
+    <a class="back" href="index.html">&lt; SKYHUNT</a>
+    <div class="brand">
+      <div class="brandMark">+</div>
+      <div class="brandText">
+        <strong>System Diagnostics</strong>
+        <small>SKYHUNT / LIVE SERVICE HEALTH</small>
+      </div>
+    </div>
+    <div class="version">DIAG v2.0</div>
   </header>
-  <section class="diagHero"><div><span class="eyebrow">DEEP SYSTEM CHECK</span><h1>Find exactly<br>what failed.</h1><p>This page tests SKYHUNT independently from the normal interface and explains whether a failure is coming from an API, Safari/network transport, permissions, maps, storage, news services or SKYHUNT's own deployed files.</p></div><div class="heroStatus"><span>OVERALL STATUS</span><strong id="overallStatus">NOT TESTED</strong><small id="overallDetail">Run the suite to begin.</small></div></section>
-  <section class="controls"><button id="runAircraftOnly" class="primary">TEST ADSB.FI ONCE</button><button id="runAll">RUN FULL DIAGNOSTIC</button><button id="copyReport">COPY FULL REPORT</button><button id="clearResults">CLEAR</button></section>
-  <section class="apiIsolate"><div><span class="eyebrow">ISOLATED AIRCRAFT TEST</span><h3>One request. No scan loop.</h3><p>This test makes exactly one adsb.fi point request. Use it after leaving SKYHUNT idle for 15â30 minutes if you suspect temporary throttling or an IP block.</p></div><div class="apiIsolateMeta"><div><span>LAST AIRCRAFT REQUEST</span><b id="lastAircraftRequest">NEVER</b></div><div><span>COOLDOWN</span><b id="cooldownState">READY</b></div><a id="openApiDirect" href="https://opendata.adsb.fi/api/v3/lat/51.4700/lon/-0.4543/dist/100" target="_blank" rel="noopener">OPEN API DIRECTLY â</a></div></section>
-  <section class="summaryGrid"><article><span>PASS</span><b id="passCount">0</b></article><article><span>WARNING</span><b id="warnCount">0</b></article><article><span>FAIL</span><b id="failCount">0</b></article><article><span>TESTS</span><b id="testCount">0</b></article></section>
-  <section class="notice"><b>How to use this</b><span>Tap Run Full Diagnostic once. It may ask for location, camera and motion permissions because those are real SKYHUNT dependencies. Camera access is immediately stopped after the test. adsb.fi is tested conservatively.</span></section>
-  <div class="sectionTitle"><span>01</span><div><h2>Browser & deployment</h2><p>Checks whether the website itself and its deployed feature files are healthy.</p></div></div><section class="testGrid" id="browserTests"></section>
-  <div class="sectionTitle"><span>02</span><div><h2>Aircraft API</h2><p>Direct adsb.fi transport, HTTP, JSON, point search and hex lookup diagnostics.</p></div></div><section class="testGrid" id="aircraftTests"></section>
-  <div class="sectionTitle"><span>03</span><div><h2>Device features</h2><p>Location, camera and device-orientation capabilities used by Nearby and Sky Lens.</p></div></div><section class="testGrid" id="deviceTests"></section>
-  <div class="sectionTitle"><span>04</span><div><h2>Maps & storage</h2><p>Leaflet, OpenStreetMap tile delivery and local Collection persistence.</p></div></div><section class="testGrid" id="platformTests"></section>
-  <div class="sectionTitle"><span>05</span><div><h2>Skywire news stack</h2><p>Tests the services used by the current News implementation independently.</p></div></div><section class="testGrid" id="newsTests"></section>
-  <div class="sectionTitle"><span>06</span><div><h2>Raw report</h2><p>Share this report when debugging a failure.</p></div></div><section class="reportBox"><pre id="rawReport">No diagnostic run yet.</pre></section>
-  <footer>SKYHUNT Diagnostics Â· not for navigation</footer>
+
+  <section class="hero">
+    <span class="eyebrow">DEEP SYSTEM CHECK</span>
+    <h1>Find exactly<br>what failed.</h1>
+    <p>Tests SKYHUNT independently from the normal interface and separates API failures from browser transport, deployment, device permissions, maps, storage and news services.</p>
+
+    <div class="statusCard">
+      <span>OVERALL STATUS</span>
+      <strong id="overallStatus" data-state="idle">NOT TESTED</strong>
+      <small id="overallDetail">Run a test to begin.</small>
+    </div>
+  </section>
+
+  <section class="controls">
+    <button id="runAircraftOnly" class="primary">TEST ADSB.FI ONCE</button>
+    <button id="runAll">RUN FULL DIAGNOSTIC</button>
+    <button id="copyReport">COPY FULL REPORT</button>
+    <button id="clearResults">CLEAR</button>
+  </section>
+
+  <section class="isolate">
+    <div>
+      <span class="eyebrow">ISOLATED AIRCRAFT TEST</span>
+      <h3>One request. No scan loop.</h3>
+      <p>Use this first when aircraft tracking fails. It makes one adsb.fi request and then analyses the result without repeatedly calling the provider.</p>
+    </div>
+    <div class="isolateMeta">
+      <div><span>LAST AIRCRAFT REQUEST</span><b id="lastAircraftRequest">NEVER</b></div>
+      <div><span>COOLDOWN</span><b id="cooldownState">READY</b></div>
+      <a href="https://opendata.adsb.fi/api/v3/lat/51.4700/lon/-0.4543/dist/100" target="_blank" rel="noopener">OPEN API DIRECTLY</a>
+    </div>
+  </section>
+
+  <section class="counts">
+    <div><span>PASS</span><b id="passCount">0</b></div>
+    <div><span>WARNING</span><b id="warnCount">0</b></div>
+    <div><span>FAIL</span><b id="failCount">0</b></div>
+    <div><span>TESTS</span><b id="testCount">0</b></div>
+  </section>
+
+  <div class="sectionHead"><span class="sectionNo">01</span><div><h2>Browser and deployment</h2><p>Confirms the site and central API architecture are actually deployed.</p></div></div>
+  <section id="browserTests" class="testGrid"></section>
+
+  <div class="sectionHead"><span class="sectionNo">02</span><div><h2>Aircraft API</h2><p>Tests adsb.fi transport, status, data format and live-follow lookup.</p></div></div>
+  <section id="aircraftTests" class="testGrid"></section>
+
+  <div class="sectionHead"><span class="sectionNo">03</span><div><h2>Device features</h2><p>Checks location, camera and orientation capabilities.</p></div></div>
+  <section id="deviceTests" class="testGrid"></section>
+
+  <div class="sectionHead"><span class="sectionNo">04</span><div><h2>Maps and storage</h2><p>Checks Leaflet, OpenStreetMap and Collection persistence.</p></div></div>
+  <section id="platformTests" class="testGrid"></section>
+
+  <div class="sectionHead"><span class="sectionNo">05</span><div><h2>Skywire</h2><p>Checks the current news feed and article-image metadata service.</p></div></div>
+  <section id="newsTests" class="testGrid"></section>
+
+  <div class="sectionHead"><span class="sectionNo">06</span><div><h2>Raw report</h2><p>Copy this entire report when something fails.</p></div></div>
+  <section class="report"><pre id="rawReport">No diagnostic run yet.</pre></section>
+
+  <footer>SKYHUNT Diagnostics / not for navigation</footer>
 </main>
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script>
-(()=>{"use strict";const $=s=>document.querySelector(s),results=[];let point=null,hex="",timer;const tests=[
-["secure","browser","Secure browser context",async()=>set("secure",isSecureContext?"pass":"fail",isSecureContext?"HTTPS secure context is active.":"Page is not secure.")],
-["assets","browser","SKYHUNT deployed JS files",assets],["provider","browser","Aircraft provider wiring",wiring],
-["online","browser","Browser network state",async()=>set("online",navigator.onLine?"pass":"fail",navigator.onLine?"Browser reports an active network connection.":"Browser reports offline.")],
-["point","aircraft","adsb.fi single point request",airPoint],["shape","aircraft","Aircraft response format",shape],["rate","aircraft","Rate-limit / block evidence",rate],["hex","aircraft","adsb.fi hex lookup",hexTest],
-["geo","device","Live location permission",geo],["camera","device","Camera / Sky Lens access",camera],["orientation","device","Motion & orientation",orientation],
-["leaflet","platform","Leaflet map engine",async()=>set("leaflet",window.L?.map?"pass":"fail",window.L?.map?`Leaflet ${L.version} loaded.`:"Leaflet unavailable.")],
-["osm","platform","OpenStreetMap tile delivery",osm],["storage","platform","Local Collection storage",storage],
-["rss","news","Google News RSS â rss2json",rss],["fallback","news","AllOrigins RSS fallback",fallback],["microlink","news","Microlink image metadata",microlink]];
-const groups={browser:"#browserTests",aircraft:"#aircraftTests",device:"#deviceTests",platform:"#platformTests",news:"#newsTests"};
-for(const [id,g,n] of tests){let e=document.createElement("article");e.className="testCard";e.id="test-"+id;e.innerHTML=`<div class="testTop"><span class="testName">${n}</span><span class="badge">NOT RUN</span></div><div class="testMessage">Waiting for diagnostic run.</div><div class="testDetail"></div><div class="testTime"></div>`;$(groups[g]).append(e)}
-const sleep=m=>new Promise(r=>setTimeout(r,m));
-async function req(url,timeout=12000){let c=new AbortController,t=setTimeout(()=>c.abort(),timeout),s=performance.now();try{let r=await fetch(url,{signal:c.signal,cache:"no-store",headers:{Accept:"application/json"}}),text=await r.text(),json=null,h={};try{json=JSON.parse(text)}catch{}try{r.headers.forEach((v,k)=>h[k]=v)}catch{}return{ok:r.ok,status:r.status,text,json,h,ms:Math.round(performance.now()-s),type:r.type}}catch(e){return{ok:false,network:true,error:e,ms:Math.round(performance.now()-s)}}finally{clearTimeout(t)}}
-function set(id,status,msg,detail="",ms=""){let e=$("#test-"+id);e.className="testCard "+status;e.querySelector(".badge").textContent=status==="pass"?"PASS":status==="warn"?"WARNING":"FAIL";e.querySelector(".testMessage").textContent=msg;e.querySelector(".testDetail").textContent=detail;e.querySelector(".testTime").textContent=ms!==""?ms+" ms":"";let n=tests.find(x=>x[0]===id)?.[2]||id,i=results.findIndex(x=>x.id===id),v={id,name:n,status,msg,detail,ms};i<0?results.push(v):results[i]=v;summary()}
-function running(id){let e=$("#test-"+id);e.className="testCard running";e.querySelector(".badge").textContent="RUNNING";e.querySelector(".testMessage").textContent="Testingâ¦"}
-function summary(){let p=results.filter(x=>x.status==="pass").length,w=results.filter(x=>x.status==="warn").length,f=results.filter(x=>x.status==="fail").length;$("#passCount").textContent=p;$("#warnCount").textContent=w;$("#failCount").textContent=f;$("#testCount").textContent=results.length;$("#overallStatus").textContent=f?"FAULTS FOUND":w?"DEGRADED":results.length?"HEALTHY":"NOT TESTED";$("#rawReport").textContent=["SKYHUNT FULL DIAGNOSTIC REPORT",`Time: ${new Date().toISOString()}`,`Page: ${location.href}`,`User agent: ${navigator.userAgent}`,`Online: ${navigator.onLine}`,`Secure context: ${isSecureContext}`,"",...results.map(x=>`[${x.status.toUpperCase()}] ${x.name}${x.ms!==""?` (${x.ms} ms)`:""}\n${x.msg}${x.detail?`\n${x.detail}`:""}`)].join("\n\n")}
-function explain(r){if(r.network)return"NETWORK/CORS: Safari failed before receiving an HTTP response.";if(r.status===429)return"HTTP 429: confirmed rate limit.";if(r.status===403)return"HTTP 403: provider rejected the browser/IP.";if(r.status>=500)return`HTTP ${r.status}: provider server failure.`;if(!r.ok)return`HTTP ${r.status}: request rejected.`;return""}
-async function assets(){let bad=[],ok=[];for(let n of["aircraft-api.js","core.js","nearby.js","radar.js","ai-finder.js","skylens.js","news.js","collection.js","app.js"]){let r=await req(n+"?diag="+Date.now(),7000);(r.ok?ok:bad).push(r.ok?`${n} HTTP ${r.status}`:`${n}: ${explain(r)}`)}set("assets",bad.length?"fail":"pass",bad.length?`${bad.length} deployed files failed.`:"All core SKYHUNT JavaScript files are served.",(bad.length?bad:ok).join("\n"))}
-async function wiring(){
- let problems=[],details=[];
- let api=await req("aircraft-api.js?wire="+Date.now(),7000);
- if(!api.ok){
-   problems.push("aircraft-api.js could not be loaded");
- }else{
-   if(!api.text.includes("opendata.adsb.fi"))problems.push("aircraft-api.js does not contain adsb.fi");
-   details.push("aircraft-api.js: "+(api.text.includes("opendata.adsb.fi")?"adsb.fi configured":"provider missing"));
- }
- for(let n of["core.js","nearby.js","radar.js","ai-finder.js","skylens.js"]){
-   let r=await req(n+"?wire="+Date.now(),7000);
-   if(!r.ok){problems.push(n+" could not be inspected");continue}
-   let direct=["api.airplanes.live","api.adsb.lol","opendata.adsb.fi","opensky-network.org","api.adsb.one"].filter(p=>r.text.includes(p));
-   if(direct.length)problems.push(n+" contains direct provider URL: "+direct.join(", "));
-   details.push(n+": "+(direct.length?"direct URL found":"uses central API layer"));
- }
- set("provider",problems.length?"fail":"pass",
-   problems.length?"Aircraft provider wiring is inconsistent.":"All aircraft features use the central aircraft-api.js module.",
-   (problems.length?problems:details).join("
-"));
-}
-function mark(){localStorage.setItem("skyhuntDiagLastAircraftRequest",Date.now());cool()}
-function cool(){let x=+localStorage.getItem("skyhuntDiagLastAircraftRequest")||0,d=Math.max(0,60000-(Date.now()-x));$("#lastAircraftRequest").textContent=x?new Date(x).toLocaleTimeString("en-GB"):"NEVER";$("#cooldownState").textContent=d?Math.ceil(d/1000)+"s":"READY"}
-async function airPoint(){mark();point=await req("https://opendata.adsb.fi/api/v3/lat/51.4700/lon/-0.4543/dist/100");let e=explain(point);if(e)return set("point","fail","adsb.fi point search failed.",e,point.ms);let a=point.json?.ac||point.json?.aircraft||[];if(!Array.isArray(a))return set("point","fail","JSON returned without aircraft array.",point.text.slice(0,400),point.ms);if(!a.length)return set("point","warn","API reachable but returned zero aircraft.",`HTTP ${point.status}`,point.ms);hex=String(a.find(x=>x.hex)?.hex||"");set("point","pass",`Returned ${a.length} aircraft around Heathrow.`,`HTTP ${point.status}${hex?` Â· test hex ${hex}`:""}`,point.ms)}
-async function shape(){if(!point||point.network||!point.json)return set("shape","fail","No valid aircraft JSON available.");let a=(point.json.ac||point.json.aircraft||[])[0];if(!a)return set("shape","warn","No aircraft object available to validate.");let m=["hex","lat","lon"].filter(k=>a[k]==null);set("shape",m.length?"fail":"pass",m.length?"Required aircraft fields missing.":"Aircraft response shape is compatible.",m.length?"Missing: "+m.join(", "):`hex=${a.hex} Â· lat=${a.lat} Â· lon=${a.lon}`)}
-async function rate(){if(!point)return set("rate","warn","No point request available.");if(point.network)return set("rate","warn","No HTTP status received; normal 429 cannot be confirmed.","IP/network blocking remains possible.");if(point.status===429)return set("rate","fail","Confirmed HTTP 429 rate limit.");let h=Object.entries(point.h||{}).filter(([k])=>/rate|retry|limit/i.test(k));set("rate",h.length?"warn":"pass",h.length?"Rate-limit headers exposed.":`HTTP ${point.status}; no direct 429 evidence.`,h.map(x=>x.join(": ")).join("\n"))}
-async function hexTest(){if(!hex)return set("hex","warn","Hex lookup skipped because no aircraft was returned.");await sleep(2200);mark();let r=await req("https://opendata.adsb.fi/api/v2/hex/"+encodeURIComponent(hex)),e=explain(r);if(e)return set("hex","fail","Hex lookup failed.",e,r.ms);let a=r.json?.ac||r.json?.aircraft||[];set("hex",a.length?"pass":"warn",a.length?`Hex lookup returned ${a.length} record(s).`:"Hex endpoint returned no aircraft.",`HTTP ${r.status}`,r.ms)}
-async function geo(){if(!navigator.geolocation)return set("geo","fail","Geolocation unsupported.");let s=performance.now();try{let p=await new Promise((a,b)=>navigator.geolocation.getCurrentPosition(a,b,{enableHighAccuracy:true,timeout:12000}));set("geo","pass","Live location returned.",`Accuracy approximately ${Math.round(p.coords.accuracy)} m. Coordinates omitted.`,Math.round(performance.now()-s))}catch(e){set("geo","fail","Location request failed.",e.message,Math.round(performance.now()-s))}}
-async function camera(){if(!navigator.mediaDevices?.getUserMedia)return set("camera","fail","Camera API unavailable.");let s=performance.now(),st;try{st=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}},audio:false});set("camera","pass","Camera permission and stream work.",st.getVideoTracks()[0]?.label||"Video device",Math.round(performance.now()-s))}catch(e){set("camera","fail","Camera request failed.",`${e.name}: ${e.message}`)}finally{st?.getTracks().forEach(t=>t.stop())}}
-async function orientation(){if(typeof DeviceOrientationEvent==="undefined")return set("orientation","fail","DeviceOrientationEvent unavailable.");if(typeof DeviceOrientationEvent.requestPermission==="function")return set("orientation","warn","iOS orientation permission requires a direct user gesture.","Test this through Sky Lens Start rather than the automated suite.");set("orientation","pass","Motion & Orientation capability is available.")}
-async function osm(){let s=performance.now(),ok=await new Promise(r=>{let i=new Image,t=setTimeout(()=>r(false),10000);i.onload=()=>{clearTimeout(t);r(true)};i.onerror=()=>{clearTimeout(t);r(false)};i.src="https://tile.openstreetmap.org/0/0/0.png?d="+Date.now()});set("osm",ok?"pass":"fail",ok?"OpenStreetMap tile loaded.":"OpenStreetMap tile failed.","",Math.round(performance.now()-s))}
-async function storage(){let k="__diag",v=Math.random()+"";try{localStorage.setItem(k,v);let ok=localStorage.getItem(k)===v;localStorage.removeItem(k);set("storage",ok?"pass":"fail",ok?"localStorage works.":"localStorage round-trip failed.")}catch(e){set("storage","fail","localStorage unavailable.",e.message)}}
-function feed(){let p=new URLSearchParams({q:"aviation OR airline OR aircraft OR airport",hl:"en-GB",gl:"GB",ceid:"GB:en"});return"https://news.google.com/rss/search?"+p}
-async function rss(){let u=new URL("https://api.rss2json.com/v1/api.json");u.searchParams.set("rss_url",feed());let r=await req(u,12000);if(!r.ok)return set("rss","fail","rss2json failed.",explain(r),r.ms);let n=r.json?.items?.length||0;set("rss",n?"pass":"warn",n?`rss2json returned ${n} items.`:"rss2json returned zero items.",`HTTP ${r.status}`,r.ms)}
-async function fallback(){let r=await req("https://api.allorigins.win/raw?url="+encodeURIComponent(feed()),14000);set("fallback",r.ok?"pass":"warn",r.ok?"AllOrigins responded.":"AllOrigins fallback unavailable.",r.ok?`HTTP ${r.status}`:explain(r),r.ms)}
-async function microlink(){let u=new URL("https://api.microlink.io/");u.searchParams.set("url","https://www.bbc.co.uk/news");u.searchParams.set("filter","image.url");let r=await req(u,10000);set("microlink",r.ok?"pass":"warn",r.ok?"Microlink responded.":"Microlink unavailable.",r.ok?`HTTP ${r.status}`:explain(r),r.ms)}
-async function isolated(){for(let id of["point","shape","rate"])running(id);point=null;hex="";await airPoint();await shape();await rate();set("hex","warn","Hex lookup intentionally skipped in isolated mode.","Exactly one provider request was made.")}
-async function all(){results.length=0;point=null;hex="";$("#runAll").disabled=true;for(let t of tests){running(t[0]);try{await t[3]()}catch(e){set(t[0],"fail","Diagnostic test threw an error.",e.message)}await sleep(120)}$("#runAll").disabled=false;summary()}
-$("#runAircraftOnly").onclick=isolated;$("#runAll").onclick=all;$("#clearResults").onclick=()=>location.reload();$("#copyReport").onclick=async()=>{try{await navigator.clipboard.writeText($("#rawReport").textContent);$("#copyReport").textContent="COPIED â";setTimeout(()=>$("#copyReport").textContent="COPY FULL REPORT",1500)}catch{}};cool();timer=setInterval(cool,1000);summary()})();
+
+(() => {
+  "use strict";
+
+  const $ = (s) => document.querySelector(s);
+  const API_POINT = "https://opendata.adsb.fi/api/v3/lat/51.4700/lon/-0.4543/dist/100";
+  const API_HEX_BASE = "https://opendata.adsb.fi/api/v2/hex/";
+  const results = new Map();
+  let lastPointResult = null;
+  let discoveredHex = "";
+  let cooldownTimer = null;
+
+  const tests = [
+    ["secure","browser","Secure browser context",testSecure],
+    ["online","browser","Browser network state",testOnline],
+    ["assets","browser","Deployed SKYHUNT files",testAssets],
+    ["wiring","browser","Central aircraft API wiring",testWiring],
+
+    ["point","aircraft","adsb.fi single point request",testPoint],
+    ["shape","aircraft","Aircraft response format",testShape],
+    ["rate","aircraft","Rate-limit / block evidence",testRate],
+    ["hex","aircraft","adsb.fi hex lookup",testHex],
+
+    ["geo","device","Location access",testGeolocation],
+    ["camera","device","Camera access",testCamera],
+    ["orientation","device","Motion and orientation support",testOrientation],
+
+    ["leaflet","platform","Leaflet map engine",testLeaflet],
+    ["tiles","platform","OpenStreetMap tiles",testTiles],
+    ["storage","platform","Collection storage",testStorage],
+
+    ["news","news","Google News RSS service",testNews],
+    ["images","news","News image metadata",testImages]
+  ];
+
+  const groups = {
+    browser: $("#browserTests"),
+    aircraft: $("#aircraftTests"),
+    device: $("#deviceTests"),
+    platform: $("#platformTests"),
+    news: $("#newsTests")
+  };
+
+  function escapeHtml(value){
+    return String(value ?? "")
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;");
+  }
+
+  function buildCards(){
+    for(const [id,group,name] of tests){
+      const el=document.createElement("article");
+      el.className="testCard";
+      el.id=`test-${id}`;
+      el.innerHTML=`
+        <div class="testHead">
+          <strong>${escapeHtml(name)}</strong>
+          <span class="statusBadge">NOT RUN</span>
+        </div>
+        <div class="testMessage">Waiting for a diagnostic run.</div>
+        <pre class="testDetail"></pre>
+        <small class="testTime"></small>
+      `;
+      groups[group].appendChild(el);
+    }
+  }
+
+  function setRunning(id){
+    const el=$(`#test-${id}`);
+    if(!el) return;
+    el.className="testCard running";
+    el.querySelector(".statusBadge").textContent="RUNNING";
+    el.querySelector(".testMessage").textContent="Testing...";
+    el.querySelector(".testDetail").textContent="";
+    el.querySelector(".testTime").textContent="";
+  }
+
+  function setResult(id,status,message,detail="",ms=null){
+    const el=$(`#test-${id}`);
+    if(!el) return;
+
+    el.className=`testCard ${status}`;
+    el.querySelector(".statusBadge").textContent =
+      status==="pass" ? "PASS" : status==="warn" ? "WARNING" : "FAIL";
+    el.querySelector(".testMessage").textContent=message;
+    el.querySelector(".testDetail").textContent=detail || "";
+    el.querySelector(".testTime").textContent=Number.isFinite(ms) ? `${ms} ms` : "";
+
+    const name=tests.find(t=>t[0]===id)?.[2] || id;
+    results.set(id,{id,name,status,message,detail,ms});
+    updateSummary();
+  }
+
+  function updateSummary(){
+    const values=[...results.values()];
+    const pass=values.filter(r=>r.status==="pass").length;
+    const warn=values.filter(r=>r.status==="warn").length;
+    const fail=values.filter(r=>r.status==="fail").length;
+
+    $("#passCount").textContent=pass;
+    $("#warnCount").textContent=warn;
+    $("#failCount").textContent=fail;
+    $("#testCount").textContent=values.length;
+
+    const overall=$("#overallStatus");
+    const detail=$("#overallDetail");
+
+    if(!values.length){
+      overall.textContent="NOT TESTED";
+      overall.dataset.state="idle";
+      detail.textContent="Run a test to begin.";
+    }else if(fail){
+      overall.textContent="FAULTS FOUND";
+      overall.dataset.state="fail";
+      detail.textContent=`${fail} failed, ${warn} warning${warn===1?"":"s"}.`;
+    }else if(warn){
+      overall.textContent="DEGRADED";
+      overall.dataset.state="warn";
+      detail.textContent=`No hard failures, ${warn} warning${warn===1?"":"s"}.`;
+    }else{
+      overall.textContent="HEALTHY";
+      overall.dataset.state="pass";
+      detail.textContent="All completed tests passed.";
+    }
+
+    renderReport();
+  }
+
+  function renderReport(){
+    const lines=[
+      "SKYHUNT FULL DIAGNOSTIC REPORT",
+      "",
+      `Time: ${new Date().toISOString()}`,
+      `Page: ${location.href}`,
+      `User agent: ${navigator.userAgent}`,
+      `Online: ${navigator.onLine}`,
+      `Secure context: ${window.isSecureContext}`,
+      "",
+      ...[...results.values()].map(r =>
+        `[${r.status.toUpperCase()}] ${r.name}${Number.isFinite(r.ms)?` (${r.ms} ms)`:""}\n${r.message}${r.detail?`\n${r.detail}`:""}`
+      )
+    ];
+    $("#rawReport").textContent=lines.join("\n\n");
+  }
+
+  function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+  async function request(url,{timeout=12000,accept="application/json"}={}){
+    const controller=new AbortController();
+    const timer=setTimeout(()=>controller.abort(),timeout);
+    const started=performance.now();
+
+    try{
+      const response=await fetch(url,{
+        signal:controller.signal,
+        cache:"no-store",
+        headers:{Accept:accept}
+      });
+
+      const text=await response.text();
+      let json=null;
+      try{ json=JSON.parse(text); }catch{}
+
+      const headers={};
+      try{ response.headers.forEach((v,k)=>headers[k]=v); }catch{}
+
+      return {
+        ok:response.ok,
+        status:response.status,
+        statusText:response.statusText,
+        text,
+        json,
+        headers,
+        type:response.type,
+        ms:Math.round(performance.now()-started)
+      };
+    }catch(error){
+      return {
+        ok:false,
+        networkError:true,
+        error,
+        ms:Math.round(performance.now()-started)
+      };
+    }finally{
+      clearTimeout(timer);
+    }
+  }
+
+  function describeFailure(r){
+    if(r?.networkError){
+      if(r.error?.name==="AbortError"){
+        return "TIMEOUT: no usable response arrived before the timeout.";
+      }
+      return "NETWORK/CORS: Safari failed before JavaScript received an HTTP response. This can mean cross-origin blocking, DNS/TLS failure, network filtering, or an IP-level provider block.";
+    }
+    if(r?.status===429) return "HTTP 429: confirmed rate limit.";
+    if(r?.status===403) return "HTTP 403: the provider rejected this browser or IP.";
+    if(r?.status===401) return "HTTP 401: authentication is required.";
+    if(r?.status>=500) return `HTTP ${r.status}: provider-side server failure.`;
+    if(r && !r.ok) return `HTTP ${r.status}: the provider returned an error response.`;
+    return "Unknown request failure.";
+  }
+
+  function formatHeaders(r){
+    if(!r || r.networkError) return "Response headers unavailable because no HTTP response was exposed.";
+    const rows=Object.entries(r.headers||{});
+    return rows.length
+      ? rows.map(([k,v])=>`${k}: ${v}`).join("\n")
+      : "No response headers were exposed to JavaScript.";
+  }
+
+  function markAircraftRequest(){
+    localStorage.setItem("skyhunt_diag_last_aircraft_request",String(Date.now()));
+    updateCooldown();
+  }
+
+  function updateCooldown(){
+    const last=Number(localStorage.getItem("skyhunt_diag_last_aircraft_request")||0);
+    const lastEl=$("#lastAircraftRequest");
+    const coolEl=$("#cooldownState");
+
+    if(!last){
+      lastEl.textContent="NEVER";
+      coolEl.textContent="READY";
+      return;
+    }
+
+    lastEl.textContent=new Date(last).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+    const remaining=Math.max(0,60000-(Date.now()-last));
+    coolEl.textContent=remaining ? `${Math.ceil(remaining/1000)}s` : "READY";
+  }
+
+  async function testSecure(){
+    if(window.isSecureContext){
+      setResult("secure","pass","HTTPS secure context is active.","Protected browser features can operate.");
+    }else{
+      setResult("secure","fail","This page is not running in a secure context.","Camera and geolocation can fail without HTTPS.");
+    }
+  }
+
+  async function testOnline(){
+    setResult(
+      "online",
+      navigator.onLine ? "pass" : "fail",
+      navigator.onLine ? "Browser reports an active network connection." : "Browser reports that it is offline.",
+      `navigator.onLine = ${navigator.onLine}`
+    );
+  }
+
+  async function testAssets(){
+    const names=[
+      "aircraft-api.js","core.js","nearby.js","radar.js","ai-finder.js",
+      "skylens.js","collection.js","news.js","legal.js","app.js"
+    ];
+    const good=[],bad=[];
+
+    for(const name of names){
+      const r=await request(`${name}?diag=${Date.now()}`,{timeout:7000,accept:"text/plain,*/*"});
+      if(r.ok) good.push(`${name}: HTTP ${r.status}`);
+      else bad.push(`${name}: ${describeFailure(r)}`);
+    }
+
+    if(bad.length){
+      setResult("assets","fail",`${bad.length} deployed SKYHUNT file${bad.length===1?"":"s"} could not be loaded.`,bad.join("\n"));
+    }else{
+      setResult("assets","pass","All expected SKYHUNT JavaScript files are being served.",good.join("\n"));
+    }
+  }
+
+  async function testWiring(){
+    const featureFiles=["core.js","nearby.js","radar.js","ai-finder.js","skylens.js"];
+    const providerUrls=[
+      "api.airplanes.live",
+      "api.adsb.lol",
+      "opensky-network.org",
+      "api.adsb.one",
+      "opendata.adsb.fi"
+    ];
+
+    const problems=[];
+    const details=[];
+
+    const api=await request(`aircraft-api.js?wire=${Date.now()}`,{timeout:7000,accept:"text/plain,*/*"});
+    if(!api.ok){
+      problems.push("aircraft-api.js could not be loaded.");
+    }else{
+      if(!api.text.includes("opendata.adsb.fi")){
+        problems.push("aircraft-api.js is not configured for adsb.fi.");
+      }
+      details.push("aircraft-api.js: central adsb.fi provider module detected.");
+    }
+
+    for(const name of featureFiles){
+      const r=await request(`${name}?wire=${Date.now()}`,{timeout:7000,accept:"text/plain,*/*"});
+      if(!r.ok){
+        problems.push(`${name} could not be inspected.`);
+        continue;
+      }
+      const direct=providerUrls.filter(u=>r.text.includes(u));
+      if(direct.length){
+        problems.push(`${name} contains a direct provider URL: ${direct.join(", ")}`);
+      }else{
+        details.push(`${name}: uses central provider layer.`);
+      }
+    }
+
+    if(problems.length){
+      setResult("wiring","fail","Aircraft API wiring is inconsistent.",[...problems,"",...details].join("\n"));
+    }else{
+      setResult("wiring","pass","All aircraft features use the central aircraft-api.js module.",details.join("\n"));
+    }
+  }
+
+  async function testPoint(){
+    markAircraftRequest();
+    const r=await request(API_POINT);
+    lastPointResult=r;
+
+    if(!r.ok){
+      setResult(
+        "point","fail","adsb.fi point request failed.",
+        `${describeFailure(r)}\nURL: ${API_POINT}\n${formatHeaders(r)}${r.text?`\nBody: ${r.text.slice(0,500)}`:""}`,
+        r.ms
+      );
+      return;
+    }
+
+    const rows=r.json?.ac || r.json?.aircraft || [];
+    if(!Array.isArray(rows)){
+      setResult("point","fail","adsb.fi returned JSON without an aircraft array.",`HTTP ${r.status}\nBody: ${r.text.slice(0,500)}`,r.ms);
+      return;
+    }
+
+    if(!rows.length){
+      setResult("point","warn","adsb.fi responded successfully but returned zero aircraft.",`HTTP ${r.status}\n${formatHeaders(r)}`,r.ms);
+      return;
+    }
+
+    discoveredHex=String(rows.find(a=>a?.hex)?.hex||"").trim().toLowerCase();
+    setResult("point","pass",`adsb.fi returned ${rows.length} aircraft around Heathrow.`,`HTTP ${r.status}${discoveredHex?` | test hex ${discoveredHex}`:""}\n${formatHeaders(r)}`,r.ms);
+  }
+
+  async function testShape(){
+    const r=lastPointResult;
+    if(!r || !r.ok || !r.json){
+      setResult("shape","warn","No successful point response is available to inspect.","Run the adsb.fi point test first.");
+      return;
+    }
+
+    const rows=r.json?.ac || r.json?.aircraft || [];
+    if(!rows.length){
+      setResult("shape","warn","No aircraft object is available to validate.","The provider returned an empty aircraft array.");
+      return;
+    }
+
+    const a=rows[0];
+    const required=["hex","lat","lon"];
+    const missing=required.filter(k=>a?.[k]===undefined || a?.[k]===null);
+
+    if(missing.length){
+      setResult("shape","fail","Aircraft objects are missing fields SKYHUNT requires.",`Missing: ${missing.join(", ")}\nKeys: ${Object.keys(a).join(", ")}`);
+    }else{
+      setResult("shape","pass","Aircraft response format is compatible with SKYHUNT.",`hex=${a.hex}\nlat=${a.lat}\nlon=${a.lon}\ncallsign=${String(a.flight||"").trim()||"n/a"}\naltitude=${a.alt_baro??"n/a"}\nspeed=${a.gs??"n/a"}`);
+    }
+  }
+
+  async function testRate(){
+    const r=lastPointResult;
+    if(!r){
+      setResult("rate","warn","No aircraft request is available to assess.","Run the single adsb.fi test first.");
+      return;
+    }
+
+    if(r.networkError){
+      setResult("rate","warn","No HTTP status was received, so a normal HTTP rate limit cannot be confirmed.","A standard rate limit would normally appear as HTTP 429. An IP-level block may still look like a network/CORS failure in Safari.");
+      return;
+    }
+
+    if(r.status===429){
+      setResult("rate","fail","Confirmed adsb.fi rate limit: HTTP 429.",formatHeaders(r));
+      return;
+    }
+
+    const rateHeaders=Object.entries(r.headers||{}).filter(([k])=>/rate|retry|limit/i.test(k));
+    if(rateHeaders.length){
+      setResult("rate","warn","The response exposed rate-limit-related headers.",rateHeaders.map(([k,v])=>`${k}: ${v}`).join("\n"));
+    }else{
+      setResult("rate","pass",`The request returned HTTP ${r.status}, not HTTP 429.`,"There is no direct evidence of a normal rate-limit response in this request.");
+    }
+  }
+
+  async function testHex(){
+    if(!discoveredHex){
+      setResult("hex","warn","Hex lookup was skipped because the point test did not return an aircraft.","No ICAO hex address is available to test.");
+      return;
+    }
+
+    await sleep(1200);
+    markAircraftRequest();
+    const url=API_HEX_BASE+encodeURIComponent(discoveredHex);
+    const r=await request(url);
+
+    if(!r.ok){
+      setResult("hex","fail","adsb.fi hex lookup failed.",`${describeFailure(r)}\nURL: ${url}\n${formatHeaders(r)}`,r.ms);
+      return;
+    }
+
+    const rows=r.json?.ac || r.json?.aircraft || [];
+    if(Array.isArray(rows) && rows.length){
+      setResult("hex","pass",`Hex lookup returned ${rows.length} aircraft record${rows.length===1?"":"s"}.`,`ICAO hex: ${discoveredHex}\nHTTP ${r.status}`,r.ms);
+    }else{
+      setResult("hex","warn","Hex endpoint responded but returned no aircraft.",`ICAO hex: ${discoveredHex}\nHTTP ${r.status}`,r.ms);
+    }
+  }
+
+  async function testGeolocation(){
+    if(!navigator.geolocation){
+      setResult("geo","fail","Geolocation is not supported by this browser.","Nearby and Sky Lens require location access.");
+      return;
+    }
+
+    const started=performance.now();
+    try{
+      const pos=await new Promise((resolve,reject)=>{
+        navigator.geolocation.getCurrentPosition(resolve,reject,{
+          enableHighAccuracy:true,
+          timeout:12000,
+          maximumAge:0
+        });
+      });
+      setResult("geo","pass","Live location was returned successfully.",`Accuracy: approximately ${Math.round(pos.coords.accuracy)} m. Coordinates are intentionally omitted.`,Math.round(performance.now()-started));
+    }catch(e){
+      const reason=e.code===1 ? "Permission denied" : e.code===2 ? "Position unavailable" : e.code===3 ? "Location timeout" : e.message;
+      setResult("geo","fail","Live location request failed.",reason,Math.round(performance.now()-started));
+    }
+  }
+
+  async function testCamera(){
+    if(!navigator.mediaDevices?.getUserMedia){
+      setResult("camera","fail","Camera API is unavailable.","Sky Lens cannot use the camera on this browser.");
+      return;
+    }
+
+    const started=performance.now();
+    let stream=null;
+    try{
+      stream=await navigator.mediaDevices.getUserMedia({
+        video:{facingMode:{ideal:"environment"}},
+        audio:false
+      });
+      const track=stream.getVideoTracks()[0];
+      setResult("camera","pass","Camera permission and video stream both work.",track?.label || "Video device available.",Math.round(performance.now()-started));
+    }catch(e){
+      setResult("camera","fail","Camera request failed.",`${e.name}: ${e.message}`,Math.round(performance.now()-started));
+    }finally{
+      stream?.getTracks().forEach(t=>t.stop());
+    }
+  }
+
+  async function testOrientation(){
+    if(typeof DeviceOrientationEvent==="undefined"){
+      setResult("orientation","fail","Device orientation is unavailable.","Sky Lens heading support cannot work.");
+      return;
+    }
+
+    if(typeof DeviceOrientationEvent.requestPermission==="function"){
+      setResult("orientation","warn","iOS requires orientation permission from the Sky Lens Start button.","The automated diagnostic deliberately does not trigger the permission prompt because iOS requires a direct user gesture.");
+      return;
+    }
+
+    setResult("orientation","pass","Device orientation support is available.");
+  }
+
+  async function testLeaflet(){
+    if(typeof window.L==="object" && typeof window.L.map==="function"){
+      setResult("leaflet","pass","Leaflet loaded successfully.",`Leaflet version: ${window.L.version||"unknown"}`);
+    }else{
+      setResult("leaflet","fail","Leaflet did not load.","Radar, Nearby and Live Follow maps cannot render.");
+    }
+  }
+
+  async function testTiles(){
+    const started=performance.now();
+    const ok=await new Promise(resolve=>{
+      const img=new Image();
+      const timer=setTimeout(()=>resolve(false),10000);
+      img.onload=()=>{ clearTimeout(timer); resolve(true); };
+      img.onerror=()=>{ clearTimeout(timer); resolve(false); };
+      img.src=`https://tile.openstreetmap.org/0/0/0.png?diag=${Date.now()}`;
+    });
+
+    setResult(
+      "tiles",
+      ok ? "pass" : "fail",
+      ok ? "OpenStreetMap tile delivery works." : "OpenStreetMap tile delivery failed.",
+      ok ? "Map imagery is reachable from this browser." : "Leaflet may load while maps appear blank.",
+      Math.round(performance.now()-started)
+    );
+  }
+
+  async function testStorage(){
+    const key=`__skyhunt_diag_${Date.now()}`;
+    const value=`ok_${Math.random()}`;
+    try{
+      localStorage.setItem(key,value);
+      const read=localStorage.getItem(key);
+      localStorage.removeItem(key);
+      if(read===value){
+        setResult("storage","pass","localStorage read, write and delete all work.","Collection persistence is available.");
+      }else{
+        setResult("storage","fail","localStorage did not return the value that was written.","Collection persistence may fail.");
+      }
+    }catch(e){
+      setResult("storage","fail","localStorage is unavailable or blocked.",`${e.name}: ${e.message}`);
+    }
+  }
+
+  function googleFeedUrl(){
+    const p=new URLSearchParams({
+      q:"aviation OR airline OR aircraft OR airport",
+      hl:"en-GB",
+      gl:"GB",
+      ceid:"GB:en"
+    });
+    return `https://news.google.com/rss/search?${p.toString()}`;
+  }
+
+  async function testNews(){
+    const endpoint=new URL("https://api.rss2json.com/v1/api.json");
+    endpoint.searchParams.set("rss_url",googleFeedUrl());
+    const r=await request(endpoint.href);
+
+    if(!r.ok){
+      setResult("news","fail","Google News RSS conversion failed.",describeFailure(r),r.ms);
+      return;
+    }
+
+    const count=Array.isArray(r.json?.items) ? r.json.items.length : 0;
+    if(count){
+      setResult("news","pass",`News service returned ${count} aviation stories.`,`HTTP ${r.status}`,r.ms);
+    }else{
+      setResult("news","warn","News service responded but returned zero stories.",`HTTP ${r.status}`,r.ms);
+    }
+  }
+
+  async function testImages(){
+    const url=new URL("https://api.microlink.io/");
+    url.searchParams.set("url","https://www.bbc.co.uk/news");
+    url.searchParams.set("filter","image.url");
+    const r=await request(url.href,{timeout:10000});
+
+    if(r.ok){
+      setResult("images","pass","News image metadata service responded successfully.",`HTTP ${r.status}`,r.ms);
+    }else{
+      setResult("images","warn","News image metadata service is unavailable.",`${describeFailure(r)}\nThis affects article images, not the main news feed.`,r.ms);
+    }
+  }
+
+  async function runTest(id){
+    const test=tests.find(t=>t[0]===id);
+    if(!test) return;
+    setRunning(id);
+    try{
+      await test[3]();
+    }catch(e){
+      setResult(id,"fail","The diagnostic test itself threw an unexpected error.",`${e.name||"Error"}: ${e.message||e}`);
+    }
+  }
+
+  async function runAircraftOnce(){
+    const btn=$("#runAircraftOnly");
+    btn.disabled=true;
+    btn.textContent="TESTING ADSB.FI...";
+
+    lastPointResult=null;
+    discoveredHex="";
+
+    await runTest("point");
+    await runTest("shape");
+    await runTest("rate");
+    setResult("hex","warn","Hex lookup intentionally skipped in single-request mode.","This mode makes exactly one adsb.fi request.");
+
+    btn.disabled=false;
+    btn.textContent="TEST ADSB.FI ONCE";
+  }
+
+  async function runFull(){
+    const btn=$("#runAll");
+    btn.disabled=true;
+    btn.textContent="RUNNING...";
+
+    results.clear();
+    lastPointResult=null;
+    discoveredHex="";
+    updateSummary();
+
+    for(const [id] of tests){
+      await runTest(id);
+      await sleep(100);
+    }
+
+    btn.disabled=false;
+    btn.textContent="RUN FULL DIAGNOSTIC";
+  }
+
+  async function copyReport(){
+    const btn=$("#copyReport");
+    const text=$("#rawReport").textContent;
+
+    try{
+      await navigator.clipboard.writeText(text);
+    }catch{
+      const ta=document.createElement("textarea");
+      ta.value=text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      ta.remove();
+    }
+
+    btn.textContent="COPIED";
+    setTimeout(()=>btn.textContent="COPY FULL REPORT",1400);
+  }
+
+  buildCards();
+  updateSummary();
+  updateCooldown();
+  cooldownTimer=setInterval(updateCooldown,1000);
+
+  $("#runAircraftOnly").addEventListener("click",runAircraftOnce);
+  $("#runAll").addEventListener("click",runFull);
+  $("#copyReport").addEventListener("click",copyReport);
+  $("#clearResults").addEventListener("click",()=>location.reload());
+})();
+
 </script>
-</body></html>
+</body>
+</html>
