@@ -1,4 +1,4 @@
-/* SKYHUNT v5.3.0 — core.js */
+/* SKYHUNT — core.js */
 const $=s=>document.querySelector(s);
 
 const spinBtn=$("#spinBtn"),spinAgain=$("#spinAgain"),scan=$("#scan"),errorBox=$("#error"),result=$("#result");
@@ -31,30 +31,12 @@ const validAircraft=a=>Number.isFinite(Number(a?.lat))&&Number.isFinite(Number(a
 function showError(msg){errorBox.textContent=msg;errorBox.style.display="block"}
 function clearError(){errorBox.style.display="none";errorBox.textContent=""}
 
-async function fetchJson(url,timeout=9000){
- const ctl=new AbortController();
- const t=setTimeout(()=>ctl.abort(),timeout);
- try{
-  const r=await fetch(url,{signal:ctl.signal,cache:"no-store",headers:{Accept:"application/json"}});
-  const text=await r.text();
-  let data;
-  try{data=JSON.parse(text)}catch{throw new Error(`Invalid JSON from ${new URL(url).hostname}`)}
-  if(!r.ok) throw new Error(`${new URL(url).hostname} returned HTTP ${r.status}`);
-  return data;
- }finally{clearTimeout(t)}
+async function scanAircraft(name,lat,lon){
+ scan.textContent=`Scanning adsb.fi near ${name}…`;
+ const result=await window.SKYHUNT_AIRCRAFT_API.point(lat,lon,250);
+ return result.aircraft;
 }
 
-async function scanAdsbLol(name,lat,lon){
- scan.textContent=`Scanning Airplanes.live near ${name}…`;
- const j=await fetchJson(`https://api.airplanes.live/v2/point/${lat}/${lon}/250`,10000);
- return (j.ac||j.aircraft||[]).filter(validAircraft);
-}
-
-async function scanAirplanesLive(name,lat,lon){
- scan.textContent=`Scanning Airplanes.live near ${name}…`;
- const j=await fetchJson(`https://api.airplanes.live/v2/point/${lat}/${lon}/250`,10000);
- return (j.ac||j.aircraft||[]).filter(validAircraft);
-}
 
 function stopTracking(){
  if(trackingTimer){clearInterval(trackingTimer);trackingTimer=null}
@@ -82,9 +64,9 @@ async function findRealAircraft(){
      const [name,lat,lon]=shuffled[i];
 
      try{
-       const list=await scanAirplanesLive(name,lat,lon);
+       const list=await scanAircraft(name,lat,lon);
        if(list.length){
-         renderAircraft(choose(list),name,"Airplanes.live");
+         renderAircraft(choose(list),name,window.SKYHUNT_AIRCRAFT_API.source);
          return;
        }
      }catch(e){
@@ -95,13 +77,13 @@ async function findRealAircraft(){
    }
 
    if(technicalErrors.length){
-     throw new Error("Airplanes.live did not return a usable aircraft. "+technicalErrors.slice(-2).join(" | "));
+     throw new Error("adsb.fi did not return a usable aircraft. "+technicalErrors.slice(-2).join(" | "));
    }
 
-   throw new Error("Airplanes.live returned zero usable aircraft in all scanned regions.");
+   throw new Error("adsb.fi returned zero usable aircraft in all scanned regions.");
  }catch(e){
    showError("Couldn’t find a live aircraft: "+e.message);
-   scan.textContent="Airplanes.live unavailable right now.";
+   scan.textContent="adsb.fi unavailable right now.";
  }finally{
    spinBtn.disabled=false;spinAgain.disabled=false;spinBtn.classList.remove("loading");
  }
@@ -217,8 +199,8 @@ async function refreshTrackedAircraft(){
  trackingBusy=true;
 
  try{
-   const j=await fetchJson(`https://api.airplanes.live/v2/hex/${encodeURIComponent(currentHex)}`,8000);
-   const list=(j.ac||[]).filter(validAircraft);
+   const tracked=await window.SKYHUNT_AIRCRAFT_API.hex(currentHex);
+   const list=tracked.aircraft;
 
    if(!list.length){
      trackStatus.textContent="● WAITING";
@@ -227,8 +209,8 @@ async function refreshTrackedAircraft(){
    }
 
    const a=list[0];
-   currentSource="Airplanes.live";
-   currentAircraft={...(currentAircraft||{}),...a,_zone:currentZone,_source:"Airplanes.live"};
+   currentSource=window.SKYHUNT_AIRCRAFT_API.source;
+   currentAircraft={...(currentAircraft||{}),...a,_zone:currentZone,_source:window.SKYHUNT_AIRCRAFT_API.source};
    updateTelemetry(a);
    updateMapPoint(a,false);
    trackStatus.textContent="● TRACKING";
