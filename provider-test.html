@@ -3,112 +3,74 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>SKYHUNT Provider Lab</title>
+<title>SKYHUNT Provider Lab v2</title>
 <style>
 :root{--bg:#071019;--card:#0d1a24;--line:#20323f;--text:#eef7fb;--muted:#8fa6b3;--cyan:#9ee8f7;--green:#77dda6;--red:#ff8195;--amber:#f0c66c}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,sans-serif}
-main{max-width:900px;margin:auto;padding:28px 16px 70px}
-h1{font-size:clamp(42px,10vw,78px);line-height:.9;letter-spacing:-.06em;margin:30px 0 16px}
-p{color:var(--muted);line-height:1.55}
-.controls{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0}
-button{border:0;border-radius:14px;padding:15px 18px;font-weight:800;background:var(--cyan);color:#071019}
-button.secondary{background:#12232f;color:var(--text);border:1px solid var(--line)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,sans-serif}
+main{max-width:950px;margin:auto;padding:28px 16px 70px}h1{font-size:clamp(40px,9vw,72px);line-height:.92;letter-spacing:-.055em;margin:28px 0 14px}
+p{color:var(--muted);line-height:1.55}.controls{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0}
+button{border:0;border-radius:14px;padding:15px 18px;font-weight:850;background:var(--cyan);color:#071019}button.secondary{background:#12232f;color:var(--text);border:1px solid var(--line)}
 .summary{padding:16px;border:1px solid var(--line);border-radius:16px;margin:15px 0 22px;background:#0a151e}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.card{border:1px solid var(--line);border-radius:18px;padding:18px;background:var(--card);min-height:205px}
-.top{display:flex;justify-content:space-between;gap:10px}
-.name{font-weight:850;font-size:18px}
-.badge{font-size:11px;font-weight:900;padding:6px 9px;border-radius:99px;border:1px solid var(--line)}
-.pass{color:var(--green)} .fail{color:var(--red)} .warn{color:var(--amber)}
-.detail{font-family:ui-monospace,SFMono-Regular,monospace;font-size:12px;color:var(--muted);white-space:pre-wrap;word-break:break-word;margin-top:14px;line-height:1.5}
-.sample{margin-top:12px;padding:10px;background:#071019;border-radius:10px;font-size:12px}
-small{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.card{border:1px solid var(--line);border-radius:18px;padding:18px;background:var(--card);min-height:210px}
+.top{display:flex;justify-content:space-between;gap:10px}.name{font-weight:850;font-size:17px}.badge{font-size:10px;font-weight:900;padding:6px 9px;border-radius:99px;border:1px solid var(--line)}
+.pass{color:var(--green)}.fail{color:var(--red)}.warn{color:var(--amber)}.detail{font-family:ui-monospace,SFMono-Regular,monospace;font-size:11px;color:var(--muted);white-space:pre-wrap;word-break:break-word;margin-top:14px;line-height:1.5}
+.sample{margin-top:12px;padding:10px;background:#071019;border-radius:10px;font-size:11px;word-break:break-word}small{color:var(--muted)}
 @media(max-width:650px){.grid{grid-template-columns:1fr}}
-</style>
-</head>
+</style></head>
 <body><main>
-<small>SKYHUNT Â· BROWSER API COMPATIBILITY LAB</small>
-<h1>Find the API Safari actually allows.</h1>
-<p>This page makes requests directly from this GitHub Pages tab. A PASS therefore means the provider is genuinely callable by SKYHUNT without a proxy. Tests run sequentially to avoid hammering public services.</p>
-
-<div class="controls">
-<button id="run">TEST ALL PROVIDERS</button>
-<button class="secondary" id="copy">COPY REPORT</button>
-</div>
-<div class="summary" id="summary">Ready. Tap Test All Providers.</div>
-<div class="grid" id="grid"></div>
-</main>
+<small>SKYHUNT Â· PROVIDER LAB v2</small>
+<h1>Clean-room aviation API test.</h1>
+<p>Each request is made directly by this GitHub Pages tab. For selected providers the lab tests both a totally minimal fetch and a JSON-header fetch, helping detect whether an optional request header is triggering a preflight/CORS problem.</p>
+<div class="controls"><button id="run">TEST EVERYTHING</button><button class="secondary" id="copy">COPY REPORT</button></div>
+<div class="summary" id="summary">Ready.</div><div class="grid" id="grid"></div>
 <script>
-const LAT=51.4700, LON=-0.4543, RADIUS=100;
-const providers=[
- {name:"ADSB.lol",url:`https://api.adsb.lol/v2/point/${LAT}/${LON}/${RADIUS}`,note:"Public/keyless ADS-B API"},
- {name:"ADSB One",url:`https://api.adsb.one/v2/point/${LAT}/${LON}/${RADIUS}`,note:"ADSBExchange-compatible public endpoint"},
- {name:"Airplanes.live",url:`https://api.airplanes.live/v2/point/${LAT}/${LON}/${RADIUS}`,note:"Public live aircraft endpoint; 1 request/sec limit"},
- {name:"adsb.fi v3",url:`https://opendata.adsb.fi/api/v3/lat/${LAT}/lon/${LON}/dist/${RADIUS}`,note:"Known to return live data when opened directly"},
- {name:"adsb.fi v2 hex sanity",url:`https://opendata.adsb.fi/api/v2/hex/406668`,note:"Different adsb.fi route; useful for CORS comparison",optional:true},
- {name:"OpenSky anonymous",url:`https://opensky-network.org/api/states/all?lamin=50.6&lomin=-1.4&lamax=52.3&lomax=0.4`,note:"Anonymous OpenSky browser test",openSky:true}
+const LAT=51.4700,LON=-0.4543,R=100;
+const tests=[
+ {name:"ADSB.lol Â· minimal",url:`https://api.adsb.lol/v2/point/${LAT}/${LON}/${R}`,mode:"minimal",live:true},
+ {name:"ADSB.lol Â· Accept JSON",url:`https://api.adsb.lol/v2/point/${LAT}/${LON}/${R}`,mode:"json",live:true},
+ {name:"ADSB One Â· minimal",url:`https://api.adsb.one/v2/point/${LAT}/${LON}/${R}`,mode:"minimal",live:true},
+ {name:"Airplanes.live Â· minimal",url:`https://api.airplanes.live/v2/point/${LAT}/${LON}/${R}`,mode:"minimal",live:true},
+ {name:"adsb.fi v3 Â· minimal",url:`https://opendata.adsb.fi/api/v3/lat/${LAT}/lon/${LON}/dist/${R}`,mode:"minimal",live:true},
+ {name:"OpenSky Â· minimal",url:`https://opensky-network.org/api/states/all?lamin=50.6&lomin=-1.4&lamax=52.3&lomax=0.4`,mode:"minimal",openSky:true,live:true},
+ {name:"ADSBdb Â· online CORS control",url:"https://api.adsbdb.com/v0/online",mode:"minimal",control:true},
+ {name:"ADSBdb Â· random aircraft",url:"https://api.adsbdb.com/v0/aircraft/random",mode:"minimal",control:true}
 ];
 let results=[];
-
-const grid=document.querySelector("#grid"), summary=document.querySelector("#summary");
-
-function rows(data,p){
- if(p.openSky) return Array.isArray(data?.states)?data.states:[];
- return Array.isArray(data?.ac)?data.ac:Array.isArray(data?.aircraft)?data.aircraft:[];
-}
-function sampleAircraft(a,p){
- if(!a) return "No sample aircraft.";
- if(p.openSky) return `ICAO: ${a[0]||"â"} Â· Callsign: ${(a[1]||"â").trim()} Â· lat/lon: ${a[6]??"â"}, ${a[5]??"â"}`;
- return `ICAO: ${a.hex||"â"} Â· Flight: ${(a.flight||"â").trim()} Â· Reg: ${a.r||"â"} Â· Type: ${a.t||"â"} Â· lat/lon: ${a.lat??"â"}, ${a.lon??"â"}`;
-}
-function card(p,status,detail,sample=""){
- const el=document.createElement("article"); el.className="card";
- el.innerHTML=`<div class="top"><div><div class="name">${p.name}</div><small>${p.note}</small></div><span class="badge ${status==="PASS"?"pass":status==="FAIL"?"fail":"warn"}">${status}</span></div><div class="detail">${detail}</div>${sample?`<div class="sample">${sample}</div>`:""}`;
- grid.appendChild(el);
-}
-async function test(p){
- const start=performance.now(), ctl=new AbortController(), timer=setTimeout(()=>ctl.abort(),10000);
+const grid=document.querySelector("#grid"),summary=document.querySelector("#summary");
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function rows(data,t){if(t.openSky)return Array.isArray(data?.states)?data.states:[];return Array.isArray(data?.ac)?data.ac:Array.isArray(data?.aircraft)?data.aircraft:[]}
+function add(t,status,detail,sample=""){const e=document.createElement("article");e.className="card";e.innerHTML=`<div class="top"><div><div class="name">${esc(t.name)}</div><small>${t.live?"LIVE POSITION TEST":t.control?"CORS CONTROL":"TEST"}</small></div><span class="badge ${status==="PASS"?"pass":status==="FAIL"?"fail":"warn"}">${status}</span></div><div class="detail">${esc(detail)}</div>${sample?`<div class="sample">${esc(sample)}</div>`:""}`;grid.appendChild(e)}
+async function one(t){
+ const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),12000),start=performance.now();
  try{
-   const r=await fetch(p.url,{signal:ctl.signal,cache:"no-store",headers:{Accept:"application/json"}});
-   const ms=Math.round(performance.now()-start);
-   const text=await r.text();
-   let data=null;
-   try{data=JSON.parse(text)}catch(e){}
-   if(!r.ok){
-     const detail=`HTTP ${r.status} ${r.statusText} Â· ${ms} ms\nBrowser received an HTTP response, so transport/CORS succeeded.\n${text.slice(0,300)}`;
-     results.push({name:p.name,status:"FAIL",detail}); card(p,"FAIL",detail); return;
-   }
-   if(!data){
-     const detail=`HTTP ${r.status} Â· ${ms} ms\nResponse was readable but was not valid JSON.\n${text.slice(0,300)}`;
-     results.push({name:p.name,status:"FAIL",detail}); card(p,"FAIL",detail); return;
-   }
-   const ac=rows(data,p);
-   const detail=`HTTP ${r.status} Â· ${ms} ms\nCORS: PASS â JavaScript read the response.\nAircraft returned: ${ac.length}`;
-   results.push({name:p.name,status:"PASS",detail});
-   card(p,"PASS",detail,sampleAircraft(ac[0],p));
+   const opts={signal:ctl.signal,cache:"no-store"};
+   if(t.mode==="json")opts.headers={Accept:"application/json"};
+   const r=await fetch(t.url,opts),ms=Math.round(performance.now()-start);
+   const text=await r.text(); let data=null;try{data=JSON.parse(text)}catch{}
+   const cors=`Response readable by JS: YES`;
+   if(!r.ok){const d=`HTTP ${r.status} ${r.statusText} Â· ${ms} ms\n${cors}\nBody: ${text.slice(0,220)}`;results.push({name:t.name,status:"FAIL",detail:d});add(t,"FAIL",d);return}
+   let count="";
+   if(t.live){count=`\nAircraft array count: ${rows(data,t).length}`}
+   const d=`HTTP ${r.status} Â· ${ms} ms\n${cors}${count}\nContent-Type: ${r.headers.get("content-type")||"not exposed"}`;
+   const sample=data?JSON.stringify(data).slice(0,300):text.slice(0,300);
+   results.push({name:t.name,status:"PASS",detail:d});add(t,"PASS",d,sample);
  }catch(e){
-   const ms=Math.round(performance.now()-start);
-   const kind=e.name==="AbortError"?"TIMEOUT":"NETWORK/CORS";
-   const detail=`${kind} Â· ${ms} ms\n${e.name}: ${e.message}\nNo readable HTTP response reached JavaScript.`;
-   results.push({name:p.name,status:"FAIL",detail}); card(p,"FAIL",detail);
+   const ms=Math.round(performance.now()-start),kind=e.name==="AbortError"?"TIMEOUT":"NETWORK/CORS";
+   const d=`${kind} Â· ${ms} ms\n${e.name}: ${e.message}\nNo HTTP response was readable by JavaScript.`;
+   results.push({name:t.name,status:"FAIL",detail:d});add(t,"FAIL",d);
  }finally{clearTimeout(timer)}
 }
 async function run(){
- results=[]; grid.innerHTML=""; summary.textContent="Testing providers sequentiallyâ¦";
- document.querySelector("#run").disabled=true;
- for(const p of providers){await test(p); await new Promise(r=>setTimeout(r,1250))}
- const passes=results.filter(x=>x.status==="PASS");
- summary.innerHTML=passes.length
-  ? `<b>${passes.length} browser-callable provider(s) found:</b> ${passes.map(x=>x.name).join(", ")}. A PASS means GitHub Pages JavaScript successfully read the API response.`
-  : `<b>No provider passed direct browser access.</b> If direct URLs work in Safari but every fetch test fails, the remaining blocker is cross-origin browser access and SKYHUNT needs a serverless bridge.`;
- document.querySelector("#run").disabled=false;
+ results=[];grid.innerHTML="";summary.textContent="Testing sequentiallyâ¦";runBtn.disabled=true;
+ for(const t of tests){await one(t);await new Promise(r=>setTimeout(r,1300))}
+ const pass=results.filter(x=>x.status==="PASS");
+ const controls=results.filter(x=>x.name.startsWith("ADSBdb")&&x.status==="PASS");
+ summary.innerHTML=pass.length?`<b>${pass.length} tests passed.</b> ${controls.length?"The ADSBdb control proves this GitHub page can make at least some cross-origin aviation API requests.":"Review the individual live-provider results below."}`:`<b>Every test failed.</b> Even the ADSBdb CORS controls failed, pointing to a broader browser/network/origin issue rather than only live ADS-B providers.`;
+ runBtn.disabled=false;
 }
-document.querySelector("#run").onclick=run;
+const runBtn=document.querySelector("#run");runBtn.onclick=run;
 document.querySelector("#copy").onclick=async()=>{
- const report=`SKYHUNT PROVIDER LAB\n${new Date().toISOString()}\n${location.href}\n${navigator.userAgent}\n\n`+
- results.map(x=>`[${x.status}] ${x.name}\n${x.detail}`).join("\n\n");
- try{await navigator.clipboard.writeText(report); summary.textContent="Report copied."}
- catch(e){prompt("Copy this report:",report)}
+ const report=`SKYHUNT PROVIDER LAB v2\n${new Date().toISOString()}\nPage: ${location.href}\nUA: ${navigator.userAgent}\n\n`+results.map(x=>`[${x.status}] ${x.name}\n${x.detail}`).join("\n\n");
+ try{await navigator.clipboard.writeText(report);summary.textContent="Report copied."}catch{prompt("Copy report:",report)}
 };
-</script></body></html>
+</script></main></body></html>
