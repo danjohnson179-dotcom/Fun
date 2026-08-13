@@ -1,5 +1,4 @@
-/* SKYHUNT v5.3.0 — nearby.js
-   Full-page Nearby experience. No modal architecture. */
+/* SKYHUNT — nearby.js */
 
 let nearbyAircraft=[];
 let nearbyPosition=null;
@@ -67,29 +66,11 @@ function getBrowserLocation(){
 }
 
 async function localFeedRequest(feed,pos,radius){
-  const lat=Number(pos.lat).toFixed(5);
-  const lon=Number(pos.lon).toFixed(5);
-
-  const j=await fetchJson(
-    `https://api.airplanes.live/v2/point/${lat}/${lon}/${radius}`,
-    10000
-  );
-
-  return {
-    source:"Airplanes.live",
-    aircraft:(j.ac||j.aircraft||[]).filter(validAircraft)
-  };
+  return window.SKYHUNT_AIRCRAFT_API.point(pos.lat,pos.lon,radius);
 }
 
 function friendlyLocalError(err){
-  const msg=String(err?.message||err||"Unknown error");
-  if(/aborted|abort/i.test(msg))return "The live aircraft feed timed out.";
-  if(/failed to fetch|load failed|networkerror|network request failed/i.test(msg))
-    return "Your browser could not connect to the live aircraft feed.";
-  if(/HTTP 429/.test(msg))return "The live feed is temporarily rate-limiting requests.";
-  if(/HTTP 403/.test(msg))return "The live feed rejected this browser request.";
-  if(/HTTP 5\d\d/.test(msg))return "The live aircraft service is temporarily unavailable.";
-  return msg;
+  return window.SKYHUNT_AIRCRAFT_API.friendlyError(err);
 }
 
 function nearbyAltitude(a){
@@ -271,8 +252,8 @@ function openNearbyAircraft(index){
 }
 
 async function requestNearbyFeed(pos,radius){
-  setNearbyStatus(`Scanning ${radius} NM via Airplanes.live…`,"scanning");
-  return localFeedRequest("Airplanes.live",pos,radius);
+  setNearbyStatus(`Scanning ${radius} NM via adsb.fi…`,"scanning");
+  return localFeedRequest("adsb.fi",pos,radius);
 }
 
 async function scanNearby(){
