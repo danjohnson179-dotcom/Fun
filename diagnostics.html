@@ -7,88 +7,68 @@
 <title>SKYHUNT Diagnostics</title>
 <meta name="description" content="SKYHUNT live-system diagnostics.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
-<link rel="stylesheet" href="diagnostics.css?v=1.0">
+<style>
+:root{--bg:#060b11;--panel:#0d151d;--panel2:#101c26;--text:#f3f7f9;--line:rgba(255,255,255,.09);--good:#76d6a5;--warn:#efc56f;--bad:#ff8195;--blue:#89d8ed}*{box-sizing:border-box}html{background:var(--bg);color-scheme:dark}body{margin:0;background:radial-gradient(60rem 36rem at 50% -10%,rgba(87,174,220,.12),transparent 65%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,a{-webkit-tap-highlight-color:transparent}.diagShell{width:min(1050px,calc(100% - 24px));margin:auto;padding-bottom:70px}.diagTop{height:74px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;border-bottom:1px solid var(--line)}.back{color:#9ab0bb;text-decoration:none;font-size:11px;font-weight:800}.brand{display:flex;align-items:center;gap:10px}.brandMark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:#dff8ff;color:#07131a}.brand strong{display:block;font-size:14px}.brand small{display:block;margin-top:3px;color:#70828d;font-size:7px;letter-spacing:.12em}.build{justify-self:end;color:#70828d;font-size:8px;font-weight:900}.diagHero{display:grid;grid-template-columns:1.5fr .5fr;gap:18px;align-items:end;padding:54px 0 28px}.eyebrow{font-size:8px;font-weight:900;letter-spacing:.16em;color:#81cadd}.diagHero h1{font-size:clamp(52px,8vw,88px);line-height:.9;letter-spacing:-.065em;margin:12px 0 16px}.diagHero p{max-width:700px;color:#8ea0aa;line-height:1.6;font-size:13px;margin:0}.heroStatus{min-height:160px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,var(--panel2),var(--panel));padding:20px;display:flex;flex-direction:column;justify-content:flex-end}.heroStatus span{font-size:7px;font-weight:900;color:#70838e;letter-spacing:.14em}.heroStatus strong{font-size:26px;margin:7px 0 4px}.heroStatus small{color:#879aa4;line-height:1.4}.controls{display:flex;gap:8px;flex-wrap:wrap;padding:0 0 14px}.controls button{min-height:46px;border-radius:12px;border:1px solid var(--line);padding:0 15px;background:#101b24;color:#dce8ed;font-weight:850;font-size:9px}.controls .primary{background:#b5eaf5;color:#06151c;border:0}.apiIsolate{display:grid;grid-template-columns:1.4fr .6fr;gap:16px;margin:0 0 20px;padding:18px;border:1px solid rgba(137,216,237,.16);background:rgba(137,216,237,.035);border-radius:18px}.apiIsolate h3{margin:7px 0 6px;font-size:22px}.apiIsolate p{margin:0;color:#8fa3ad;font-size:10px;line-height:1.55}.apiIsolateMeta{display:grid;grid-template-columns:1fr 1fr;gap:8px}.apiIsolateMeta>div{border:1px solid var(--line);background:#0a141c;border-radius:12px;padding:11px}.apiIsolateMeta span{display:block;color:#6f838e;font-size:6px;font-weight:900}.apiIsolateMeta b{display:block;margin-top:5px;font-size:11px}.apiIsolateMeta a{grid-column:1/-1;min-height:40px;border:1px solid var(--line);border-radius:11px;display:flex;align-items:center;justify-content:center;color:#b7d8e2;text-decoration:none;font-size:8px;font-weight:900}.summaryGrid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:18px;overflow:hidden}.summaryGrid article{padding:18px;border-right:1px solid var(--line)}.summaryGrid span{display:block;color:#718590;font-size:7px;font-weight:900}.summaryGrid b{display:block;font-size:28px;margin-top:5px}.notice{margin:14px 0 42px;padding:16px;border:1px solid rgba(137,216,237,.13);background:rgba(137,216,237,.035);border-radius:16px}.notice b{display:block;font-size:11px}.notice span{display:block;color:#8fa3ad;font-size:10px;line-height:1.55;margin-top:5px}.sectionTitle{display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px}.sectionTitle>span{width:28px;height:28px;border-radius:9px;border:1px solid var(--line);display:grid;place-items:center;color:#7ec7da;font-size:8px;font-weight:900}.sectionTitle h2{font-size:25px;margin:0}.sectionTitle p{color:#718590;font-size:9px;margin:4px 0 0}.testGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.testCard{min-height:142px;border:1px solid var(--line);background:linear-gradient(180deg,#0e1922,#0a131b);border-radius:17px;padding:15px;position:relative}.testTop{display:flex;justify-content:space-between;gap:8px}.testName{font-size:12px;font-weight:800}.badge{font-size:7px;font-weight:950;padding:5px 7px;border-radius:999px;border:1px solid var(--line)}.pass .badge{color:var(--good)}.warn .badge{color:var(--warn)}.fail .badge{color:var(--bad)}.running .badge{color:var(--blue)}.testMessage{font-size:11px;line-height:1.5;color:#d0dbe0;margin-top:16px}.testDetail{font-size:9px;line-height:1.55;color:#788b96;margin-top:7px;white-space:pre-wrap;word-break:break-word}.testTime{position:absolute;right:14px;bottom:11px;color:#586b76;font-size:7px}.reportBox{border:1px solid var(--line);border-radius:18px;background:#050a0f;overflow:auto}.reportBox pre{margin:0;padding:16px;white-space:pre-wrap;word-break:break-word;font-size:9px;line-height:1.5;color:#9fb0b9}footer{text-align:center;color:#536773;font-size:8px;margin-top:42px}@media(max-width:700px){.diagHero,.apiIsolate{grid-template-columns:1fr}.testGrid{grid-template-columns:1fr}.summaryGrid{grid-template-columns:1fr 1fr}.diagHero h1{font-size:58px}.controls button{flex:1}.controls .primary{flex-basis:100%}}
+</style>
 </head>
 <body>
 <main class="diagShell">
   <header class="diagTop">
-    <a class="back" href="index.html">← SKYHUNT</a>
-    <div class="brand">
-      <span class="brandMark">✦</span>
-      <div><strong>System Diagnostics</strong><small>SKYHUNT · LIVE SERVICE HEALTH</small></div>
-    </div>
+    <a class="back" href="index.html">â SKYHUNT</a>
+    <div class="brand"><span class="brandMark">â¦</span><div><strong>System Diagnostics</strong><small>SKYHUNT Â· LIVE SERVICE HEALTH</small></div></div>
     <span class="build">DIAG v1.1</span>
   </header>
-
-  <section class="diagHero">
-    <div>
-      <span class="eyebrow">DEEP SYSTEM CHECK</span>
-      <h1>Find exactly<br>what failed.</h1>
-      <p>This page tests SKYHUNT independently from the normal interface and explains whether a failure is coming from an API, Safari/network transport, permissions, maps, storage, news services or SKYHUNT's own deployed files.</p>
-    </div>
-    <div class="heroStatus">
-      <span>OVERALL STATUS</span>
-      <strong id="overallStatus">NOT TESTED</strong>
-      <small id="overallDetail">Run the suite to begin.</small>
-    </div>
-  </section>
-
-  <section class="controls">
-    <button id="runAircraftOnly" class="primary">TEST AIRPLANES.LIVE ONCE</button>
-    <button id="runAll">RUN FULL DIAGNOSTIC</button>
-    <button id="copyReport">COPY FULL REPORT</button>
-    <button id="clearResults">CLEAR</button>
-  </section>
-
-  <section class="apiIsolate">
-    <div>
-      <span class="eyebrow">ISOLATED AIRCRAFT TEST</span>
-      <h3>One request. No scan loop.</h3>
-      <p>This test makes exactly one Airplanes.live point request. Use it after leaving SKYHUNT idle for 15–30 minutes if you suspect temporary throttling or an IP block.</p>
-    </div>
-    <div class="apiIsolateMeta">
-      <div><span>LAST AIRCRAFT REQUEST</span><b id="lastAircraftRequest">NEVER</b></div>
-      <div><span>COOLDOWN</span><b id="cooldownState">READY</b></div>
-      <a id="openApiDirect" href="https://api.airplanes.live/v2/point/51.4700/-0.4543/100" target="_blank" rel="noopener">OPEN API DIRECTLY ↗</a>
-    </div>
-  </section>
-
-  <section class="summaryGrid">
-    <article><span>PASS</span><b id="passCount">0</b></article>
-    <article><span>WARNING</span><b id="warnCount">0</b></article>
-    <article><span>FAIL</span><b id="failCount">0</b></article>
-    <article><span>TESTS</span><b id="testCount">0</b></article>
-  </section>
-
-  <section class="notice">
-    <b>How to use this</b>
-    <span>Tap Run Full Diagnostic once. It may ask for location, camera and motion permissions because those are real SKYHUNT dependencies. Camera access is immediately stopped after the test. Airplanes.live is tested conservatively. The isolated test makes exactly one request; the full suite reuses that result rather than repeatedly hammering the provider.</span>
-  </section>
-
-  <div class="sectionTitle"><span>01</span><div><h2>Browser & deployment</h2><p>Checks whether the website itself and its deployed feature files are healthy.</p></div></div>
-  <section class="testGrid" id="browserTests"></section>
-
-  <div class="sectionTitle"><span>02</span><div><h2>Aircraft API</h2><p>Direct Airplanes.live tests with transport, HTTP, JSON, point search, repeat request and hex lookup diagnostics.</p></div></div>
-  <section class="testGrid" id="aircraftTests"></section>
-
-  <div class="sectionTitle"><span>03</span><div><h2>Device features</h2><p>Location, camera and device-orientation capabilities used by Nearby and Sky Lens.</p></div></div>
-  <section class="testGrid" id="deviceTests"></section>
-
-  <div class="sectionTitle"><span>04</span><div><h2>Maps & storage</h2><p>Leaflet, OpenStreetMap tile delivery and local Collection persistence.</p></div></div>
-  <section class="testGrid" id="platformTests"></section>
-
-  <div class="sectionTitle"><span>05</span><div><h2>Skywire news stack</h2><p>Tests the services used by the current News implementation independently.</p></div></div>
-  <section class="testGrid" id="newsTests"></section>
-
-  <div class="sectionTitle"><span>06</span><div><h2>Raw report</h2><p>Share this report when debugging a failure.</p></div></div>
-  <section class="reportBox">
-    <pre id="rawReport">No diagnostic run yet.</pre>
-  </section>
-
-  <footer>SKYHUNT Diagnostics · not for navigation</footer>
+  <section class="diagHero"><div><span class="eyebrow">DEEP SYSTEM CHECK</span><h1>Find exactly<br>what failed.</h1><p>This page tests SKYHUNT independently from the normal interface and explains whether a failure is coming from an API, Safari/network transport, permissions, maps, storage, news services or SKYHUNT's own deployed files.</p></div><div class="heroStatus"><span>OVERALL STATUS</span><strong id="overallStatus">NOT TESTED</strong><small id="overallDetail">Run the suite to begin.</small></div></section>
+  <section class="controls"><button id="runAircraftOnly" class="primary">TEST AIRPLANES.LIVE ONCE</button><button id="runAll">RUN FULL DIAGNOSTIC</button><button id="copyReport">COPY FULL REPORT</button><button id="clearResults">CLEAR</button></section>
+  <section class="apiIsolate"><div><span class="eyebrow">ISOLATED AIRCRAFT TEST</span><h3>One request. No scan loop.</h3><p>This test makes exactly one Airplanes.live point request. Use it after leaving SKYHUNT idle for 15â30 minutes if you suspect temporary throttling or an IP block.</p></div><div class="apiIsolateMeta"><div><span>LAST AIRCRAFT REQUEST</span><b id="lastAircraftRequest">NEVER</b></div><div><span>COOLDOWN</span><b id="cooldownState">READY</b></div><a id="openApiDirect" href="https://api.airplanes.live/v2/point/51.4700/-0.4543/100" target="_blank" rel="noopener">OPEN API DIRECTLY â</a></div></section>
+  <section class="summaryGrid"><article><span>PASS</span><b id="passCount">0</b></article><article><span>WARNING</span><b id="warnCount">0</b></article><article><span>FAIL</span><b id="failCount">0</b></article><article><span>TESTS</span><b id="testCount">0</b></article></section>
+  <section class="notice"><b>How to use this</b><span>Tap Run Full Diagnostic once. It may ask for location, camera and motion permissions because those are real SKYHUNT dependencies. Camera access is immediately stopped after the test. Airplanes.live is tested conservatively.</span></section>
+  <div class="sectionTitle"><span>01</span><div><h2>Browser & deployment</h2><p>Checks whether the website itself and its deployed feature files are healthy.</p></div></div><section class="testGrid" id="browserTests"></section>
+  <div class="sectionTitle"><span>02</span><div><h2>Aircraft API</h2><p>Direct Airplanes.live transport, HTTP, JSON, point search and hex lookup diagnostics.</p></div></div><section class="testGrid" id="aircraftTests"></section>
+  <div class="sectionTitle"><span>03</span><div><h2>Device features</h2><p>Location, camera and device-orientation capabilities used by Nearby and Sky Lens.</p></div></div><section class="testGrid" id="deviceTests"></section>
+  <div class="sectionTitle"><span>04</span><div><h2>Maps & storage</h2><p>Leaflet, OpenStreetMap tile delivery and local Collection persistence.</p></div></div><section class="testGrid" id="platformTests"></section>
+  <div class="sectionTitle"><span>05</span><div><h2>Skywire news stack</h2><p>Tests the services used by the current News implementation independently.</p></div></div><section class="testGrid" id="newsTests"></section>
+  <div class="sectionTitle"><span>06</span><div><h2>Raw report</h2><p>Share this report when debugging a failure.</p></div></div><section class="reportBox"><pre id="rawReport">No diagnostic run yet.</pre></section>
+  <footer>SKYHUNT Diagnostics Â· not for navigation</footer>
 </main>
-
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-<script src="diagnostics.js?v=1.0"></script>
-</body>
-</html>
+<script>
+(()=>{"use strict";const $=s=>document.querySelector(s),results=[];let point=null,hex="",timer;const tests=[
+["secure","browser","Secure browser context",async()=>set("secure",isSecureContext?"pass":"fail",isSecureContext?"HTTPS secure context is active.":"Page is not secure.")],
+["assets","browser","SKYHUNT deployed JS files",assets],["provider","browser","Aircraft provider wiring",wiring],
+["online","browser","Browser network state",async()=>set("online",navigator.onLine?"pass":"fail",navigator.onLine?"Browser reports an active network connection.":"Browser reports offline.")],
+["point","aircraft","Airplanes.live single point request",airPoint],["shape","aircraft","Aircraft response format",shape],["rate","aircraft","Rate-limit / block evidence",rate],["hex","aircraft","Airplanes.live hex lookup",hexTest],
+["geo","device","Live location permission",geo],["camera","device","Camera / Sky Lens access",camera],["orientation","device","Motion & orientation",orientation],
+["leaflet","platform","Leaflet map engine",async()=>set("leaflet",window.L?.map?"pass":"fail",window.L?.map?`Leaflet ${L.version} loaded.`:"Leaflet unavailable.")],
+["osm","platform","OpenStreetMap tile delivery",osm],["storage","platform","Local Collection storage",storage],
+["rss","news","Google News RSS â rss2json",rss],["fallback","news","AllOrigins RSS fallback",fallback],["microlink","news","Microlink image metadata",microlink]];
+const groups={browser:"#browserTests",aircraft:"#aircraftTests",device:"#deviceTests",platform:"#platformTests",news:"#newsTests"};
+for(const [id,g,n] of tests){let e=document.createElement("article");e.className="testCard";e.id="test-"+id;e.innerHTML=`<div class="testTop"><span class="testName">${n}</span><span class="badge">NOT RUN</span></div><div class="testMessage">Waiting for diagnostic run.</div><div class="testDetail"></div><div class="testTime"></div>`;$(groups[g]).append(e)}
+const sleep=m=>new Promise(r=>setTimeout(r,m));
+async function req(url,timeout=12000){let c=new AbortController,t=setTimeout(()=>c.abort(),timeout),s=performance.now();try{let r=await fetch(url,{signal:c.signal,cache:"no-store",headers:{Accept:"application/json"}}),text=await r.text(),json=null,h={};try{json=JSON.parse(text)}catch{}try{r.headers.forEach((v,k)=>h[k]=v)}catch{}return{ok:r.ok,status:r.status,text,json,h,ms:Math.round(performance.now()-s),type:r.type}}catch(e){return{ok:false,network:true,error:e,ms:Math.round(performance.now()-s)}}finally{clearTimeout(t)}}
+function set(id,status,msg,detail="",ms=""){let e=$("#test-"+id);e.className="testCard "+status;e.querySelector(".badge").textContent=status==="pass"?"PASS":status==="warn"?"WARNING":"FAIL";e.querySelector(".testMessage").textContent=msg;e.querySelector(".testDetail").textContent=detail;e.querySelector(".testTime").textContent=ms!==""?ms+" ms":"";let n=tests.find(x=>x[0]===id)?.[2]||id,i=results.findIndex(x=>x.id===id),v={id,name:n,status,msg,detail,ms};i<0?results.push(v):results[i]=v;summary()}
+function running(id){let e=$("#test-"+id);e.className="testCard running";e.querySelector(".badge").textContent="RUNNING";e.querySelector(".testMessage").textContent="Testingâ¦"}
+function summary(){let p=results.filter(x=>x.status==="pass").length,w=results.filter(x=>x.status==="warn").length,f=results.filter(x=>x.status==="fail").length;$("#passCount").textContent=p;$("#warnCount").textContent=w;$("#failCount").textContent=f;$("#testCount").textContent=results.length;$("#overallStatus").textContent=f?"FAULTS FOUND":w?"DEGRADED":results.length?"HEALTHY":"NOT TESTED";$("#rawReport").textContent=["SKYHUNT FULL DIAGNOSTIC REPORT",`Time: ${new Date().toISOString()}`,`Page: ${location.href}`,`User agent: ${navigator.userAgent}`,`Online: ${navigator.onLine}`,`Secure context: ${isSecureContext}`,"",...results.map(x=>`[${x.status.toUpperCase()}] ${x.name}${x.ms!==""?` (${x.ms} ms)`:""}\n${x.msg}${x.detail?`\n${x.detail}`:""}`)].join("\n\n")}
+function explain(r){if(r.network)return"NETWORK/CORS: Safari failed before receiving an HTTP response.";if(r.status===429)return"HTTP 429: confirmed rate limit.";if(r.status===403)return"HTTP 403: provider rejected the browser/IP.";if(r.status>=500)return`HTTP ${r.status}: provider server failure.`;if(!r.ok)return`HTTP ${r.status}: request rejected.`;return""}
+async function assets(){let bad=[],ok=[];for(let n of["core.js","nearby.js","radar.js","ai-finder.js","skylens.js","news.js","collection.js","app.js"]){let r=await req(n+"?diag="+Date.now(),7000);(r.ok?ok:bad).push(r.ok?`${n} HTTP ${r.status}`:`${n}: ${explain(r)}`)}set("assets",bad.length?"fail":"pass",bad.length?`${bad.length} deployed files failed.`:"All core SKYHUNT JavaScript files are served.",(bad.length?bad:ok).join("\n"))}
+async function wiring(){let found=[];for(let n of["core.js","nearby.js","radar.js","ai-finder.js","skylens.js"]){let r=await req(n+"?wire="+Date.now(),7000);if(r.ok){for(let p of["api.airplanes.live","opendata.adsb.fi","api.adsb.lol","opensky-network.org"])if(r.text.includes(p))found.push(`${n}: ${p}`)}}set("provider",found.length?"warn":"pass",found.length?"Aircraft provider references found in deployed code.":"No recognised aircraft provider URL found.",found.join("\n"))}
+function mark(){localStorage.setItem("skyhuntDiagLastAircraftRequest",Date.now());cool()}
+function cool(){let x=+localStorage.getItem("skyhuntDiagLastAircraftRequest")||0,d=Math.max(0,60000-(Date.now()-x));$("#lastAircraftRequest").textContent=x?new Date(x).toLocaleTimeString("en-GB"):"NEVER";$("#cooldownState").textContent=d?Math.ceil(d/1000)+"s":"READY"}
+async function airPoint(){mark();point=await req("https://api.airplanes.live/v2/point/51.4700/-0.4543/100");let e=explain(point);if(e)return set("point","fail","Airplanes.live point search failed.",e,point.ms);let a=point.json?.ac||point.json?.aircraft||[];if(!Array.isArray(a))return set("point","fail","JSON returned without aircraft array.",point.text.slice(0,400),point.ms);if(!a.length)return set("point","warn","API reachable but returned zero aircraft.",`HTTP ${point.status}`,point.ms);hex=String(a.find(x=>x.hex)?.hex||"");set("point","pass",`Returned ${a.length} aircraft around Heathrow.`,`HTTP ${point.status}${hex?` Â· test hex ${hex}`:""}`,point.ms)}
+async function shape(){if(!point||point.network||!point.json)return set("shape","fail","No valid aircraft JSON available.");let a=(point.json.ac||point.json.aircraft||[])[0];if(!a)return set("shape","warn","No aircraft object available to validate.");let m=["hex","lat","lon"].filter(k=>a[k]==null);set("shape",m.length?"fail":"pass",m.length?"Required aircraft fields missing.":"Aircraft response shape is compatible.",m.length?"Missing: "+m.join(", "):`hex=${a.hex} Â· lat=${a.lat} Â· lon=${a.lon}`)}
+async function rate(){if(!point)return set("rate","warn","No point request available.");if(point.network)return set("rate","warn","No HTTP status received; normal 429 cannot be confirmed.","IP/network blocking remains possible.");if(point.status===429)return set("rate","fail","Confirmed HTTP 429 rate limit.");let h=Object.entries(point.h||{}).filter(([k])=>/rate|retry|limit/i.test(k));set("rate",h.length?"warn":"pass",h.length?"Rate-limit headers exposed.":`HTTP ${point.status}; no direct 429 evidence.`,h.map(x=>x.join(": ")).join("\n"))}
+async function hexTest(){if(!hex)return set("hex","warn","Hex lookup skipped because no aircraft was returned.");await sleep(2200);mark();let r=await req("https://api.airplanes.live/v2/hex/"+encodeURIComponent(hex)),e=explain(r);if(e)return set("hex","fail","Hex lookup failed.",e,r.ms);let a=r.json?.ac||r.json?.aircraft||[];set("hex",a.length?"pass":"warn",a.length?`Hex lookup returned ${a.length} record(s).`:"Hex endpoint returned no aircraft.",`HTTP ${r.status}`,r.ms)}
+async function geo(){if(!navigator.geolocation)return set("geo","fail","Geolocation unsupported.");let s=performance.now();try{let p=await new Promise((a,b)=>navigator.geolocation.getCurrentPosition(a,b,{enableHighAccuracy:true,timeout:12000}));set("geo","pass","Live location returned.",`Accuracy approximately ${Math.round(p.coords.accuracy)} m. Coordinates omitted.`,Math.round(performance.now()-s))}catch(e){set("geo","fail","Location request failed.",e.message,Math.round(performance.now()-s))}}
+async function camera(){if(!navigator.mediaDevices?.getUserMedia)return set("camera","fail","Camera API unavailable.");let s=performance.now(),st;try{st=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}},audio:false});set("camera","pass","Camera permission and stream work.",st.getVideoTracks()[0]?.label||"Video device",Math.round(performance.now()-s))}catch(e){set("camera","fail","Camera request failed.",`${e.name}: ${e.message}`)}finally{st?.getTracks().forEach(t=>t.stop())}}
+async function orientation(){if(typeof DeviceOrientationEvent==="undefined")return set("orientation","fail","DeviceOrientationEvent unavailable.");if(typeof DeviceOrientationEvent.requestPermission==="function")return set("orientation","warn","iOS orientation permission requires a direct user gesture.","Test this through Sky Lens Start rather than the automated suite.");set("orientation","pass","Motion & Orientation capability is available.")}
+async function osm(){let s=performance.now(),ok=await new Promise(r=>{let i=new Image,t=setTimeout(()=>r(false),10000);i.onload=()=>{clearTimeout(t);r(true)};i.onerror=()=>{clearTimeout(t);r(false)};i.src="https://tile.openstreetmap.org/0/0/0.png?d="+Date.now()});set("osm",ok?"pass":"fail",ok?"OpenStreetMap tile loaded.":"OpenStreetMap tile failed.","",Math.round(performance.now()-s))}
+async function storage(){let k="__diag",v=Math.random()+"";try{localStorage.setItem(k,v);let ok=localStorage.getItem(k)===v;localStorage.removeItem(k);set("storage",ok?"pass":"fail",ok?"localStorage works.":"localStorage round-trip failed.")}catch(e){set("storage","fail","localStorage unavailable.",e.message)}}
+function feed(){let p=new URLSearchParams({q:"aviation OR airline OR aircraft OR airport",hl:"en-GB",gl:"GB",ceid:"GB:en"});return"https://news.google.com/rss/search?"+p}
+async function rss(){let u=new URL("https://api.rss2json.com/v1/api.json");u.searchParams.set("rss_url",feed());let r=await req(u,12000);if(!r.ok)return set("rss","fail","rss2json failed.",explain(r),r.ms);let n=r.json?.items?.length||0;set("rss",n?"pass":"warn",n?`rss2json returned ${n} items.`:"rss2json returned zero items.",`HTTP ${r.status}`,r.ms)}
+async function fallback(){let r=await req("https://api.allorigins.win/raw?url="+encodeURIComponent(feed()),14000);set("fallback",r.ok?"pass":"warn",r.ok?"AllOrigins responded.":"AllOrigins fallback unavailable.",r.ok?`HTTP ${r.status}`:explain(r),r.ms)}
+async function microlink(){let u=new URL("https://api.microlink.io/");u.searchParams.set("url","https://www.bbc.co.uk/news");u.searchParams.set("filter","image.url");let r=await req(u,10000);set("microlink",r.ok?"pass":"warn",r.ok?"Microlink responded.":"Microlink unavailable.",r.ok?`HTTP ${r.status}`:explain(r),r.ms)}
+async function isolated(){for(let id of["point","shape","rate"])running(id);point=null;hex="";await airPoint();await shape();await rate();set("hex","warn","Hex lookup intentionally skipped in isolated mode.","Exactly one provider request was made.")}
+async function all(){results.length=0;point=null;hex="";$("#runAll").disabled=true;for(let t of tests){running(t[0]);try{await t[3]()}catch(e){set(t[0],"fail","Diagnostic test threw an error.",e.message)}await sleep(120)}$("#runAll").disabled=false;summary()}
+$("#runAircraftOnly").onclick=isolated;$("#runAll").onclick=all;$("#clearResults").onclick=()=>location.reload();$("#copyReport").onclick=async()=>{try{await navigator.clipboard.writeText($("#rawReport").textContent);$("#copyReport").textContent="COPIED â";setTimeout(()=>$("#copyReport").textContent="COPY FULL REPORT",1500)}catch{}};cool();timer=setInterval(cool,1000);summary()})();
+</script>
+</body></html>
