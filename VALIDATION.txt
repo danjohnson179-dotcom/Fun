@@ -1,0 +1,39 @@
+SKYHUNT PACKAGE VALIDATION
+==========================
+
+Validated: 19 August 2026
+Frontend source: danjohnson179-dotcom/Fun main
+Source commit: ccb07e73bc02971e9866205d8b206a69cc2be8e1
+
+PASS - JavaScript syntax:
+  ai-finder.js
+  aircraft-api.js
+  app.js
+  collection.js
+  core.js
+  legal.js
+  nearby.js
+  news.js
+  radar.js
+  skylens.js
+  cloudflare-worker.js (checked as an ES module)
+
+PASS - Inline JavaScript syntax:
+  index.html
+  diagnostics.html
+  provider-test.html
+
+PASS - Deployment requirements:
+  index.html loads aircraft-api.js?v=cf-1
+  index.html retains its Diagnostics footer link
+  Worker primary provider is adsb.fi
+  Worker fallback provider is Airplanes.live
+  CORS allowlist includes the specified GitHub Pages origin and localhost only
+  Point, radius, hex and HTTP method validation are present
+  /health endpoint is present
+  Successful aircraft results use a 2-second Cloudflare cache
+  _skyhunt provider-attempt diagnostics are returned
+  diagnostics.html calls the Worker bridge instead of adsb.fi directly
+
+Live Worker requests cannot pass until cloudflare-worker.js has been deployed.
+Run diagnostics.html and provider-test.html after completing README-INSTALL.txt.

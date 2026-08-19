@@ -184,7 +184,7 @@ footer{text-align:center;color:#536974;font-size:8px;margin-top:38px}
   </section>
 
   <section class="controls">
-    <button id="runAircraftOnly" class="primary">TEST ADSB.FI ONCE</button>
+    <button id="runAircraftOnly" class="primary">TEST WORKER ONCE</button>
     <button id="runAll">RUN FULL DIAGNOSTIC</button>
     <button id="copyReport">COPY FULL REPORT</button>
     <button id="clearResults">CLEAR</button>
@@ -194,12 +194,12 @@ footer{text-align:center;color:#536974;font-size:8px;margin-top:38px}
     <div>
       <span class="eyebrow">ISOLATED AIRCRAFT TEST</span>
       <h3>One request. No scan loop.</h3>
-      <p>Use this first when aircraft tracking fails. It makes one adsb.fi request and then analyses the result without repeatedly calling the provider.</p>
+      <p>Use this first when aircraft tracking fails. It makes one request through the Cloudflare Worker and reports the upstream provider selected by the bridge.</p>
     </div>
     <div class="isolateMeta">
       <div><span>LAST AIRCRAFT REQUEST</span><b id="lastAircraftRequest">NEVER</b></div>
       <div><span>COOLDOWN</span><b id="cooldownState">READY</b></div>
-      <a href="https://opendata.adsb.fi/api/v3/lat/51.4700/lon/-0.4543/dist/100" target="_blank" rel="noopener">OPEN API DIRECTLY</a>
+      <a href="https://skyhunt-api.danjohnson179.workers.dev/health" target="_blank" rel="noopener">OPEN WORKER HEALTH</a>
     </div>
   </section>
 
@@ -213,7 +213,7 @@ footer{text-align:center;color:#536974;font-size:8px;margin-top:38px}
   <div class="sectionHead"><span class="sectionNo">01</span><div><h2>Browser and deployment</h2><p>Confirms the site and central API architecture are actually deployed.</p></div></div>
   <section id="browserTests" class="testGrid"></section>
 
-  <div class="sectionHead"><span class="sectionNo">02</span><div><h2>Aircraft API</h2><p>Tests adsb.fi transport, status, data format and live-follow lookup.</p></div></div>
+  <div class="sectionHead"><span class="sectionNo">02</span><div><h2>Aircraft API</h2><p>Tests the Cloudflare bridge, its upstream diagnostics, data format and live-follow lookup.</p></div></div>
   <section id="aircraftTests" class="testGrid"></section>
 
   <div class="sectionHead"><span class="sectionNo">03</span><div><h2>Device features</h2><p>Checks location, camera and orientation capabilities.</p></div></div>
@@ -238,8 +238,9 @@ footer{text-align:center;color:#536974;font-size:8px;margin-top:38px}
   "use strict";
 
   const $ = (s) => document.querySelector(s);
-  const API_POINT = "https://opendata.adsb.fi/api/v3/lat/51.4700/lon/-0.4543/dist/100";
-  const API_HEX_BASE = "https://opendata.adsb.fi/api/v2/hex/";
+  const WORKER_BASE = "https://skyhunt-api.danjohnson179.workers.dev";
+  const API_POINT = `${WORKER_BASE}/point?lat=51.4700&lon=-0.4543&radius=100`;
+  const API_HEX_BASE = `${WORKER_BASE}/hex?hex=`;
   const results = new Map();
   let lastPointResult = null;
   let discoveredHex = "";
@@ -251,10 +252,10 @@ footer{text-align:center;color:#536974;font-size:8px;margin-top:38px}
     ["assets","browser","Deployed SKYHUNT files",testAssets],
     ["wiring","browser","Central aircraft API wiring",testWiring],
 
-    ["point","aircraft","adsb.fi single point request",testPoint],
+    ["point","aircraft","Worker bridge point request",testPoint],
     ["shape","aircraft","Aircraft response format",testShape],
     ["rate","aircraft","Rate-limit / block evidence",testRate],
-    ["hex","aircraft","adsb.fi hex lookup",testHex],
+    ["hex","aircraft","Worker bridge hex lookup",testHex],
 
     ["geo","device","Location access",testGeolocation],
     ["camera","device","Camera access",testCamera],
@@ -521,10 +522,10 @@ footer{text-align:center;color:#536974;font-size:8px;margin-top:38px}
     if(!api.ok){
       problems.push("aircraft-api.js could not be loaded.");
     }else{
-      if(!api.text.includes("opendata.adsb.fi")){
-        problems.push("aircraft-api.js is not configured for adsb.fi.");
+      if(!api.text.includes("skyhunt-api.danjohnson179.workers.dev")){
+        problems.push("aircraft-api.js is not configured for the Cloudflare Worker.");
       }
-      details.push("aircraft-api.js: central adsb.fi provider module detected.");
+      details.push("aircraft-api.js: central Cloudflare bridge module detected.");
     }
 
     for(const name of featureFiles){
@@ -555,7 +556,7 @@ footer{text-align:center;color:#536974;font-size:8px;margin-top:38px}
 
     if(!r.ok){
       setResult(
-        "point","fail","adsb.fi point request failed.",
+        "point","fail","Cloudflare Worker point request failed.",
         `${describeFailure(r)}\nURL: ${API_POINT}\n${formatHeaders(r)}${r.text?`\nBody: ${r.text.slice(0,500)}`:""}`,
         r.ms
       );
@@ -564,23 +565,23 @@ footer{text-align:center;color:#536974;font-size:8px;margin-top:38px}
 
     const rows=r.json?.ac || r.json?.aircraft || [];
     if(!Array.isArray(rows)){
-      setResult("point","fail","adsb.fi returned JSON without an aircraft array.",`HTTP ${r.status}\nBody: ${r.text.slice(0,500)}`,r.ms);
+      setResult("point","fail","Worker returned JSON without an aircraft array.",`HTTP ${r.status}\nBody: ${r.text.slice(0,500)}`,r.ms);
       return;
     }
 
     if(!rows.length){
-      setResult("point","warn","adsb.fi responded successfully but returned zero aircraft.",`HTTP ${r.status}\n${formatHeaders(r)}`,r.ms);
+      setResult("point","warn","Worker responded successfully but returned zero aircraft.",`HTTP ${r.status}\nProvider: ${r.json?._skyhunt?.provider||"unknown"}\n${formatHeaders(r)}`,r.ms);
       return;
     }
 
     discoveredHex=String(rows.find(a=>a?.hex)?.hex||"").trim().toLowerCase();
-    setResult("point","pass",`adsb.fi returned ${rows.length} aircraft around Heathrow.`,`HTTP ${r.status}${discoveredHex?` | test hex ${discoveredHex}`:""}\n${formatHeaders(r)}`,r.ms);
+    setResult("point","pass",`Worker returned ${rows.length} aircraft around Heathrow.`,`Provider: ${r.json?._skyhunt?.provider||"unknown"}\nFallback used: ${!!r.json?._skyhunt?.fallbackUsed}\nHTTP ${r.status}${discoveredHex?` | test hex ${discoveredHex}`:""}\n${formatHeaders(r)}`,r.ms);
   }
 
   async function testShape(){
     const r=lastPointResult;
     if(!r || !r.ok || !r.json){
-      setResult("shape","warn","No successful point response is available to inspect.","Run the adsb.fi point test first.");
+      setResult("shape","warn","No successful point response is available to inspect.","Run the Worker bridge point test first.");
       return;
     }
 
@@ -604,7 +605,7 @@ footer{text-align:center;color:#536974;font-size:8px;margin-top:38px}
   async function testRate(){
     const r=lastPointResult;
     if(!r){
-      setResult("rate","warn","No aircraft request is available to assess.","Run the single adsb.fi test first.");
+      setResult("rate","warn","No aircraft request is available to assess.","Run the single Worker test first.");
       return;
     }
 
@@ -614,7 +615,7 @@ footer{text-align:center;color:#536974;font-size:8px;margin-top:38px}
     }
 
     if(r.status===429){
-      setResult("rate","fail","Confirmed adsb.fi rate limit: HTTP 429.",formatHeaders(r));
+      setResult("rate","fail","Confirmed bridge/upstream rate limit: HTTP 429.",formatHeaders(r));
       return;
     }
 
@@ -638,7 +639,7 @@ footer{text-align:center;color:#536974;font-size:8px;margin-top:38px}
     const r=await request(url);
 
     if(!r.ok){
-      setResult("hex","fail","adsb.fi hex lookup failed.",`${describeFailure(r)}\nURL: ${url}\n${formatHeaders(r)}`,r.ms);
+      setResult("hex","fail","Worker bridge hex lookup failed.",`${describeFailure(r)}\nURL: ${url}\n${formatHeaders(r)}`,r.ms);
       return;
     }
 
@@ -807,7 +808,7 @@ footer{text-align:center;color:#536974;font-size:8px;margin-top:38px}
   async function runAircraftOnce(){
     const btn=$("#runAircraftOnly");
     btn.disabled=true;
-    btn.textContent="TESTING ADSB.FI...";
+    btn.textContent="TESTING WORKER...";
 
     lastPointResult=null;
     discoveredHex="";
@@ -815,10 +816,10 @@ footer{text-align:center;color:#536974;font-size:8px;margin-top:38px}
     await runTest("point");
     await runTest("shape");
     await runTest("rate");
-    setResult("hex","warn","Hex lookup intentionally skipped in single-request mode.","This mode makes exactly one adsb.fi request.");
+    setResult("hex","warn","Hex lookup intentionally skipped in single-request mode.","This mode makes exactly one Worker request.");
 
     btn.disabled=false;
-    btn.textContent="TEST ADSB.FI ONCE";
+    btn.textContent="TEST WORKER ONCE";
   }
 
   async function runFull(){
