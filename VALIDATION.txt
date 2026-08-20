@@ -1,19 +1,45 @@
-SKYHUNT VERCEL OPENSKY API VALIDATION
-=====================================
+SKYHUNT PACKAGE VALIDATION
+==========================
 
-Validated: 19 August 2026
+Build date: 20 August 2026
 
-PASS - Node.js ES-module JavaScript syntax
-PASS - Vercel Functions in the /api directory
-PASS - Root rewrites for /health, /point and /hex
-PASS - OpenSky OAuth2 client-credentials request matches official documentation
-PASS - Credentials are read only from server-side environment variables
-PASS - Token reuse and expiry safety margin
-PASS - Authenticated OpenSky /states/all bounding-box request
-PASS - OpenSky state vectors converted into SKYHUNT aircraft records
-PASS - Circular radius filtering after bounding-box retrieval
-PASS - 10-second Vercel CDN cache header
-PASS - Input validation and restricted CORS
+PASS — JavaScript syntax
+  ai-finder.js
+  aircraft-api.js
+  app.js
+  cloudflare-worker.js
+  collection.js
+  core.js
+  legal.js
+  nearby.js
+  news.js
+  radar.js
+  skylens.js
 
-Live OpenSky and Vercel connectivity must be tested after the user adds their
-private credentials and completes deployment.
+PASS — Inline JavaScript syntax
+  diagnostics.html
+  provider-test.html
+
+PASS — Every local stylesheet/script referenced by index.html exists
+
+PASS — Required index.html wiring
+  aircraft-api.js cache tag is ?v=cf-1
+  Diagnostics footer link remains present
+  Global Radar contains the embedded adsb.lol frame
+  Nearby contains the embedded adsb.lol frame
+
+PASS — Cloudflare Worker unit checks
+  Health response and metadata
+  Missing AIRLABS_API_KEY diagnostic
+  GitHub Pages origin allowed
+  localhost origin allowed
+  unrelated origin rejected
+  AirLabs response normalization
+  90-second Cache API write
+
+PASS — Package structure
+  Deployment files are at the ZIP root, not inside an extra nested folder.
+
+NOT RUN — A real authenticated AirLabs request
+  No private API key is stored in or used while building the package. Run the
+  included point test after adding AIRLABS_API_KEY to Cloudflare.

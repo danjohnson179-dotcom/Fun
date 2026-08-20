@@ -67,7 +67,8 @@ function aiMatchScore(a,p){
 async function aiLiveSample(){
   if(Array.isArray(worldPlanes)&&worldPlanes.length>20)return worldPlanes;
 
-  const sample=[...zones].sort(()=>Math.random()-.5).slice(0,5),all=[];
+  // Limit optional AirLabs calls so the free monthly allowance lasts longer.
+  const sample=[...zones].sort(()=>Math.random()-.5).slice(0,3),all=[];
 
   for(let i=0;i<sample.length;i++){
     const [name,lat,lon]=sample[i];
@@ -77,7 +78,7 @@ async function aiLiveSample(){
       rows.forEach(a=>all.push({...a,_zone:name,_worldSource:window.SKYHUNT_AIRCRAFT_API.source}));
     }catch(_){}
 
-    if(i<sample.length-1)await sleep(1100);
+    if(i<sample.length-1)await sleep(900);
   }
 
   const seen=new Set();
@@ -118,7 +119,7 @@ async function aiSearch(q){
     aiLastMatches.forEach((a,i)=>aiAddBubble(aiResultCard(a,i),"bot",true));
     aiMessages.querySelectorAll("[data-ai-open]").forEach(b=>b.onclick=()=>aiOpen(Number(b.dataset.aiOpen)));
     aiMessages.querySelectorAll("[data-ai-save]").forEach(b=>b.onclick=()=>aiSave(Number(b.dataset.aiSave),b));
-  }catch(e){thinking.remove();aiAddBubble(`The live search couldn't complete: ${e.message||"feed unavailable"}. Try again in a moment.`)}
+  }catch(e){thinking.remove();aiAddBubble(`Detailed AI search couldn't complete: ${friendlyLocalError(e)} The Global Radar and Nearby map remain live.`)}
 }
 function aiOpen(i){
   const a=aiLastMatches[i];if(!a)return;closeAiFinder();

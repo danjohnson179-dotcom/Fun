@@ -1,0 +1,223 @@
+SKYHUNT FREE LIVE RADAR — WINDOWS INSTALLATION
+================================================
+
+PURPOSE
+-------
+This package restores useful live aircraft tracking without making the main
+Radar pages depend on an unreliable anonymous API call.
+
+The Global Radar and Nearby map work immediately through an embedded adsb.lol
+map. Cloudflare plus a free AirLabs key is optional and only adds SKYHUNT's
+detailed cards, Spin, AI Finder, Sky Lens and follow functions.
+
+You do not need Vercel for this version.
+
+
+PART A — REPLACE THE GITHUB PAGES SITE
+--------------------------------------
+
+1. In Windows File Explorer, right-click the downloaded ZIP and choose
+   "Extract All".
+
+2. Open the extracted SKYHUNT-Free-Live-Radar-Package folder.
+
+3. In a browser, open:
+   https://github.com/danjohnson179-dotcom/Fun
+
+4. Make sure the branch shown is "main".
+
+5. Choose Add file, then Upload files.
+
+6. Drag the FILES INSIDE the extracted folder onto the GitHub upload page.
+   Do not drag the outer folder itself. The files must appear at the same level
+   as the existing index.html, not inside a new subfolder.
+
+7. GitHub will show existing filenames as replacements. Confirm that at least
+   these files are included:
+
+   index.html
+   styles.css
+   aircraft-api.js
+   core.js
+   nearby.js
+   radar.js
+   ai-finder.js
+   skylens.js
+   collection.js
+   news.js
+   legal.js
+   app.js
+   diagnostics.html
+   provider-test.html
+   cloudflare-worker.js
+
+8. Enter a commit message such as:
+   Restore free live radar with optional AirLabs details
+
+9. Click Commit changes.
+
+10. Wait one or two minutes, then open:
+    https://danjohnson179-dotcom.github.io/Fun/
+
+11. Force a fresh copy in Chrome or Edge with Ctrl+F5.
+
+12. Open Global Radar. A live adsb.lol map should appear. Pan and zoom inside
+    the map. The Change Area button loads a different aviation region.
+
+13. Open Nearby, select a range, press Use My Location & Scan, and allow
+    location access. The live map should centre on your area even if the
+    optional detail service has not been configured.
+
+
+PART B — OPTIONAL AIRLABS DETAILS THROUGH CLOUDFLARE
+----------------------------------------------------
+
+Skip this part if you only need the live Global Radar and Nearby map.
+
+1. Create or sign in to an AirLabs account:
+   https://airlabs.co/
+
+2. In the AirLabs account dashboard, copy your API key. Keep it private.
+   Never paste it into GitHub, index.html, aircraft-api.js, a screenshot, or a
+   public chat.
+
+3. Sign in to Cloudflare and open:
+   Workers & Pages > skyhunt-api
+
+4. Open Edit Code.
+
+5. IMPORTANT: open the existing entry file named worker.js in the left panel.
+   Select all of its contents with Ctrl+A and delete it.
+
+6. On your PC, open the included cloudflare-worker.js in Notepad. Select all
+   with Ctrl+A, copy with Ctrl+C, then paste it into Cloudflare's existing
+   worker.js editor.
+
+   Do not merely create a second cloudflare-worker.js tab. Cloudflare can keep
+   running the original worker.js entry file, which is why a preview may still
+   show "Hello World" even though another file contains the new code.
+
+7. Click Deploy and wait for the deployment to say successful.
+
+8. Return to the skyhunt-api Worker page. Open Settings, then Variables and
+   Secrets. The exact wording can vary slightly in Cloudflare's dashboard.
+
+9. Add a new variable:
+
+   Name: AIRLABS_API_KEY
+   Type: Secret / encrypted
+   Value: paste the AirLabs API key
+
+10. Save the secret. If Cloudflare asks you to deploy again, approve it. If it
+    does not, open Deployments and redeploy the latest deployment so the new
+    secret is active.
+
+
+PART C — TEST CLOUDFLARE
+------------------------
+
+TEST 1 — HEALTH
+
+Open:
+https://skyhunt-api.danjohnson179.workers.dev/health
+
+Expected result includes:
+
+  "ok": true
+  "host": "Cloudflare"
+  "provider": "AirLabs"
+  "configured": true
+
+If configured is false, the Worker code is deployed but AIRLABS_API_KEY is not
+available to that deployment. Recheck the secret name and redeploy.
+
+TEST 2 — LIVE AIRCRAFT DETAILS
+
+Open:
+https://skyhunt-api.danjohnson179.workers.dev/point?lat=51.4700&lon=-0.4543&radius=50
+
+A successful result contains an "ac" array and a "_skyhunt" block showing:
+
+  "ok": true
+  "provider": "AirLabs"
+
+The ac array can occasionally be empty because coverage changes, but the HTTP
+request and _skyhunt status should still succeed.
+
+TEST 3 — SITE SUPPORT PAGE
+
+Open:
+https://danjohnson179-dotcom.github.io/Fun/provider-test.html
+
+The first section is the independent embedded radar. The buttons in the second
+section test Worker health and optional Heathrow details.
+
+For the complete report, use the Diagnostics link in SKYHUNT's footer or open:
+https://danjohnson179-dotcom.github.io/Fun/diagnostics.html
+
+
+TROUBLESHOOTING
+---------------
+
+LIVE MAP IS BLANK
+
+- Press Ctrl+F5.
+- Temporarily disable strict tracking protection or an ad/privacy blocker for
+  the site; some extensions block embedded third-party maps.
+- Open https://adsb.lol/ directly. If that site is unavailable, wait and retry.
+- Check that index.html, radar.js, nearby.js and styles.css are in the GitHub
+  repository root rather than a nested folder.
+
+NEARBY WILL NOT CENTRE ON MY LOCATION
+
+- The page must use HTTPS, which GitHub Pages does.
+- Click the padlock/site-settings icon in the browser address bar and allow
+  Location, then reload with Ctrl+F5.
+- Windows Location Services must also be enabled.
+
+HEALTH SHOWS HELLO WORLD
+
+- Cloudflare is still running the old worker.js entry file. Paste the included
+  cloudflare-worker.js contents over the existing worker.js, then Deploy.
+
+HEALTH SHOWS CONFIGURED FALSE
+
+- The secret must be named exactly AIRLABS_API_KEY.
+- It must be attached to the Production Worker environment.
+- Redeploy after saving it.
+
+POINT TEST SHOWS HTTP 429 OR AN ALLOWANCE/QUOTA MESSAGE
+
+- The AirLabs free allowance has been reached. Wait for its reset or review the
+  AirLabs account plan.
+- The embedded adsb.lol Global Radar and Nearby map remain available.
+- Do not repeatedly press AI Finder, Spin or Refresh while testing. Those are
+  optional detail queries. Successful Worker responses are cached for 90
+  seconds, but different regions are separate queries.
+
+POINT TEST SHOWS TIMEOUT OR HTTP 502/504
+
+- The JSON now identifies whether the failure happened during the AirLabs
+  upstream call.
+- Retry once after a minute and check the AirLabs dashboard/status.
+- The embedded maps are deliberately independent and should still be used.
+
+BROWSER SAYS ORIGIN NOT ALLOWED
+
+- The Worker intentionally accepts browser calls only from:
+  https://danjohnson179-dotcom.github.io
+  plus localhost/127.0.0.1 for local testing.
+- A direct address-bar test has no browser Origin header and is allowed.
+- If the GitHub account/domain changes, update SITE_ORIGIN at the top of
+  cloudflare-worker.js and deploy it again.
+
+
+SECURITY AND USAGE
+------------------
+
+- Keep AIRLABS_API_KEY only in Cloudflare Secrets.
+- Do not commit any real API key to GitHub.
+- AirLabs plan limits and provider terms can change. Check the AirLabs dashboard
+  before public or commercial use.
+- adsb.lol data is provided under the Open Data Commons Open Database License.
+- SKYHUNT is not suitable for navigation or safety decisions.

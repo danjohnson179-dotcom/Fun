@@ -32,7 +32,7 @@ function showError(msg){errorBox.textContent=msg;errorBox.style.display="block"}
 function clearError(){errorBox.style.display="none";errorBox.textContent=""}
 
 async function scanAircraft(name,lat,lon){
- scan.textContent=`Scanning adsb.fi near ${name}…`;
+ scan.textContent=`Checking detailed aircraft near ${name}…`;
  const result=await window.SKYHUNT_AIRCRAFT_API.point(lat,lon,250);
  return result.aircraft;
 }
@@ -58,7 +58,9 @@ async function findRealAircraft(){
 
  const technicalErrors=[];
  try{
-   const shuffled=[...zones].sort(()=>Math.random()-.5).slice(0,8);
+   // Keep the optional free API allowance under control. The main Radar remains
+   // live and unlimited through its embedded adsb.lol map.
+   const shuffled=[...zones].sort(()=>Math.random()-.5).slice(0,3);
 
    for(let i=0;i<shuffled.length;i++){
      const [name,lat,lon]=shuffled[i];
@@ -73,17 +75,17 @@ async function findRealAircraft(){
        technicalErrors.push(`${name}: ${e.message}`);
      }
 
-     if(i<shuffled.length-1) await sleep(1100);
+     if(i<shuffled.length-1) await sleep(900);
    }
 
    if(technicalErrors.length){
-     throw new Error("adsb.fi did not return a usable aircraft. "+technicalErrors.slice(-2).join(" | "));
+     throw new Error("The optional detailed-aircraft service did not return a usable aircraft. "+technicalErrors.slice(-2).join(" | "));
    }
 
-   throw new Error("adsb.fi returned zero usable aircraft in all scanned regions.");
+   throw new Error("The optional detailed-aircraft service returned zero usable aircraft in the scanned regions.");
  }catch(e){
-   showError("Couldn’t find a live aircraft: "+e.message);
-   scan.textContent="adsb.fi unavailable right now.";
+   showError("Couldn’t load a detailed aircraft: "+friendlyLocalError(e)+" Use Global Radar for the always-on live map.");
+   scan.textContent="Detailed cards unavailable · Radar still live";
  }finally{
    spinBtn.disabled=false;spinAgain.disabled=false;spinBtn.classList.remove("loading");
  }
@@ -243,7 +245,8 @@ function startTracking(){
 
  stopTracking();
  refreshTrackedAircraft();
- trackingTimer=setInterval(refreshTrackedAircraft,5000);
+ // AirLabs' free plan is intended for light use. The Worker also caches for 90 seconds.
+ trackingTimer=setInterval(refreshTrackedAircraft,90000);
 
  showMapBtn.textContent="📡 FOLLOWING LIVE";
  setTimeout(()=>mapSection.scrollIntoView({behavior:"smooth",block:"start"}),120);

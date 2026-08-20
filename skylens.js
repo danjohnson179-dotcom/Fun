@@ -85,7 +85,7 @@ function stopOrientation(){
 async function scanLensAircraft(){
   if(!lensPosition)return;
   lensStatus.textContent="Scanning nearby live aircraft…";
-  const result=await localFeedRequest("adsb.fi",lensPosition,40);
+  const result=await localFeedRequest("AirLabs",lensPosition,40);
   lensAircraft=(result.aircraft||[]).map(a=>{
     const dist=distanceKm(lensPosition.lat,lensPosition.lon,Number(a.lat),Number(a.lon));
     return {...a,_lensDistanceKm:dist,_lensBearing:bearingDeg(lensPosition.lat,lensPosition.lon,Number(a.lat),Number(a.lon)),_lensSource:result.source};

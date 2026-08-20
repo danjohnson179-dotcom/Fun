@@ -184,6 +184,9 @@ body::before{
 .worldCountChip{font-size:9px;font-weight:950}
 .worldWrap{height:min(56vh,520px);min-height:390px;border:1px solid var(--line);border-radius:22px;overflow:hidden;position:relative;background:#071018}
 #worldMap{height:100%}.worldLegend{position:absolute;left:9px;bottom:9px;z-index:500;padding:7px 9px;border-radius:11px;background:rgba(4,10,15,.82);border:1px solid var(--line);color:#7e8c9e;font-size:8px}
+.embeddedRadarHost{position:relative;overflow:hidden;background:#071018}
+.skyhuntRadarFrame{display:block;width:100%;height:100%;border:0;background:#071018;color-scheme:dark}
+.embeddedRadarHost::after{content:"LIVE DATA · ADSB.LOL";position:absolute;right:9px;bottom:9px;z-index:650;padding:7px 9px;border-radius:999px;background:rgba(4,10,15,.84);border:1px solid rgba(255,255,255,.14);color:#9be8ff;font-size:7px;font-weight:950;letter-spacing:.08em;pointer-events:none}
 .worldTip{padding:11px 13px;margin-top:9px;border:1px solid var(--line);border-radius:14px;background:#090e14;color:#768396;font-size:10px;line-height:1.4}
 .radarPlane{font-size:17px;color:var(--cyan);text-shadow:0 0 8px rgba(98,231,255,.7)}
 .leaflet-container{background:#071018;filter:saturate(.65) brightness(.78)}
@@ -1010,6 +1013,7 @@ footer,.footerLinks button{color:#93a4b0!important}.versionBtn{color:#84cae6!imp
   border:1px solid var(--v51-line);background:#1f2c35
 }
 #nearbyMap{height:100%;width:100%}
+#nearbyMap.embeddedRadarHost{height:100%;width:100%}
 .nearbyMapCard .leaflet-tile-pane{filter:saturate(.62) brightness(.72) contrast(1.02)}
 .nearbyMapHint{
   position:absolute;z-index:500;left:9px;bottom:9px;padding:8px 10px;border-radius:999px;

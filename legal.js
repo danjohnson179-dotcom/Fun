@@ -29,7 +29,7 @@ privacy:{
 sources:{
  title:"Data & Sources",
  html:`
- <div class="legalSection"><h3>Live aircraft data</h3><p>SKYHUNT uses open live ADS-B/MLAT aircraft data. adsb.lol is used as a primary feed in the current build. Airplanes.live is retained as a fallback in selected demo features.</p></div>
+ <div class="legalSection"><h3>Live aircraft data</h3><p>The Global Radar and Nearby map embed adsb.lol, an independent community ADS-B service. Optional detailed cards, AI Finder and Sky Lens use AirLabs through the SKYHUNT Cloudflare bridge when the site owner configures an API key.</p></div>
  <div class="legalSection"><h3>Maps</h3><p>Interactive maps use Leaflet and OpenStreetMap tiles/attribution in the current demo.</p></div>
  <div class="legalSection"><h3>What the data means</h3><p>Aircraft fields are shown only when returned by the connected feed where practical. Coverage depends on receivers, aircraft broadcasts, MLAT availability and the upstream service. “Live” does not mean zero-delay or guaranteed completeness.</p></div>
  <div class="legalSection"><h3>AI Finder</h3><p>AI Finder currently uses a local natural-language query parser rather than a generative AI service. It searches sampled live aircraft data and does not invent a target when no match is found.</p></div>

@@ -107,7 +107,7 @@
       <div class="mapMeta" id="mapMeta">Waiting for next position…</div>
     </div>
 
-    <div class="source">Live aircraft data: <a href="https://adsb.fi/" target="_blank">adsb.fi</a></div>
+    <div class="source">Always-on live radar: <a href="https://adsb.lol/" target="_blank" rel="noopener">adsb.lol</a> · Detailed target data: optional SKYHUNT AirLabs bridge</div>
   </section>
 </section>
 
@@ -115,43 +115,51 @@
   <div class="sectionHead">
     <div>
       <h2>Global Radar</h2>
-      <p>Scan live aviation hotspots and hunt your own target.</p>
+      <p>Explore a genuinely live aircraft map without relying on a blocked cloud API.</p>
     </div>
   </div>
 
   <div class="worldIntro">
     <div>
       <strong>SKYHUNT global radar</strong>
-      <p>Each sweep samples several busy airspaces and plots the real aircraft returned by the live feeds.</p>
+      <p>The embedded adsb.lol radar loads from the visitor's own connection, keeping live tracking available for free.</p>
     </div>
-    <button class="worldScanPrimary" id="worldScanBtn">SCAN</button>
+    <button class="worldScanPrimary" id="worldScanBtn">CHANGE AREA</button>
   </div>
 
   <div class="worldStatusBar">
     <div class="worldStatusLeft">
       <span class="radarDot" id="worldRadarDot"></span>
-      <span class="worldStatusText" id="worldStatus">RADAR STANDING BY</span>
+      <span class="worldStatusText" id="worldStatus">LIVE MAP READY · LONDON</span>
     </div>
-    <div class="worldCountChip"><span id="worldCount">0</span> LIVE</div>
+    <div class="worldCountChip"><span id="worldCount">ADSB.LOL</span> LIVE</div>
   </div>
 
   <div class="worldWrap">
-    <div id="worldMap"></div>
+    <div id="worldMap" class="embeddedRadarHost">
+      <iframe
+        id="worldRadarFrame"
+        class="skyhuntRadarFrame"
+        title="Live aircraft radar supplied by adsb.lol"
+        src="https://adsb.lol/?lat=51.4700&amp;lon=-0.4543&amp;zoom=9"
+        loading="eager"
+        referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
 
     <div class="worldTopHud">
       <div class="worldTopLeft">
         <div class="radarChip live"><span class="tinyDot"></span> LIVE RADAR</div>
-        <div class="radarChip"><strong id="worldHudCount">0</strong> TARGETS</div>
+        <div class="radarChip"><strong id="worldHudCount">LIVE</strong> FEED</div>
       </div>
       <div class="worldTopRight">
         <button class="radarAction" id="worldRecenterBtn">⌖ RESET</button>
-        <button class="radarAction primary" id="worldHudScanBtn">◎ SCAN</button>
+        <button class="radarAction primary" id="worldHudScanBtn">◎ CHANGE AREA</button>
       </div>
     </div>
 
     <div class="worldBottomHud">
-      <div class="worldLegend">✈ TAP A TARGET</div>
-      <div class="mapHint">Real ADS-B positions from the current radar sample.</div>
+      <div class="worldLegend">✈ INTERACTIVE LIVE MAP</div>
+      <div class="mapHint">Pan, zoom and select aircraft inside the adsb.lol radar.</div>
     </div>
 
     <div class="aircraftSheet" id="aircraftSheet">
@@ -175,7 +183,7 @@
   </div>
 
   <div class="worldTip">
-    Global Radar is a live sample, not a complete global traffic picture. Coverage and update timing vary by connected receiver networks and feeds.
+    Live map supplied by adsb.lol under the Open Data Commons Open Database License. Coverage varies with community receivers and is not suitable for navigation.
   </div>
 </section>
 
@@ -192,7 +200,7 @@
   <div class="nearbyControlCard">
     <div class="nearbyControlCopy">
       <strong>Local radar</strong>
-      <p>SKYHUNT uses your location only to request aircraft around you. Choose a range, then scan.</p>
+      <p>Choose a range, then load the adsb.lol live map around your position. Detailed cards appear when the optional free AirLabs bridge is configured.</p>
     </div>
 
     <div class="nearbyRadius" id="nearbyRadius">
@@ -205,19 +213,27 @@
 
     <div class="nearbyStatusRow">
       <span class="radarDot" id="nearbyRadarDot"></span>
-      <span id="nearbyStatus">Ready to scan your local sky.</span>
+      <span id="nearbyStatus">Ready to load your local live radar.</span>
     </div>
   </div>
 
   <div class="nearbyStats">
-    <div class="nearbyStat"><b id="nearbyCount">0</b><span>AIRCRAFT</span></div>
+    <div class="nearbyStat"><b id="nearbyCount">LIVE</b><span>RADAR</span></div>
     <div class="nearbyStat"><b id="nearbyClosest">—</b><span>CLOSEST</span></div>
     <div class="nearbyStat"><b id="nearbyFeed">—</b><span>LIVE FEED</span></div>
   </div>
 
   <div class="nearbyMapCard">
-    <div id="nearbyMap"></div>
-    <div class="nearbyMapHint">⌖ YOU · ✈ LIVE AIRCRAFT</div>
+    <div id="nearbyMap" class="embeddedRadarHost">
+      <iframe
+        id="nearbyRadarFrame"
+        class="skyhuntRadarFrame"
+        title="Nearby live aircraft radar supplied by adsb.lol"
+        src="https://adsb.lol/?lat=54.0000&amp;lon=-2.0000&amp;zoom=5"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <div class="nearbyMapHint">⌖ YOUR AREA · ✈ LIVE ADSB.LOL RADAR</div>
   </div>
 
   <div class="nearbyResultsHead">
@@ -228,12 +244,12 @@
   <div class="nearbyResults" id="nearbyResults">
     <div class="nearbyEmpty">
       <div class="nearbyEmptyIcon">⌖</div>
-      <strong>Your local sky is waiting.</strong>
-      <span>Allow location access and SKYHUNT will search the live feeds around you.</span>
+      <strong>Your local live radar is ready.</strong>
+      <span>Allow location access to centre the embedded map. Detailed aircraft cards require the optional free AirLabs bridge.</span>
     </div>
   </div>
 
-  <div class="nearbyPrivacy">Location is requested by your browser and used for the nearby-aircraft request. SKYHUNT does not intentionally save your personal coordinates to your Hangar.</div>
+  <div class="nearbyPrivacy">Location is requested by your browser and used to centre the embedded adsb.lol map and, when enabled, request detailed aircraft from the SKYHUNT AirLabs bridge. SKYHUNT does not intentionally save your coordinates to your Collection.</div>
 </section>
 
 
@@ -485,8 +501,8 @@
       <p>Welcome to SKYHUNT — live aircraft discovery built for exploring the real sky around you.</p>
       <ul>
         <li><b>Discover</b> — hunt a real live aircraft and jump straight into its tracking view.</li>
-        <li><b>Global Radar</b> — explore sampled live aircraft on an interactive world radar, inspect targets and capture aircraft directly from the map.</li>
-        <li><b>Nearby</b> — use your location to discover, map and sort aircraft flying around you.</li>
+        <li><b>Global Radar</b> — explore live aircraft on an embedded interactive adsb.lol radar without a SKYHUNT API key.</li>
+        <li><b>Nearby</b> — use your location to centre a live radar around you; optional AirLabs details can add sortable SKYHUNT cards.</li>
         <li><b>Live Tracking</b> — follow a selected aircraft with available live position, altitude, speed, heading, callsign, registration and aircraft data.</li>
         <li><b>Collection</b> — capture aircraft you discover, build a persistent on-device collection, track rarities and record repeat discoveries.</li>
         <li><b>Flight ID</b> — see your discovery progress, capture totals, aircraft types and Collection statistics.</li>
@@ -494,7 +510,7 @@
         <li><b>Sky Lens · Beta</b> — combine live aircraft data with your camera, location and device orientation to estimate where nearby aircraft are in the sky.</li>
         <li><b>Aircraft target cards</b> — inspect available callsign, registration, ICAO hex, aircraft type, altitude, speed and other live details.</li>
         <li><b>SKYHUNT Labs</b> — a dedicated home for experimental aircraft-discovery tools including Sky Lens and AI Finder.</li>
-        <li><b>Live ADS-B data</b> — uses public and third-party aviation data sources with fallback behaviour where supported.</li>
+        <li><b>Live ADS-B data</b> — embedded adsb.lol maps stay independent of the optional Cloudflare/AirLabs detail bridge.</li>
         <li><b>Mobile-first interface</b> — touch-first navigation across Home, Radar, Nearby, Collection and Labs.</li>
         <li><b>No SKYHUNT account required</b> — Collection data is stored locally on the device, while location and camera access are requested only when required by a feature.</li>
         <li><b>Built-in transparency</b> — Terms, Privacy, Data &amp; Sources and Safety information are available in-app, including a clear warning that SKYHUNT is not for navigation.</li>
@@ -507,14 +523,14 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
 <script src="aircraft-api.js?v=cf-1"></script>
-<script src="core.js?v=clean-1"></script>
-<script src="nearby.js?v=clean-1"></script>
-<script src="skylens.js?v=clean-1"></script>
-<script src="ai-finder.js?v=clean-1"></script>
-<script src="collection.js?v=clean-1"></script>
-<script src="news.js?v=clean-1"></script>
-<script src="radar.js?v=clean-1"></script>
-<script src="legal.js?v=clean-1"></script>
-<script src="app.js?v=clean-1"></script>
+<script src="core.js?v=free-live-1"></script>
+<script src="nearby.js?v=free-live-1"></script>
+<script src="skylens.js?v=free-live-1"></script>
+<script src="ai-finder.js?v=free-live-1"></script>
+<script src="collection.js?v=free-live-1"></script>
+<script src="news.js?v=free-live-1"></script>
+<script src="radar.js?v=free-live-1"></script>
+<script src="legal.js?v=free-live-1"></script>
+<script src="app.js?v=free-live-1"></script>
 </body>
 </html>

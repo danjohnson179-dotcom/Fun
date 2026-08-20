@@ -1,9 +1,43 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SKYHUNT Worker Test</title>
-<style>body{max-width:850px;margin:40px auto;padding:0 18px;background:#071018;color:#eef7fb;font:16px system-ui}button{padding:14px 18px;border:0;border-radius:12px;background:#a9e7f4;font-weight:800}pre{white-space:pre-wrap;word-break:break-word;background:#0d1821;border:1px solid #20323f;border-radius:14px;padding:18px;min-height:180px}a{color:#a9e7f4}</style></head>
-<body><a href="index.html">&larr; SKYHUNT</a><h1>Cloudflare bridge test</h1><p>Runs health, Heathrow point, validation, and CORS-visible response tests against the deployed Worker.</p><button id="run">RUN TESTS</button><pre id="out">Ready.</pre>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SKYHUNT Provider Test</title>
+  <style>
+    :root{color-scheme:dark;font-family:Arial,sans-serif;background:#07101d;color:#eef7ff}*{box-sizing:border-box}body{margin:0;padding:24px}.wrap{max-width:1050px;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:20px}h1{margin:0;font-size:clamp(25px,5vw,46px)}p{color:#a9bed1;line-height:1.55}.card{border:1px solid #253c52;background:#0b1827;border-radius:18px;padding:20px;margin:16px 0}.buttons{display:flex;gap:10px;flex-wrap:wrap}button,a.button{border:1px solid #4e7090;background:#10263a;color:white;padding:12px 15px;border-radius:10px;font-weight:800;text-decoration:none;cursor:pointer}button.primary{background:#ffd84d;color:#07101d;border-color:#ffd84d}pre{white-space:pre-wrap;word-break:break-word;background:#050b12;border-radius:12px;padding:16px;min-height:90px;color:#bcecff}.map{width:100%;height:560px;border:0;border-radius:14px;background:#000}.note{border-left:4px solid #ffd84d;padding-left:12px}small{color:#7893aa}@media(max-width:700px){body{padding:13px}.map{height:65vh}}
+  </style>
+</head>
+<body>
+<main class="wrap">
+  <div class="top"><div><small>SKYHUNT · SUPPORT TOOL</small><h1>Live radar test</h1></div><a class="button" href="index.html">BACK TO SKYHUNT</a></div>
+  <section class="card">
+    <h2>1. Always-on embedded radar</h2>
+    <p>This map loads straight from adsb.lol in the visitor's browser. It does not use Cloudflare, Vercel, OpenSky, adsb.fi or Airplanes.live.</p>
+    <iframe class="map" title="adsb.lol live aircraft test" src="https://adsb.lol/?lat=51.4700&amp;lon=-0.4543&amp;zoom=9" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </section>
+  <section class="card">
+    <h2>2. Optional detailed-aircraft bridge</h2>
+    <p>Health should always work. The point test also requires the encrypted <b>AIRLABS_API_KEY</b> Worker secret.</p>
+    <div class="buttons"><button id="health" class="primary">TEST WORKER HEALTH</button><button id="point">TEST HEATHROW DETAILS</button><a class="button" href="https://skyhunt-api.danjohnson179.workers.dev/health" target="_blank" rel="noopener">OPEN HEALTH URL</a></div>
+    <pre id="output">No bridge test run yet.</pre>
+    <p class="note">If the result says the key is not configured or the free allowance is exhausted, the embedded map above and SKYHUNT's Radar pages still work.</p>
+  </section>
+</main>
 <script>
-const BASE="https://skyhunt-api.danjohnson179.workers.dev",out=document.querySelector("#out");
-async function test(name,path){const started=performance.now();try{const r=await fetch(BASE+path,{cache:"no-store",headers:{Accept:"application/json"}}),text=await r.text();let data;try{data=JSON.parse(text)}catch{}return`[${r.ok?"PASS":"FAIL"}] ${name} — HTTP ${r.status} — ${Math.round(performance.now()-started)} ms\nProvider: ${data?._skyhunt?.provider||"n/a"}\nCache: ${r.headers.get("x-skyhunt-cache")||"n/a"}\n${text.slice(0,800)}`}catch(e){return`[FAIL] ${name}\n${e.name}: ${e.message}`}}
-document.querySelector("#run").onclick=async e=>{e.target.disabled=true;out.textContent="Testing…";const results=[];results.push(await test("Health","/health"));results.push(await test("Point","/point?lat=51.4700&lon=-0.4543&radius=100"));results.push(await test("Validation (HTTP 400 expected)","/point?lat=999&lon=0&radius=100"));out.textContent=results.join("\n\n");e.target.disabled=false};
-</script></body></html>
+const output=document.querySelector("#output");
+async function run(path){
+  output.textContent="Testing…";
+  const started=performance.now();
+  try{
+    const response=await fetch(`https://skyhunt-api.danjohnson179.workers.dev${path}`,{headers:{Accept:"application/json"}});
+    const text=await response.text();
+    let pretty=text;try{pretty=JSON.stringify(JSON.parse(text),null,2)}catch{}
+    output.textContent=`HTTP ${response.status} · ${Math.round(performance.now()-started)} ms\n\n${pretty}`;
+  }catch(error){output.textContent=`Browser request failed: ${error.message}\n\nThe embedded adsb.lol radar is independent of this optional bridge.`}
+}
+document.querySelector("#health").addEventListener("click",()=>run("/health"));
+document.querySelector("#point").addEventListener("click",()=>run("/point?lat=51.4700&lon=-0.4543&radius=50"));
+</script>
+</body>
+</html>
